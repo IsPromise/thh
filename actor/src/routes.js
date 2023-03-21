@@ -1,5 +1,5 @@
 import {h, resolveComponent} from "vue";
-import {Analytics, CheckmarkDoneOutline, LogoTwitter, LogoWebComponent} from '@vicons/ionicons5'
+import {LogoTwitter, LogoWebComponent} from '@vicons/ionicons5'
 
 import sun from "@/pages/HomePage.vue";
 import moon from "@/pages/AllManager.vue";
@@ -17,11 +17,15 @@ let imDemo = () => import("@/pages/manager/ImDemo.vue")
 let index = () => import("@/pages/home/IndexPage.vue")
 let twitterManager = () => import("@/pages/manager/TwitterManager.vue")
 let sysInfo = () => import("@/pages/manager/SysInfo.vue")
+let login = () => import("@/pages/Login.vue")
 
 
 export default [
     {
         path: '/:catchAll(.*)*', name: '', redirect: '/manager/'
+    },
+    {
+        path: '/login', component: login
     },
     {
         path: '/home', component: sun, children: [

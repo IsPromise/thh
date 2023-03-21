@@ -1,7 +1,6 @@
 import axios from "axios"
 
 
-
 const instanceAxios = axios.create({
     //http://127.0.0.1/
     baseURL: import.meta.env.VITE_DEV_API_HOST,
@@ -29,6 +28,22 @@ instanceAxios.interceptors.request.use(config => {
     // }
     return config;
 });
+
+
+remoteService.login = function (username, password) {
+    return instanceAxios.post("/login", {
+        username: username,
+        password: password
+    })
+}
+
+remoteService.reg = function (email, username, password) {
+    return instanceAxios.post("/reg", {
+        email:email,
+        username: username,
+        password: password
+    })
+}
 
 remoteService.getTList = function (searchList) {
     return instanceAxios.post('t-list', {
@@ -89,7 +104,7 @@ remoteService.getArticlesDetail = function (id, maxCommentId) {
     })
 }
 
-remoteService.getSysInfo = function (){
+remoteService.getSysInfo = function () {
     return instanceAxios.get("/sys-info")
 }
 

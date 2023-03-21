@@ -43,7 +43,7 @@ func ginApi(ginApp *gin.Engine) {
 
 	apiGroup := ginApp.Group("api")
 	apiGroup.POST("reg", ginUpJP(controllers.Register))
-	apiGroup.GET("login", ginUpJP(controllers.Login))
+	apiGroup.POST("login", ginUpJP(controllers.Login))
 	// lowerControllers
 	apiGroup.GET("gin-upload", genLowerControllers.GinUpload)
 	apiGroup.GET("show-pic", genLowerControllers.GinShowPic)
