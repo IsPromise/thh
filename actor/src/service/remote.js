@@ -39,7 +39,7 @@ remoteService.login = function (username, password) {
 
 remoteService.reg = function (email, username, password) {
     return instanceAxios.post("/reg", {
-        email:email,
+        email: email,
         username: username,
         password: password
     })

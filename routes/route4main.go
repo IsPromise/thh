@@ -2,7 +2,7 @@ package routes
 
 import (
 	"thh/app/http/controllers"
-	"thh/app/http/controllers/genLowerControllers"
+	"thh/app/http/controllers/ginLowerControllers"
 	"thh/app/http/controllers/lowerControllers"
 	"thh/app/http/middleware"
 	"thh/arms"
@@ -10,20 +10,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-func RegisterByGin(ginApp *gin.Engine) {
-
-	ginApp.Use(middleware.TraceInit)
-	ginApp.Use(middleware.GinCors)
-	ginApp.Use(middleware.GinLogger)
-
-	ginWeb(ginApp)
-	ginApi(ginApp)
-	ginAuth(ginApp)
-	ginWs(ginApp)
-
-	ginApp.NoRoute(controllers.NotFound)
-}
 
 func ginWeb(ginApp *gin.Engine) {
 	if app.IsProduction() {
@@ -35,9 +21,10 @@ func ginWeb(ginApp *gin.Engine) {
 	ginApp.GET("get-clash-config-plus", lowerControllers.GinGetClashConfigPlus)
 }
 func ginWs(ginApp *gin.Engine) {
-	ginApp.GET("ws", middleware.WebSocketMid(genLowerControllers.GinIm))
-	arms.GuardGoRoutine(genLowerControllers.Broadcaster)
+	ginApp.GET("ws", middleware.WebSocketMid(ginLowerControllers.GinIm))
+	arms.GuardGoRoutine(ginLowerControllers.Broadcaster)
 }
+
 func ginApi(ginApp *gin.Engine) {
 	ginApp.GET("/api", controllers.Api)
 
@@ -45,8 +32,8 @@ func ginApi(ginApp *gin.Engine) {
 	apiGroup.POST("reg", ginUpJP(controllers.Register))
 	apiGroup.POST("login", ginUpJP(controllers.Login))
 	// lowerControllers
-	apiGroup.GET("gin-upload", genLowerControllers.GinUpload)
-	apiGroup.GET("show-pic", genLowerControllers.GinShowPic)
+	apiGroup.GET("gin-upload", ginLowerControllers.GinUpload)
+	apiGroup.GET("show-pic", ginLowerControllers.GinShowPic)
 	apiGroup.POST("t-list", ginUpP(controllers.TListV2))
 	apiGroup.GET("get-twitter-user-list", ginUpP(controllers.GetTwitterUserList))
 	apiGroup.GET("get-twitter-tweet-list", ginUpP(controllers.GetTwitterTweetList))
@@ -60,14 +47,9 @@ func ginApi(ginApp *gin.Engine) {
 	apiGroup.GET("memUse", ginUpNP(controllers.GetUseMem))
 	apiGroup.GET("about", ginUpNP(controllers.About))
 	apiGroup.GET("sys-info", ginUpNP(controllers.SysInfo))
-	apiGroup.GET("traefik-provider", genLowerControllers.TraefikProvider)
+	apiGroup.GET("traefik-provider", ginLowerControllers.TraefikProvider)
 	apiGroup.Any("test-bind", ginUpP(controllers.Params))
 
 	apiGroup.Any("get-articles", ginUpP(controllers.GetArticles))
 	apiGroup.Any("get-articles-detail", ginUpP(controllers.GetArticlesDetail))
-}
-
-func ginAuth(ginApp *gin.Engine) {
-	authGroup := ginApp.Group("api").Use(middleware.JWTAuth4Gin)
-	authGroup.GET("get-user-info", ginUpNPAuth(controllers.UserInfoV3))
 }

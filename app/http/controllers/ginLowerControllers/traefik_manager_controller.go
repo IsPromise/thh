@@ -1,4 +1,4 @@
-package genLowerControllers
+package ginLowerControllers
 
 import (
 	"net/http"
