@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	"go/types"
 	"io/fs"
 	"net/http"
 	"path"
@@ -116,6 +117,28 @@ func ginUpNPAuth(action func(ctx component.RequestContext) component.Response) f
 			})
 		}
 		response := action(component.RequestContext{
+			UserId: userId,
+		})
+		c.JSON(response.Code, response.Data)
+	}
+}
+
+type null types.Nil
+
+func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Response) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		userIdData, _ := c.Get("userId")
+		userId := userIdData.(uint64)
+		var params T
+		_ = c.ShouldBind(&params)
+		err := validate.Struct(params)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, resultMap{
+				"msg": err.Error(),
+			})
+		}
+		response := action(component.BetterRequest[T]{
+			Params: params,
 			UserId: userId,
 		})
 		c.JSON(response.Code, response.Data)

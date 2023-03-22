@@ -81,3 +81,14 @@ func UserInfoV3(request component.RequestContext) component.Response {
 	}
 	return component.SuccessResponse(userEntity)
 }
+
+type null struct {
+}
+
+func UserInfoV4(req component.BetterRequest[null]) component.Response {
+	userEntity, err := req.GetUser()
+	if err != nil {
+		return component.FailResponse("账号异常" + err.Error())
+	}
+	return component.SuccessResponse(userEntity)
+}

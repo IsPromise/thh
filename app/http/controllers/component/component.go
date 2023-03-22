@@ -6,9 +6,34 @@ import (
 )
 
 const (
-	SUCCESS = 1
-	FAIL    = 0
+	SUCCESS = 0
+	FAIL    = 1
 )
+
+type BetterRequest[T any] struct {
+	Params   T
+	UserId   uint64
+	userSet  bool
+	userInfo Users.Users
+}
+type Null struct {
+}
+type NullRequest BetterRequest[Null]
+
+func (r *BetterRequest[T]) GetParams() T {
+	return r.Params
+}
+
+func (r *BetterRequest[T]) GetUser() (Users.Users, error) {
+	if r.userSet != false {
+		return r.userInfo, nil
+	}
+	user, _ := Users.Get(r.UserId)
+
+	r.userSet = true
+	r.userInfo = user
+	return r.userInfo, nil
+}
 
 type RequestContext struct {
 	UserId   uint64

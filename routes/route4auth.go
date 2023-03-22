@@ -7,6 +7,11 @@ import (
 )
 
 func ginAuth(ginApp *gin.Engine) {
-	authGroup := ginApp.Group("api").Use(middleware.JWTAuth4Gin)
-	authGroup.GET("get-user-info", ginUpNPAuth(controllers.UserInfoV3))
+	ginApp.Group("api").
+		POST("reg", ginUpJP(controllers.Register)).
+		POST("login", ginUpJP(controllers.Login))
+
+	ginApp.Group("api").Use(middleware.JWTAuth4Gin).
+		GET("get-user-info", ginUpNPAuth(controllers.UserInfoV3)).
+		GET("get-user-info-v4", UpButterReq(controllers.UserInfoV4))
 }

@@ -29,8 +29,6 @@ func ginApi(ginApp *gin.Engine) {
 	ginApp.GET("/api", controllers.Api)
 
 	apiGroup := ginApp.Group("api")
-	apiGroup.POST("reg", ginUpJP(controllers.Register))
-	apiGroup.POST("login", ginUpJP(controllers.Login))
 	// lowerControllers
 	apiGroup.GET("gin-upload", ginLowerControllers.GinUpload)
 	apiGroup.GET("show-pic", ginLowerControllers.GinShowPic)
