@@ -37,6 +37,18 @@ const options = [
         {default: () => 'home'}),
     key: "home"
   },
+  {
+    label: () => h(
+        RouterLink,
+        {
+          to: {
+            path: '/login/'
+          }
+        },
+        {default: () => 'login'},
+    ),
+    key: "login"
+  }
 ]
 
 function handleSelect(key) {

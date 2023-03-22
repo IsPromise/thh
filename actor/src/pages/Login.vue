@@ -1,17 +1,14 @@
 <script setup>
 import {NButton, NCard, NForm, NFormItemRow, NGrid, NGridItem, NInput, NTabPane, NTabs} from "naive-ui"
-import {remoteService} from "@/service/remote";
 import {ref} from "vue"
+import {useUserStore} from "@/modules/user";
 
 let loginUsername = ref("")
 let loginPassword = ref("")
+const userStore = useUserStore()
 
 function login() {
-  remoteService.login(loginUsername.value, loginPassword.value).then(r => {
-    // todo 跳转页面
-  }).catch(e => {
-    console.error(e)
-  })
+  userStore.login(loginUsername.value, loginPassword.value)
 }
 </script>
 

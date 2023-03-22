@@ -1,7 +1,7 @@
 import {createApp} from 'vue'
 import App from './App.vue'
-import {createRouter, createWebHashHistory} from "vue-router";
-import routes from './routes.js'
+import router from './route/router'
+import {createPinia} from 'pinia'
 // !import 不能忘记引入katex的样式
 // import 'katex/dist/katex.css'
 // 引入katex下的自动渲染函数
@@ -15,22 +15,8 @@ const renderOption = {
         {left: '\\(', right: '\\)', display: false},
         {left: '\\[', right: '\\]', display: true}
     ],
-    throwOnError : false
+    throwOnError: false
 }
-// 2. 定义一些路由
-// 每个路由都需要映射到一个组件。
-// 我们后面再讨论嵌套路由。
-
-
-// 3. 创建路由实例并传递 `routes` 配置
-// 你可以在这里输入更多的配置，但我们在这里
-// 暂时保持简单
-const router = createRouter({
-    // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
-    history: createWebHashHistory(),
-    routes: routes, // `routes: routes` 的缩写
-})
-
 // let title;  // 用于临时存放原来的title内容
 // window.onblur = function(){
 //     // onblur时先存下原来的title,再更改title内容
@@ -51,5 +37,6 @@ const app = createApp(App)
 // }
 
 app.use(router)
+    .use(createPinia())
 app.mount('#app')
 

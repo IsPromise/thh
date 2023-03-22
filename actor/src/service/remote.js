@@ -1,34 +1,26 @@
 import axios from "axios"
-
+import {useUserStore} from "@/modules/user";
 
 const instanceAxios = axios.create({
-    //http://127.0.0.1/
     baseURL: import.meta.env.VITE_DEV_API_HOST,
-    // baseURL: "/api",
     timeout: 10 * 1000,
     headers: {}
 })
 
 const remoteService = {}
 instanceAxios.interceptors.request.use(config => {
-    // if (config.method === 'post') {
-    //     // config.data = JSON.stringify(config.data) // 转为formdata数据格式
-    //     // config.data = JSON.stringify({
-    //     //     ...config.data
-    //     // })
-    //     config.params = {
-    //         access_token: localStorage.getItem('access_token')
-    //     }
-    // } else if (config.method === 'get') {
-    //
-    //     config.params = {
-    //         access_token: localStorage.getItem('access_token'),
-    //         ...config.params
-    //     }
-    // }
+    const userStore = useUserStore()
+    config.headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + userStore.token,
+        ...config.headers
+    }
     return config;
 });
 
+remoteService.getUserInfo = function (){
+    return instanceAxios.get("get-user-info-v4")
+}
 
 remoteService.login = function (username, password) {
     return instanceAxios.post("/login", {

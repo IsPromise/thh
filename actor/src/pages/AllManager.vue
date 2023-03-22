@@ -4,7 +4,7 @@ import {h, ref} from 'vue'
 import {RouterLink} from 'vue-router'
 import {Flash} from '@vicons/ionicons5'
 import {NDrawer,NDrawerContent,NButton, NDropdown, NIcon, NLayout, NLayoutHeader, NLayoutSider, NMenu} from 'naive-ui'
-import routes from "../routes";
+import routes from "@/route/routes";
 import {useIsMobile} from "@/utils/composables";
 
 function renderIcon(icon) {

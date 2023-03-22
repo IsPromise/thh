@@ -16,11 +16,14 @@ import {
   NSpace,
   NStatistic,
   NTag,
-  NThing
+  NThing,
+  useMessage
 } from 'naive-ui'
 import {ref} from 'vue'
 import {useIsMobile, useIsSmallDesktop, useIsTablet} from "@/utils/composables";
+import {remoteService} from "@/service/remote"
 
+const message = useMessage()
 const listData = ref([
   {
     title: "title1",
@@ -29,25 +32,6 @@ const listData = ref([
   }
 ])
 
-function sorlly() {
-  let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  //  可视区域
-  let clientHeight = document.documentElement.clientHeight;
-  // 页面的高度
-  let scrollHeight = document.documentElement.scrollHeight;
-  //如果触底就让index++
-  if (scrollTop + clientHeight >= scrollHeight) {
-    listData.value.push({
-      title: "title1",
-      tag: ["tag1", "tag2"],
-      body: "bodybodybodybodybodybodybody"
-    })
-  }
-}
-
-// onMounted(() => {
-// window.addEventListener('scroll',sorlly)
-// })
 const isMobileRef = useIsMobile()
 const isTabletRef = useIsTablet()
 const isSmallDesktop = useIsSmallDesktop()
@@ -72,9 +56,18 @@ function showNew() {
   sessionStorageData.value = JSON.stringify(sessionStorage)
   localStorageData.value = JSON.stringify(localStorage)
 }
+
+function getUserInfo() {
+  remoteService.getUserInfo().then(r => {
+    message.success(JSON.stringify(r.data.data))
+  })
+}
 </script>
 <template>
   <n-space vertical>
+    <n-card>
+      <n-button @click="getUserInfo"> 获取用户信息</n-button>
+    </n-card>
     <n-card>
       <n-statistic label="SessionStorage">
         {{ sessionStorageData }}
