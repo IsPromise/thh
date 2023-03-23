@@ -2,14 +2,14 @@
 <script setup>
 import {NButton, NCard, NList, NListItem, NSpace, NTag, NThing} from 'naive-ui'
 import {onMounted, ref} from "vue";
-import {remoteService} from "@/service/remote";
+import {getArticlesApi, remoteService} from "@/service/remote";
 
 const listData = ref([])
 
 let maxId = 0
 
-function getArticles() {
-  getArticles(maxId).then(r => {
+function getArticlesAction() {
+  getArticlesApi(maxId).then(r => {
     let newList = r.data.data.list.map(function (item) {
       maxId = item.id
       return {
@@ -30,11 +30,11 @@ function getArticles() {
 
 onMounted(() => {
   maxId = 0
-  getArticles()
+  getArticlesApi()
 })
 
 function more() {
-  getArticles()
+  getArticlesApi()
 }
 
 
