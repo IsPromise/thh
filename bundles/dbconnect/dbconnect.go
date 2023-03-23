@@ -94,7 +94,7 @@ func connectMysqlDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	db, err := gorm.Open(gormConfig, &gorm.Config{
 		Logger: _logger,
 	})
-	if debug && err == nil {
+	if debug {
 		fmt.Println("开启debug")
 		db = db.Debug()
 	}
@@ -118,7 +118,7 @@ func connectSqlLiteDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	}
 	// ":memory:"
 	db, err := gorm.Open(sqlite.Open(dbPath+"?_pragma=busy_timeout(5000)"), &gorm.Config{Logger: _logger})
-	if debug && err == nil {
+	if debug {
 		fmt.Println("开启debug")
 		db = db.Debug()
 	}

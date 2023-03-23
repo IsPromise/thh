@@ -67,8 +67,8 @@ func GetByMaxIdPage(id uint64, pageSize int) (entities []Articles) {
 	return
 }
 
-func CanWriteNew(userId uint64, maxCount int64) bool {
+func CantWriteNew(userId uint64, maxCount int64) bool {
 	var count int64
 	builder().Where(querybuild.Eq(fieldUserId, userId)).Where(querybuild.Gt(fieldCreateTime, time.Now().Format("2006-01-02"))).Count(&count)
-	return count < maxCount
+	return count > maxCount
 }

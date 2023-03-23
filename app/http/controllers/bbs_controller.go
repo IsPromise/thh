@@ -79,7 +79,7 @@ type WriteArticleReq struct {
 }
 
 func WriteArticles(req component.BetterRequest[WriteArticleReq]) component.Response {
-	if Articles.CanWriteNew(req.UserId, 66) {
+	if Articles.CantWriteNew(req.UserId, 66) {
 		return component.FailResponse("您当天已发布较多，为保证质量，请明天再发布新帖")
 	}
 	var article Articles.Articles
