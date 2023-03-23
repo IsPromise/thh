@@ -1,6 +1,6 @@
 <script setup>
 import {h, onMounted, reactive, ref} from 'vue'
-import {remoteService} from "@/service/remote";
+import {getQueueLenApi, getTwitterTweetList, remoteService, runTSpiderMaster} from "@/service/remote";
 import {
     NButton,
     NCard,
@@ -94,7 +94,7 @@ const paginationReactive = reactive({
 const dataRef = ref([])
 const formRef = ref(null);
 const searchPage = function (current) {
-    remoteService.getTwitterTweetList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
+    getTwitterTweetList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
         dataRef.value = r.data.data.itemList
         paginationReactive.page = current
         paginationReactive.pageCount = parseInt(String(r.data.data.total / r.data.data.size))
@@ -135,7 +135,7 @@ function handleValidateClick(e) {
 }
 
 function newSpider(e) {
-    remoteService.runTSpiderMaster().then(r => {
+    runTSpiderMaster().then(r => {
         message.success(r.data.data.message);
     }).catch(e => {
         console.log(e)
@@ -144,7 +144,7 @@ function newSpider(e) {
 }
 
 function getQueueLen(e) {
-    remoteService.getQueueLen().then(r => {
+    getQueueLenApi().then(r => {
         message.success(r.data.data.message);
     }).catch(e => {
         console.log(e)

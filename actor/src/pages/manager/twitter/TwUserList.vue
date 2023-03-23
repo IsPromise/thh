@@ -1,6 +1,6 @@
 <script setup>
 import {h, onMounted, reactive, ref} from 'vue'
-import {remoteService} from "@/service/remote";
+import {getTwitterUserList, remoteService} from "@/service/remote";
 import {
   NButton,
   NCard,
@@ -94,7 +94,7 @@ const paginationReactive = reactive({
 const dataRef = ref([])
 const formRef = ref(null);
 const searchPage = function (current) {
-  remoteService.getTwitterUserList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
+  getTwitterUserList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
     dataRef.value = r.data.data.itemList
     paginationReactive.page = current
     paginationReactive.pageCount = parseInt(String(r.data.data.total / r.data.data.size))

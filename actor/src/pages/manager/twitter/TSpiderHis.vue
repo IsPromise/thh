@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
-import {remoteService} from "@/service/remote";
+import {getTSpiderHis, remoteService} from "@/service/remote";
 import {NButton, NDataTable, NForm, NFormItem, useMessage} from "naive-ui";
 
 const columns = ref([{title: 'CreateTime', key: 'CreateTime', width: "120px"}])
@@ -18,7 +18,7 @@ const pagination = reactive({
 const data = ref([])
 const message = useMessage()
 const searchPage = function (current) {
-  remoteService.getTSpiderHis(current, pagination.pageSize = 10).then(r => {
+  getTSpiderHis(current, pagination.pageSize = 10).then(r => {
     data.value = r.data.data.itemList
     columns.value = r.data.data.keyList.map(function (item) {
       let tData =  {

@@ -1,7 +1,7 @@
 <script setup>
 import {h, ref} from 'vue'
 import {NButton, NCard, NDataTable, NDynamicTags, NSpace, useMessage} from 'naive-ui'
-import {remoteService} from "@/service/remote";
+import {getTList, remoteService} from "@/service/remote";
 
 const createColumns = () => {
   return [
@@ -49,7 +49,7 @@ const formRef = ref([])
 
 const Search = (searchList) => {
   message.info("开始")
-  remoteService.getTList(searchList).then(r => {
+  getTList(searchList).then(r => {
     dataRef.value = r.data.data
     console.log(r.data)
     message.success("成功")

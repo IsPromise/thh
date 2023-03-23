@@ -2,7 +2,7 @@
 import {NCard, NList, NListItem, NSpace, NTag, NThing} from 'naive-ui'
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
-import {remoteService} from "@/service/remote";
+import {getArticlesDetailApi, remoteService} from "@/service/remote";
 
 
 const listData = ref([])
@@ -12,7 +12,7 @@ let id = 1
 let maxCommentId = 0
 
 function getArticlesDetail() {
-  remoteService.getArticlesDetail(id, maxCommentId).then(r => {
+  getArticlesDetailApi(id, maxCommentId).then(r => {
     console.log(r.data.data)
     listData.value.push(
         {

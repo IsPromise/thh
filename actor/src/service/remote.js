@@ -1,8 +1,6 @@
 import axios from "axios"
 import {useUserStore} from "@/modules/user";
-import {
-    createDiscreteApi,
-} from "naive-ui";
+import {createDiscreteApi,} from "naive-ui";
 
 const {message} = createDiscreteApi(
     ["message"],
@@ -31,7 +29,7 @@ const fail = 1
 
 instanceAxios.interceptors.response.use(response => {
     if (response.headers['new-token'] !== undefined) {
-        userStore.token = response.headers['new-token']
+        userStore.updateToken(response.headers['new-token'])
     }
     const res = response.data
     if (res === undefined) {
@@ -43,18 +41,18 @@ instanceAxios.interceptors.response.use(response => {
     return response
 })
 
-remoteService.getUserInfo = function () {
+export function getUserInfo() {
     return instanceAxios.get("get-user-info-v4")
 }
 
-remoteService.login = function (username, password) {
+export function login(username, password) {
     return instanceAxios.post("/login", {
         username: username,
         password: password
     })
 }
 
-remoteService.reg = function (email, username, password) {
+export function reg(email, username, password) {
     return instanceAxios.post("/reg", {
         email: email,
         username: username,
@@ -62,12 +60,13 @@ remoteService.reg = function (email, username, password) {
     })
 }
 
-remoteService.getTList = function (searchList) {
+export function getTList(searchList) {
     return instanceAxios.post('t-list', {
         SearchList: searchList
     })
 }
-remoteService.getTwitterUserList = function (page = 1, pageSize = 10, search = "") {
+
+export function getTwitterUserList(page = 1, pageSize = 10, search = "") {
     return instanceAxios.get('get-twitter-user-list', {
         params: {
             page: page,
@@ -77,7 +76,7 @@ remoteService.getTwitterUserList = function (page = 1, pageSize = 10, search = "
     })
 }
 
-remoteService.getTwitterTweetList = function (page = 1, pageSize = 10, search = "") {
+export function getTwitterTweetList(page = 1, pageSize = 10, search = "") {
     return instanceAxios.get('get-twitter-tweet-list', {
         params: {
             page: page,
@@ -88,15 +87,15 @@ remoteService.getTwitterTweetList = function (page = 1, pageSize = 10, search = 
 }
 
 
-remoteService.runTSpiderMaster = function () {
+export function runTSpiderMaster() {
     return instanceAxios.get('run-tspider-master')
 }
 
-remoteService.getQueueLen = function () {
+export function getQueueLenApi() {
     return instanceAxios.get('get-queue-len')
 }
 
-remoteService.getTSpiderHis = function (page = 1, pageSize = 10) {
+export function getTSpiderHis(page = 1, pageSize = 10) {
     return instanceAxios.get('get-tspider-his', {
         params: {
             page: page,
@@ -105,7 +104,7 @@ remoteService.getTSpiderHis = function (page = 1, pageSize = 10) {
     })
 }
 
-remoteService.getArticles = function (maxId) {
+export function getArticlesApi(maxId) {
     return instanceAxios.post('bbs/get-articles', {
         maxId: maxId,
         pageSize: 10,
@@ -113,7 +112,7 @@ remoteService.getArticles = function (maxId) {
 }
 
 
-remoteService.getArticlesDetail = function (id, maxCommentId) {
+export function getArticlesDetailApi(id, maxCommentId) {
     return instanceAxios.post('bbs/get-articles-detail', {
         maxCommentId: maxCommentId,
         id: parseInt(id),
@@ -121,7 +120,7 @@ remoteService.getArticlesDetail = function (id, maxCommentId) {
     })
 }
 
-remoteService.getSysInfo = function () {
+export function getSysInfo() {
     return instanceAxios.get("/sys-info")
 }
 

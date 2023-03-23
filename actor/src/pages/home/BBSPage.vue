@@ -9,7 +9,7 @@ const listData = ref([])
 let maxId = 0
 
 function getArticles() {
-  remoteService.getArticles(maxId).then(r => {
+  getArticles(maxId).then(r => {
     let newList = r.data.data.list.map(function (item) {
       maxId = item.id
       return {

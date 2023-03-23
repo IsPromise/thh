@@ -21,7 +21,7 @@ import {
 } from 'naive-ui'
 import {ref} from 'vue'
 import {useIsMobile, useIsSmallDesktop, useIsTablet} from "@/utils/composables";
-import {remoteService} from "@/service/remote"
+import {getUserInfo} from "@/service/remote"
 
 const message = useMessage()
 const listData = ref([
@@ -57,8 +57,8 @@ function showNew() {
   localStorageData.value = JSON.stringify(localStorage)
 }
 
-function getUserInfo() {
-  remoteService.getUserInfo().then(r => {
+function getUserInfoAction() {
+  getUserInfo().then(r => {
     message.success(JSON.stringify(r.data.data))
   })
 }
@@ -66,7 +66,7 @@ function getUserInfo() {
 <template>
   <n-space vertical>
     <n-card>
-      <n-button @click="getUserInfo"> 获取用户信息</n-button>
+      <n-button @click="getUserInfoAction"> 获取用户信息</n-button>
     </n-card>
     <n-card>
       <n-statistic label="SessionStorage">

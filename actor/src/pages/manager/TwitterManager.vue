@@ -3,7 +3,7 @@ import {NButton, NLayout, NLayoutContent, NLayoutHeader, NMenu, useMessage} from
 import TwitterRoutes from "@/pages/manager/twitter/TwitterRoutes";
 import {RouterLink} from "vue-router";
 import {h, ref} from "vue";
-import {remoteService} from "@/service/remote.js";
+import {getQueueLenApi, remoteService, runTSpiderMaster} from "@/service/remote.js";
 
 const message = useMessage()
 const menuOptions = TwitterRoutes.filter(item => {
@@ -20,7 +20,7 @@ const menuOptions = TwitterRoutes.filter(item => {
 const activeKey = ref<string>("")
 
 function newSpider(e) {
-  remoteService.runTSpiderMaster().then(r => {
+  runTSpiderMaster().then(r => {
     message.success(r.data.data.message);
   }).catch(e => {
     console.log(e)
@@ -29,7 +29,7 @@ function newSpider(e) {
 }
 
 function getQueueLen(e) {
-  remoteService.getQueueLen().then(r => {
+  getQueueLenApi().then(r => {
     message.success(r.data.data.message);
   }).catch(e => {
     console.log(e)
