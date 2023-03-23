@@ -9,7 +9,10 @@ const listData = ref([])
 let maxId = 0
 
 function getArticlesAction() {
+
+  console.log(maxId)
   getArticlesApi(maxId).then(r => {
+    console.log(r)
     let newList = r.data.data.list.map(function (item) {
       maxId = item.id
       return {
@@ -30,11 +33,11 @@ function getArticlesAction() {
 
 onMounted(() => {
   maxId = 0
-  getArticlesApi()
+  getArticlesAction()
 })
 
 function more() {
-  getArticlesApi()
+  getArticlesAction()
 }
 
 
@@ -48,7 +51,7 @@ function more() {
         <router-link :to="{path:'articlesPage',query:{title:item.title,id:item.id}}">
           <n-thing :title="item.title">
             <template #description>
-              <n-space size="small" style="margin-top: 4px">
+              <n-space size="small" style="padding-top: 4px">
                 <n-tag v-for="itemTag in item.tag" :bordered="false" type="info" size="small" v-text="itemTag">
                 </n-tag>
               </n-space>
