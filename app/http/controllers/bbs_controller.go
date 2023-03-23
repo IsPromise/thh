@@ -75,7 +75,7 @@ func GetArticlesDetail(request GetArticlesDetailRequest) component.Response {
 
 type WriteArticleReq struct {
 	Id      int64  `json:"id"`
-	Content string `json:"content"`
+	Content string `json:"content" validate:"required"`
 }
 
 func WriteArticles(req component.BetterRequest[WriteArticleReq]) component.Response {
@@ -83,8 +83,13 @@ func WriteArticles(req component.BetterRequest[WriteArticleReq]) component.Respo
 		return component.FailResponse("您当天已发布较多，为保证质量，请明天再发布新帖")
 	}
 	var article Articles.Articles
-	if req.Params.Id == 0 {
+	if req.Params.Id != 0 {
 		article = Articles.Get(req.Params.Id)
+		if article.UserId != req.UserId {
+			return component.FailResponse("不要更改别人发出的帖子哦")
+		}
+	} else {
+		article.UserId = req.UserId
 	}
 	article.Content = req.Params.Content
 	Articles.Save(&article)
