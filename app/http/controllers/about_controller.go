@@ -45,16 +45,6 @@ func About() component.Response {
 	})
 }
 
-type Cat struct {
-	JsonData string `json:"jsonData"`
-	FormData string `form:"formData"`
-}
-
-func Params(response Cat) component.Response {
-	return component.SuccessResponse(
-		component.DataMap{"cat": response})
-}
-
 func SysInfo() component.Response {
 	var s arms.Server
 	var err error

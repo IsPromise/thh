@@ -74,14 +74,6 @@ func Login(r LoginReq) component.Response {
 	})
 }
 
-func UserInfoV3(request component.RequestContext) component.Response {
-	userEntity, err := request.GetUser()
-	if err != nil {
-		return component.FailResponse("账号异常" + err.Error())
-	}
-	return component.SuccessResponse(userEntity)
-}
-
 type null struct {
 }
 

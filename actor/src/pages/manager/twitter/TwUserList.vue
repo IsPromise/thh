@@ -151,8 +151,9 @@ function showInfo() {
       :model="pagination"
       :rules="rules"
       :size="size"
+      style="padding:10px"
   >
-    <n-form-item label="搜索内容" path="phone">
+    <n-form-item>
       <n-space>
         <n-input v-model:value="pagination.search" placeholder="搜索内容"/>
         <n-button attr-type="button" @click="handleValidateClick">

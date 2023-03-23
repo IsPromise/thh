@@ -2,7 +2,6 @@ package routes
 
 import (
 	"fmt"
-	"go/types"
 	"io/fs"
 	"net/http"
 	"path"
@@ -106,25 +105,6 @@ func ginUpAuth[T any](action func(ctx component.RequestContext, request T) compo
 	}
 }
 
-// ginUpNPAuth 支持获取 user 无参数下使用
-func ginUpNPAuth(action func(ctx component.RequestContext) component.Response) func(c *gin.Context) {
-	return func(c *gin.Context) {
-		userIdData, _ := c.Get("userId")
-		userId := userIdData.(uint64)
-		if userId == 0 {
-			c.JSON(http.StatusUnauthorized, resultMap{
-				"message": "un Login",
-			})
-		}
-		response := action(component.RequestContext{
-			UserId: userId,
-		})
-		c.JSON(response.Code, response.Data)
-	}
-}
-
-type null types.Nil
-
 func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Response) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		userIdData, _ := c.Get("userId")
@@ -145,6 +125,43 @@ func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Re
 	}
 }
 
+//// 普通无参数
+//// 普通有参数
+//// 普通用 request
+//// 普通无 request
+//// 登录 无参数
+//// 登录 有参数
+//
+//type unParams func() component.Response
+//type paramsType[T any] func(request T) component.Response
+//
+//func UpButterReqV2[T any](varParams any) func(c *gin.Context) {
+//	switch action := varParams.(type) {
+//	case unParams:
+//		return func(c *gin.Context) {
+//			response := action()
+//			c.JSON(response.Code, response.Data)
+//		}
+//	case paramsType[T]:
+//		return func(c *gin.Context) {
+//			var params T
+//			_ = c.BindJSON(&params)
+//			err := validate.Struct(params)
+//			if err != nil {
+//				c.JSON(http.StatusBadRequest, component.DataMap{
+//					"msg": err.Error(),
+//				})
+//				return
+//			}
+//			response := action(params)
+//			c.JSON(response.Code, response.Data)
+//		}
+//	default:
+//		return func(c *gin.Context) {
+//			c.JSON(http.StatusInternalServerError, "handle不规范")
+//		}
+//	}
+//}
 //
 //func ginUpSuper[R any, T func() component.Response | func(Request R) component.Response](action T) func(c *gin.Context) {
 //	return func(actionItem any) func(c *gin.Context) {

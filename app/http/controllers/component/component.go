@@ -5,9 +5,11 @@ import (
 	"thh/app/models/Users"
 )
 
+type Status int
+
 const (
-	SUCCESS = 0
-	FAIL    = 1
+	SUCCESS Status = iota // 成功
+	FAIL                  // 失败
 )
 
 type BetterRequest[T any] struct {
@@ -29,7 +31,6 @@ func (r *BetterRequest[T]) GetUser() (Users.Users, error) {
 		return r.userInfo, nil
 	}
 	user, _ := Users.Get(r.UserId)
-
 	r.userSet = true
 	r.userInfo = user
 	return r.userInfo, nil

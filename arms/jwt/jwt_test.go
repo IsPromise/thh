@@ -33,7 +33,7 @@ func TestCreateNewToken(t *testing.T) {
 }
 
 func TestVerifyTokenWithFresh(t *testing.T) {
-	token, err := CreateNewToken(123456, 5)
+	token, err := CreateNewToken(123456, 15*time.Second)
 	if err != nil {
 		fmt.Println(err)
 		return

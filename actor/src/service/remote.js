@@ -1,5 +1,13 @@
 import axios from "axios"
 import {useUserStore} from "@/modules/user";
+import {
+    createDiscreteApi,
+} from "naive-ui";
+
+const {message} = createDiscreteApi(
+    ["message"],
+);
+
 
 const instanceAxios = axios.create({
     baseURL: import.meta.env.VITE_DEV_API_HOST,
@@ -7,9 +15,9 @@ const instanceAxios = axios.create({
     headers: {}
 })
 
+const userStore = useUserStore()
 const remoteService = {}
 instanceAxios.interceptors.request.use(config => {
-    const userStore = useUserStore()
     config.headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + userStore.token,
@@ -18,7 +26,24 @@ instanceAxios.interceptors.request.use(config => {
     return config;
 });
 
-remoteService.getUserInfo = function (){
+const success = 0
+const fail = 1
+
+instanceAxios.interceptors.response.use(response => {
+    if (response.headers['new-token'] !== undefined) {
+        userStore.token = response.headers['new-token']
+    }
+    const res = response.data
+    if (res === undefined) {
+        return response
+    }
+    if (res.code === fail) {
+        message.error(res.msg ? res.msg : "响应异常")
+    }
+    return response
+})
+
+remoteService.getUserInfo = function () {
     return instanceAxios.get("get-user-info-v4")
 }
 
@@ -81,7 +106,7 @@ remoteService.getTSpiderHis = function (page = 1, pageSize = 10) {
 }
 
 remoteService.getArticles = function (maxId) {
-    return instanceAxios.post('get-articles', {
+    return instanceAxios.post('bbs/get-articles', {
         maxId: maxId,
         pageSize: 10,
     })
@@ -89,7 +114,7 @@ remoteService.getArticles = function (maxId) {
 
 
 remoteService.getArticlesDetail = function (id, maxCommentId) {
-    return instanceAxios.post('get-articles-detail', {
+    return instanceAxios.post('bbs/get-articles-detail', {
         maxCommentId: maxCommentId,
         id: parseInt(id),
         pageSize: 10,

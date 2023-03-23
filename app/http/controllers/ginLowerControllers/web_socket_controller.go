@@ -41,13 +41,13 @@ func GinIm(ws *websocket.Conn) {
 		}
 		log.Printf("recv: %s", msg)
 		message <- Message{0, client.name, string(msg)}
-
-		//if err = ws.WriteMessage(mt, msg); err != nil {
-		//	log.Println("write:", err)
-		//	break
-		//}
 	}
 }
+
+// onOpen
+// onMessage
+// onSend
+// onClose
 
 type Client struct {
 	conn     *websocket.Conn // 用户websocket连接
@@ -65,7 +65,7 @@ type Message struct {
 }
 
 var clients = make(map[Client]bool) // 用户组映射
-var clientsManager sync.Mutex
+var clientsManager = &sync.Mutex{}
 
 // 此处要设置有缓冲的通道。因为这是goroutine自己从通道中发送并接受数据。
 // 若是无缓冲的通道，该goroutine发送数据到通道后就被锁定，需要数据被接受后才能解锁，而恰恰接受数据的又只能是它自己

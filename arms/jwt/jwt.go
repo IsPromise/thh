@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -40,6 +41,7 @@ func newJWT() *JWT {
 	}
 }
 
+// VerifyTokenWithFresh 验证token 并刷新， 如果token还有1天就过期则生成新的token，否则还是用原来的
 func VerifyTokenWithFresh(tokenStr string) (userId uint64, newToken string, err error) {
 	claims, err := Std().ParseToken(tokenStr)
 	if err != nil {
@@ -47,8 +49,9 @@ func VerifyTokenWithFresh(tokenStr string) (userId uint64, newToken string, err 
 	}
 
 	if !claims.VerifyExpiresAt(time.Now().Add(time.Second*86400*1), true) {
-		claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(expiresTime))
+		claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(validTime))
 		tokenStr, _ = Std().CreateToken(*claims)
+		fmt.Print("快过期了")
 	}
 	return claims.UserId, tokenStr, err
 }
@@ -61,7 +64,7 @@ func VerifyToken(tokenStr string) (userId uint64, err error) {
 	return claims.UserId, err
 }
 
-var expiresTime = time.Second * 86400 * 7
+var validTime = time.Second * 86400 * 7
 
 func CreateNewToken(userId uint64, expireTime time.Duration) (string, error) {
 	cc := CustomClaims{
