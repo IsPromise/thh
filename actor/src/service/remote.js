@@ -120,6 +120,10 @@ export function getArticlesDetailApi(id, maxCommentId) {
     })
 }
 
+export function writeArticlesDetail(){
+
+}
+
 export function getSysInfo() {
     return instanceAxios.get("/sys-info")
 }
