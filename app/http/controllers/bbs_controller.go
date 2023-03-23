@@ -78,13 +78,15 @@ type WriteArticleReq struct {
 	Content string `json:"content"`
 }
 
-func WriteArticles(req WriteArticleReq) component.Response {
-
-	var article Articles.Articles
-	if req.Id == 0 {
-		article = Articles.Get(req.Id)
+func WriteArticles(req component.BetterRequest[WriteArticleReq]) component.Response {
+	if Articles.CanWriteNew(req.UserId, 66) {
+		return component.FailResponse("您当天已发布较多，为保证质量，请明天再发布新帖")
 	}
-	article.Content = req.Content
+	var article Articles.Articles
+	if req.Params.Id == 0 {
+		article = Articles.Get(req.Params.Id)
+	}
+	article.Content = req.Params.Content
 	Articles.Save(&article)
 	return component.SuccessResponse(map[string]any{})
 }

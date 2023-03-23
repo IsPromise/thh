@@ -18,7 +18,7 @@ func ginBBS(ginApp *gin.Engine) {
 
 	bbsAuth := bbs.Use(middleware.JWTAuth4Gin)
 	// 发布文章
-	bbsAuth.POST("write-articles", ginUpJP(controllers.WriteArticles))
+	bbsAuth.POST("write-articles", UpButterReq(controllers.WriteArticles))
 	// 发布评论
 	bbsAuth.POST("articles-comment", ginUpJP(controllers.ArticleComment))
 

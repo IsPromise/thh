@@ -3,6 +3,7 @@ package Articles
 import (
 	"context"
 	querybuild "thh/arms/querymaker"
+	"time"
 )
 
 type Rep struct {
@@ -64,4 +65,10 @@ func IsExist(field, value string) bool {
 func GetByMaxIdPage(id uint64, pageSize int) (entities []Articles) {
 	builder().Where(querybuild.Gt(pid, id)).Order(querybuild.Desc(fieldUpdateTime)).Limit(pageSize).Find(&entities)
 	return
+}
+
+func CanWriteNew(userId uint64, maxCount int64) bool {
+	var count int64
+	builder().Where(querybuild.Eq(fieldUserId, userId)).Where(querybuild.Gt(fieldCreateTime, time.Now().Format("2006-01-02"))).Count(&count)
+	return count < maxCount
 }
