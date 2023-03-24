@@ -72,6 +72,39 @@ goimports -w .
 ```
 go build -ldflags="-w -s" .
 ```
+windows
+```
+SET CGO_ENABLED=0
+SET GOOS=darwin
+SET GOARCH=amd64
+go build
+
+SET CGO_ENABLED=0
+SET GOOS=darwin
+SET GOARCH=arm64
+go build
+
+SET CGO_ENABLED=0
+SET GOOS=linux
+SET GOARCH=amd64
+go build
+```
+
+mac
+```
+go build
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build
+```
+
+linux
+```
+go build
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build
+CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build
+```
+
 
 ## 程序覆盖测试开启及展示
 
