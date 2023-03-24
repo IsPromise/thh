@@ -43,6 +43,7 @@ func Init() {
 	var (
 		logType = config.Get("LOG_TYPE")
 		logPath = config.Get("LOG_PATH", "./storage/log/app.log")
+		debug   = config.GetBool("APP_DEBUG")
 	)
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	logrus.SetReportCaller(true)
@@ -55,7 +56,6 @@ func Init() {
 	//	ForceColors:   conf.LogType() == conf.LogTypeStdout,
 	//})
 
-	debug := config.GetBool("app.debug")
 	log.Out = os.Stdout
 	if debug {
 		log.Level = logrus.TraceLevel

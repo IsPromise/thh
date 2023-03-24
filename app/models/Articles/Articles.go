@@ -13,7 +13,8 @@ const fieldCreateTime = "create_time"
 const fieldUpdateTime = "update_time"
 
 type Articles struct {
-	Id         uint64    `gorm:"primaryKey;column:id;autoIncrement;not null;" json:"id"`                           // 主键
+	Id         uint64    `gorm:"primaryKey;column:id;autoIncrement;not null;" json:"id"` // 主键
+	Title      string    `gorm:"type:varchar(512);not null;default:'';" json:"title"`
 	Content    string    `gorm:"column:content;type:text;default:'';" json:"content"`                              //
 	UserId     uint64    `gorm:"column:user_id;type:bigint;not null;default:0;" json:"userId"`                     //
 	CreateTime time.Time `gorm:"column:create_time;autoCreateTime;type:datetime;not null;" json:"createTime"`      //

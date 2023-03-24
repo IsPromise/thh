@@ -40,7 +40,7 @@ func (l GormLogger) LogMode(level gLogger.LogLevel) gLogger.Interface {
 
 // Info 实现 gLogger.Interface 的 Info 方法
 func (l GormLogger) Info(ctx context.Context, str string, args ...any) {
-	l.logger().Debugf(str, args...)
+	l.logger().Infof(str, args...)
 }
 
 // Warn 实现 gLogger.Interface 的 Warn 方法

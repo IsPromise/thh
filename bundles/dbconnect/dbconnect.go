@@ -43,6 +43,7 @@ func NewMysql(dsn string) (*gorm.DB, error) {
 // ConnectDB 初始化模型
 func connectDB() {
 	fmt.Println("init connectDB")
+	var debug = config.GetBool("APP_DEBUG")
 	var err error
 	switch config.GetString("DB_CONNECTION", "sqlite") {
 	case "sqlite":
@@ -64,6 +65,11 @@ func connectDB() {
 		panic(err)
 	}
 
+	if debug {
+		fmt.Println("开启debug")
+		dbIns = dbIns.Debug()
+	}
+
 	// 获取底层的 sqlDB
 	sqlDB, _ := dbIns.DB()
 	var (
@@ -83,7 +89,6 @@ func connectMysqlDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	// 初始化 MySQL 连接信息
 	var (
 		dbUrl = config.GetString("DATABASE_URL", "db_user:db_pass@tcp(db_host:3306)/db_name?charset=utf8mb4&parseTime=True&loc=Local")
-		debug = config.GetBool("APP_DEBUG")
 	)
 
 	gormConfig := mysql.New(mysql.Config{
@@ -94,17 +99,12 @@ func connectMysqlDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	db, err := gorm.Open(gormConfig, &gorm.Config{
 		Logger: _logger,
 	})
-	if debug {
-		fmt.Println("开启debug")
-		db = db.Debug()
-	}
 	return db, err
 }
 
 func connectSqlLiteDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	var (
 		dbPath = config.Get("DB_PATH", ":memory:")
-		debug  = config.GetBool("APP_DEBUG")
 	)
 
 	dbDir := filepath.Dir(dbPath)
@@ -118,9 +118,5 @@ func connectSqlLiteDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	}
 	// ":memory:"
 	db, err := gorm.Open(sqlite.Open(dbPath+"?_pragma=busy_timeout(5000)"), &gorm.Config{Logger: _logger})
-	if debug {
-		fmt.Println("开启debug")
-		db = db.Debug()
-	}
 	return db, err
 }

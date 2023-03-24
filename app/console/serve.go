@@ -37,7 +37,7 @@ func runWeb(_ *cobra.Command, _ []string) {
 	go RunJob()
 
 	// 初始化应用程序
-	if config.GetBool("app.debug", true) {
+	if config.GetBool("APP_DEBUG", true) {
 		go func() {
 			// go tool pprof http://localhost:6060/debug/pprof/profile
 			//http://127.0.0.1:7070/debug/pprof/
