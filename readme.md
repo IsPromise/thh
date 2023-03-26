@@ -90,6 +90,17 @@ SET GOARCH=amd64
 go build
 ```
 
+powershell
+```powershell
+// 设置Linux编译环境
+$env:CGO_ENABLED="0"
+$env:GOOS="linux"
+$env:GOARCH="amd64"
+ 
+// 开始编译
+go build .
+```
+
 mac
 ```
 go build
@@ -120,4 +131,12 @@ go tool covdata textfmt -i=storage/mycovdata/ -pkg="thh,thh/arms/...,thh/app/htt
 go tool covdata textfmt -i=storage/mycovdata/ -o storage/profile.txt
 go tool cover -func=storage/profile.txt
 go tool cover -html=storage/profile.txt
+```
+
+```shell
+sudo apt install nginx
+sudo systemctl start nginx
+sudo systemctl stop nginx
+sudo systemctl restart nginx
+sudo systemctl status nginx
 ```
