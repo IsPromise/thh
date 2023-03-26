@@ -120,8 +120,12 @@ export function getArticlesDetailApi(id, maxCommentId) {
     })
 }
 
-export function writeArticlesDetail(){
+export function writeArticlesDetail() {
 
+}
+
+export function wsInfo() {
+    return instanceAxios.get('ws-info')
 }
 
 export function getSysInfo() {
