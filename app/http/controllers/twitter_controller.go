@@ -103,7 +103,7 @@ func GetTwitterUserList(param GetTwitterUserListParam) component.Response {
 				Name:       item.Name,
 				Desc:       item.Desc,
 				Url:        fmt.Sprintf("https://twitter.com/%v/with_replies", item.ScreenName),
-				CreateTime: item.CreateTime.Format("2006-01-02 15:05:05"),
+				CreateTime: item.CreateTime.Format("2006-01-02 15:04:05"),
 			}
 		}, pageData.Data),
 		"size":    pageData.PageSize,
