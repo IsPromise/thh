@@ -97,8 +97,13 @@ $env:CGO_ENABLED="0"
 $env:GOOS="linux"
 $env:GOARCH="amd64"
  
+$env:CGO_ENABLED=""
+$env:GOOS=""
+$env:GOARCH=""
 // 开始编译
 go build .
+
+//https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-5.1
 ```
 
 mac
