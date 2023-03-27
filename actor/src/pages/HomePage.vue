@@ -103,10 +103,9 @@ const menuOptions = [
         </n-layout-header>
 
         <n-layout-content position="absolute" style="top: 64px;">
-
             <router-view></router-view>
             <n-card>
-                dasdsad
+              有花堪折直须折,莫待无花空折枝
             </n-card>
         </n-layout-content>
     </n-layout>
