@@ -17,9 +17,9 @@ let sysInfo = () => import("@/pages/manager/SysInfo.vue")
 let login = () => import("@/pages/Login.vue")
 
 
-let bbs = () => import("@/pages/bbs/BBSIndex.vue")
-let bbsPage = () => import("@/pages/bbs/BBSPage.vue")
-let articlesPage = () => import("@/pages/bbs/ArticlesPage.vue")
+let bbs = () => import("@/pages/home/bbs/BBSIndex.vue")
+let bbsPage = () => import("@/pages/home/bbs/BBSPage.vue")
+let articlesPage = () => import("@/pages/home/bbs/ArticlesPage.vue")
 
 
 export default [
