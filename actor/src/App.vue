@@ -9,80 +9,80 @@ import {RouterLink} from "vue-router";
 
 
 const options = [
-  {
-    label: 'super menu',
-    key: 'marina bay sands',
-    disabled: false
-  },
-  {
-    label: () => h(
-        RouterLink,
-        {
-          to: {
-            path: '/manager/',
-          }
-        },
-        {default: () => 'manager'}),
-    key: "manager"
-  },
+    {
+        label: 'super menu',
+        key: 'marina bay sands',
+        disabled: false
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    path: '/manager/',
+                }
+            },
+            {default: () => 'manager'}),
+        key: "manager"
+    },
 
-  {
-    label: () => h(
-        RouterLink,
-        {
-          to: {
-            path: '/home/',
-          }
-        },
-        {default: () => 'home'}),
-    key: "home"
-  },
-  {
-    label: () => h(
-        RouterLink,
-        {
-          to: {
-            path: '/login/'
-          }
-        },
-        {default: () => 'login'},
-    ),
-    key: "login"
-  }
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    path: '/home/',
+                }
+            },
+            {default: () => 'home'}),
+        key: "home"
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    path: '/login/'
+                }
+            },
+            {default: () => 'login'},
+        ),
+        key: "login"
+    }
 ]
 
 function handleSelect(key) {
-  console.log(key)
+    console.log(key)
 }
 </script>
 
 <template>
   <!--  <img alt="Vue logo" src="./assets/logo.png" />-->
   <!--  <HelloWorld msg="Hello Vue 3 + Vite" />-->
-  <n-message-provider>
-    <n-config-provider :locale="zhCN" :date-locale="dateZhCN">
-      <n-layout position="absolute">
-        <n-layout position="absolute">
-          <router-view></router-view>
-        </n-layout>
+    <n-message-provider>
+        <n-config-provider :locale="zhCN" :date-locale="dateZhCN">
+            <n-layout position="absolute">
+                <n-layout position="absolute">
+                    <router-view></router-view>
+                </n-layout>
 
-        <div
-            style="right: 60px;bottom: 100px;position:absolute"
-        >
-          <n-dropdown trigger="hover" :options="options" @select="handleSelect">
-            <n-button circle size="large">
-              <template #icon>
-                <n-icon>
-                  <sparkles-outline/>
-                </n-icon>
-              </template>
-            </n-button>
-          </n-dropdown>
+                <div
+                        style="right: 60px;bottom: 100px;position:absolute;z-index:1501"
+                >
+                    <n-dropdown trigger="hover" :options="options" @select="handleSelect">
+                        <n-button circle size="large">
+                            <template #icon>
+                                <n-icon>
+                                    <sparkles-outline/>
+                                </n-icon>
+                            </template>
+                        </n-button>
+                    </n-dropdown>
 
-        </div>
-      </n-layout>
-    </n-config-provider>
-  </n-message-provider>
+                </div>
+            </n-layout>
+        </n-config-provider>
+    </n-message-provider>
 </template>
 
 <style>

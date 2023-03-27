@@ -33,36 +33,12 @@ func Create(entity *Users) error {
 	return builder().Create(&entity).Error
 }
 
-func Save(entity *Users) int64 {
-	result := builder().Save(entity)
-	return result.RowsAffected
-}
-
-func Update(entity *Users) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]Users) {
-	builder().Save(entities)
-}
-
-func Delete(entity *Users) int64 {
-	result := builder().Delete(entity)
-	return result.RowsAffected
-}
-
-func GetBy(field, value string) (entity Users) {
-	builder().Where(field+" = ?", value).First(&entity)
-	return
-}
-
 func All() (entities []Users) {
 	builder().Find(&entities)
 	return
 }
 
-func IsExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
+func GetByUsername(username string) (entities *Users) {
+	builder().Where(querybuild.Eq(fieldUsername, username)).First(entities)
+	return
 }

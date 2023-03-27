@@ -2,6 +2,8 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import router from './route/router'
 import {createPinia} from 'pinia'
+import 'mavon-editor/dist/css/index.css'
+import mavonEditor from 'mavon-editor'
 // !import 不能忘记引入katex的样式
 // import 'katex/dist/katex.css'
 // 引入katex下的自动渲染函数
@@ -32,11 +34,9 @@ const renderOption = {
 // }
 
 const app = createApp(App)
-// app.config.globalProperties.$formula = function (dom) {
-//     renderMathInElement(dom, renderOption)
-// }
 
 app.use(router)
     .use(createPinia())
-app.mount('#app')
+    .use(mavonEditor)
+    .mount('#app')
 

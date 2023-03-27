@@ -5,10 +5,7 @@ import sun from "@/pages/HomePage.vue";
 import moon from "@/pages/AllManager.vue";
 import twitterTool from "@/pages/manager/twitter/TwitterRoutes.js"
 
-let home = () => import("@/pages/home/MainPage.vue")
 let about = () => import("@/pages/home/AboutPage.vue")
-let bbs = () => import("@/pages/home/BBSPage.vue")
-let articlesPage = () => import("@/pages/home/ArticlesPage.vue")
 let gridPage = () => import("@/pages/manager/GridPageDemo.vue")
 let allTool = () => import("@/pages/manager/AllTool.vue")
 let traefikManager = () => import("@/pages/manager/TraefikRouterManager.vue")
@@ -20,6 +17,11 @@ let sysInfo = () => import("@/pages/manager/SysInfo.vue")
 let login = () => import("@/pages/Login.vue")
 
 
+let bbs = () => import("@/pages/bbs/BBSIndex.vue")
+let bbsPage = () => import("@/pages/bbs/BBSPage.vue")
+let articlesPage = () => import("@/pages/bbs/ArticlesPage.vue")
+
+
 export default [
     {
         path: '/:catchAll(.*)*', name: '', redirect: '/manager/'
@@ -29,12 +31,17 @@ export default [
     },
     {
         path: '/home', component: sun, children: [
-            {name: '', path: '', component: home},
+            {name: '', path: '', redirect: '/home/index'},
             {name: 'index', path: 'index', component: index},
-            {name: 'home', path: 'home', component: home},
+            {
+                path: 'bbs', component: bbs, children: [
+                    {name: '', path: '', redirect: '/home/bbs/bbs'},
+                    {name: 'bbs', path: 'bbs', component: bbsPage},
+                    {name: 'articlesPage', path: 'articlesPage', component: articlesPage},
+                ]
+            },
             {name: 'about', path: 'about', component: about},
-            {name: 'bbs', path: 'bbs', component: bbs},
-            {name: 'articlesPage', path: 'articlesPage', component: articlesPage},
+
         ]
     },
     {
