@@ -68,6 +68,7 @@ const menuOptions = [
     <n-layout position="absolute">
 
         <n-layout-header class="l-header" position="absolute"
+                         style="height: 64px; padding: 8px;"
                          bordered
         >
             <n-grid cols="24" item-responsive>
@@ -102,7 +103,7 @@ const menuOptions = [
 
         </n-layout-header>
 
-        <n-layout-content position="absolute" style="top: 64px;">
+        <n-layout-content position="absolute" style="top: 64px;"  :native-scrollbar="false">
             <router-view></router-view>
             <n-card>
               有花堪折直须折,莫待无花空折枝
