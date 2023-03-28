@@ -1,23 +1,11 @@
 #app, html, body {
     height: 100%;
     background-color: #E9EEF3;
+    margin: 0;
 }
 
-.top {
-    height: 10%;
-}
 
-.top-other {
-    height: 90%;
-}
-
-.n-layout-header,
-.n-layout-footer {
-    padding: 24px;
-}
-
-.n-layout-sider {
-}
-
-.n-layout-content {
+body {
+    display: flex; /* 使用 flex 布局 */
+    flex-direction: column; /* 竖直方向排列 */
 }

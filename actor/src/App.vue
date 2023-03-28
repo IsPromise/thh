@@ -57,30 +57,26 @@ function handleSelect(key) {
 </script>
 
 <template>
-  <!--  <img alt="Vue logo" src="./assets/logo.png" />-->
-  <!--  <HelloWorld msg="Hello Vue 3 + Vite" />-->
     <n-message-provider>
         <n-config-provider :locale="zhCN" :date-locale="dateZhCN">
             <n-layout position="absolute">
-                <n-layout position="absolute">
-                    <router-view></router-view>
-                </n-layout>
-
-                <div
-                        style="right: 60px;bottom: 100px;position:absolute;z-index:1501"
-                >
-                    <n-dropdown trigger="hover" :options="options" @select="handleSelect">
-                        <n-button circle size="large">
-                            <template #icon>
-                                <n-icon>
-                                    <sparkles-outline/>
-                                </n-icon>
-                            </template>
-                        </n-button>
-                    </n-dropdown>
-
-                </div>
+                <router-view></router-view>
             </n-layout>
+
+            <div
+                style="right: 60px;bottom: 100px;position:absolute;z-index:1501"
+            >
+                <n-dropdown trigger="hover" :options="options" @select="handleSelect">
+                    <n-button circle size="large">
+                        <template #icon>
+                            <n-icon>
+                                <sparkles-outline/>
+                            </n-icon>
+                        </template>
+                    </n-button>
+                </n-dropdown>
+
+            </div>
         </n-config-provider>
     </n-message-provider>
 </template>

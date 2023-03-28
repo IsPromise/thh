@@ -10,6 +10,9 @@ const userStore = useUserStore()
 function login() {
   userStore.login(loginUsername.value, loginPassword.value)
 }
+function regAction(){
+    userStore.login(loginUsername.value, loginPassword.value)
+}
 </script>
 
 <template>
