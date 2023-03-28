@@ -1,37 +1,11 @@
 <script setup>
-import {NList,NListItem,NCalendar, NGrid, NGridItem, NTimeline, NTimelineItem, useMessage} from 'naive-ui';
-import moment from "moment"
+import {NList, NListItem, useMessage} from 'naive-ui';
 import {ref} from "vue";
 import {addDays, isYesterday} from "date-fns";
 
 
 const message = useMessage()
-let dayInfoList = [];
-let nowT = moment()
-let t = moment(moment().format("YYYY-01-01"))
-for (let i = 1; i < 12; i++) {
-  t.add(1, "months")
-  let type = 'warning'
-  let lineType = 'dashed'
-  if (parseInt(t.format('M')) > parseInt(nowT.format('M'))) {
-    type = 'success'
-    lineType = 'default'
-  }
-  let timeInfo = t.format('YYYY-MM-DD')
-  dayInfoList.push({
-    title: timeInfo,
-    time: timeInfo,
-    // content: timeInfo,
-    type: type,
-    lineType: lineType
-  })
-}
-dayInfoList.sort(function (item1, item2) {
-  return item1.time > item2.time ? -1 : 1
-})
 
-dayInfoList.push({title: "start"})
-dayInfoList.unshift({title: "end", type: "success"});
 
 function success() {
   message.success(
@@ -51,36 +25,35 @@ function isDateDisabled(timestamp) {
 }
 </script>
 <template>
-  <n-list  class="thh-index" :show-divider="false">
+  <n-list class="thh-index" :show-divider="false">
     <n-list-item>
-      <div class="greetings">
+      <div class="greetings" style=" text-align: center;">
         <h1 class="green">thh</h1>
-        <h3>
-          You’ve successfully created a project with
-          <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-          <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-        </h3>
+        <p>候鸟归来时 羽翼扑满尘</p>
+        <p>容我再等你一个转身</p>
+        <p>斜阳对黄昏 谁的容颜老三分</p>
+        <p>巷子里酒香 越传越深</p>
+        <br>
+        <p>莫等到白发催人泪 徒留悔恨增伤悲</p>
+        <p>莫使金樽空对月 今朝有酒今朝醉</p>
+        <p>莫怪青山换不回 念天地悠悠轮回</p>
+        <p>弹指一挥这一生 也无悔</p>
+        <br>
+        <p>候鸟归来时 羽翼扑满尘</p>
+        <p>容我再等你一个转身</p>
+        <p>斜阳对黄昏 谁的容颜老三分</p>
+        <p>巷子里酒香 越传越深</p>
+        <br>
+        <p>莫等到白发催人泪 徒留悔恨增伤悲</p>
+        <p>莫使金樽空对月 今朝有酒今朝醉</p>
+        <p>莫怪青山换不回 念天地悠悠轮回</p>
+        <p>弹指一挥这一生 也无悔</p>
+        <br>
+        <p>莫等到山河都踏碎 徒留行囊换愚昧</p>
+        <p>莫使年华付流水 敢爱敢恨把你追</p>
+        <p>莫怪烛光不够美 千古诗篇来赞美</p>
+        <p>我许下山盟海誓 永相随</p>
       </div>
-    </n-list-item>
-    <n-list-item >
-      <n-timeline :size="'large'" >
-        <n-timeline-item v-for="timeInfo in dayInfoList" :type="timeInfo.type"
-                         :title="timeInfo.title"
-                         :content="timeInfo.content"
-                         :time="timeInfo.time"
-                         :line-type="timeInfo.lineType"
-        />
-      </n-timeline>
-    </n-list-item>
-    <n-list-item >
-      <n-calendar
-          @update:value="handleUpdateValue"
-          #="{ year, month, date }"
-          v-model:value="value"
-          :is-date-disabled="isDateDisabled"
-      >
-        {{ year }}-{{ month }}-{{ date }}
-      </n-calendar>
     </n-list-item>
   </n-list>
 </template>
@@ -96,10 +69,11 @@ h3 {
   font-size: 1.2rem;
 }
 
-.greetings{
+.greetings {
   max-width: 1280px;
   margin: 0 auto;
 }
+
 .greetings h1,
 .greetings h3 {
   text-align: center;
@@ -111,7 +85,7 @@ h3 {
 /*    text-align: left;*/
 /*  }*/
 /*}*/
-.thh-index .n-list-item{
+.thh-index .n-list-item {
   padding-left: 20px;
   padding-right: 20px;
 }
