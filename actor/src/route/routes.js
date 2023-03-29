@@ -20,6 +20,7 @@ let login = () => import("@/pages/Login.vue")
 let bbs = () => import("@/pages/home/bbs/BBSIndex.vue")
 let bbsPage = () => import("@/pages/home/bbs/BBSPage.vue")
 let articlesPage = () => import("@/pages/home/bbs/ArticlesPage.vue")
+let articlesEdit = () => import("@/pages/home/bbs/ArticlesEdit.vue")
 
 
 export default [
@@ -38,6 +39,7 @@ export default [
                     {name: '', path: '', redirect: '/home/bbs/bbs'},
                     {name: 'bbs', path: 'bbs', component: bbsPage},
                     {name: 'articlesPage', path: 'articlesPage', component: articlesPage},
+                    {name: 'articlesEdit', path: 'articlesEdit', component: articlesEdit},
                 ]
             },
             {name: 'about', path: 'about', component: about},

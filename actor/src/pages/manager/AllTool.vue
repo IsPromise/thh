@@ -22,6 +22,7 @@ import {
 import {ref} from 'vue'
 import {useIsMobile, useIsSmallDesktop, useIsTablet} from "@/utils/composables";
 import {getUserInfo} from "@/service/remote"
+import MChat from "@/pages/manager/MChat.vue";
 
 const message = useMessage()
 const listData = ref([
@@ -67,6 +68,7 @@ const mdData = ref("# h1")
 </script>
 <template>
     <n-space vertical>
+      <MChat></MChat>
         <n-card>
             <n-button @click="getUserInfoAction"> 获取用户信息</n-button>
         </n-card>
@@ -88,9 +90,6 @@ const mdData = ref("# h1")
             |SmallDesktop:<span>{{ isSmallDesktop }}</span>
         </n-card>
 
-        <n-card>
-            <mavon-editor v-model:value="mdData"/>
-        </n-card>
         <n-card title="things">
             <n-grid>
                 <n-grid-item :span="24">
