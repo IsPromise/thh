@@ -5,6 +5,7 @@ import {useIsMobile, useIsSmallDesktop, useIsTablet} from '@/utils/composables';
 import {FastFoodOutline as CashIcon, FishOutline, GameController, InfiniteOutline} from '@vicons/ionicons5'
 import {h, ref} from "vue";
 import {RouterLink} from "vue-router";
+import UserInfoCard from "@/pages/home/UserInfoCard.vue";
 
 function renderIcon(icon) {
   return () => h(NIcon, null, {default: () => h(icon)});
@@ -61,22 +62,8 @@ const menuOptions = [
           <!--                    <n-input type="text">asdasd</n-input>-->
         </n-gi>
         <n-gi span="0 800:8">
-          <n-gi style="float:right">
-            <n-icon size="40" color="#0e7a0d">
-              <game-controller/>
-            </n-icon>
-            <n-avatar
-                round
-                size="medium"
-                src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-            />
-            <n-avatar
-                round
-                size="medium"
-                src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-            >
-              旺财
-            </n-avatar>
+          <n-gi style="float:right;padding-right: 30px">
+          <user-info-card></user-info-card>
           </n-gi>
 
         </n-gi>
