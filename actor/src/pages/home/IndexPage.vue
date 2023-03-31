@@ -73,7 +73,7 @@ h3 {
 
 .green {
   text-decoration: none;
-  color: #5BACFCFF;
+  /*color: #5BACFCFF;*/
   transition: 0.4s;
 }
 
