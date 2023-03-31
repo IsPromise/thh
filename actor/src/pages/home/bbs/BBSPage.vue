@@ -1,6 +1,6 @@
 <script setup>
 import {NButton, NCard, NList, NListItem, NSpace, NTag, NThing} from 'naive-ui'
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {getArticlesPageApi} from "@/service/remote";
 
 const listData = ref([])
@@ -34,6 +34,28 @@ function more() {
 }
 
 
+
+const text = ref('金色传说') // 需要进行高亮的文本
+const textColor = ref('#000') // 文本颜色
+
+let interval // 定时器变量
+
+// 定义高亮动画函数，每 200ms 切换一次文本颜色
+function highlightAnimation() {
+    interval = setInterval(() => {
+        textColor.value = textColor.value === '#fff' ? '#E21C1CFF' : '#fff'
+    }, 200)
+}
+
+// 在组件挂载时启动高亮动画
+onMounted(() => {
+    highlightAnimation()
+})
+
+// 在组件卸载时停止高亮动画
+onUnmounted(() => {
+    clearInterval(interval)
+})
 </script>
 <template>
     <n-card style="margin:0 auto">
@@ -43,6 +65,9 @@ function more() {
                     <n-thing>
                         <template #description>
                             <n-space size="small" style="padding-top: 4px">
+                                <span class="highlight-animation" :style="{ color: textColor }">
+                                    {{ text }}
+                                </span>
                                 {{ item.title }}
                                 <n-tag v-for="itemTag in item.tag" :bordered="false" type="info" size="small"
                                        v-text="itemTag">
@@ -62,7 +87,19 @@ function more() {
         </n-list>
     </n-card>
 </template>
-<style>
+<style scoped>
+.highlight-animation {
+    animation: highlight 0.5s ease-in-out alternate infinite;
+}
+
+@keyframes highlight {
+    from {
+        background-color: #fff;
+    }
+    to {
+        background-color: #ffff00;
+    }
+}
 a {
     text-decoration: none
 }
