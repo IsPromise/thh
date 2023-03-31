@@ -63,8 +63,8 @@ function buildMenuOption(parentPath, route, deep = 0) {
 }
 
 let menuOptions = []
-for (let i = 0; i < routes.length; i++) {
-    menuOptions.push(...buildMenuOption('', routes[i]))
+for (const element of routes) {
+    menuOptions.push(...buildMenuOption('', element))
 }
 const options = menuOptions
 const collapsed = ref(false)
@@ -87,9 +87,9 @@ function handleSelect() {
         >
             <n-layout style="float: right">
                 <n-dropdown trigger="hover" :options="options">
-                    <n-button>恒昼菜单</n-button>
+                    <n-button>旺财</n-button>
                 </n-dropdown>
-                <n-button @click="activate('left')">暗影菜单</n-button>
+                <n-button @click="activate('left')">阿福</n-button>
             </n-layout>
 
         </n-layout-header
