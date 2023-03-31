@@ -145,3 +145,33 @@ sudo systemctl stop nginx
 sudo systemctl restart nginx
 sudo systemctl status nginx
 ```
+
+
+ng
+```conf
+upstream my_server {
+        # 将流量代理到你的网站所在的服务器 IP 和端口
+    server host.docker.internal:90;
+}
+
+server {
+    listen 80 default_server;
+
+    # 支持 WebSocket 流量
+    location /ws {
+        proxy_pass http://my_server;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400;
+    }
+
+    # 其他 HTTP 流量
+    location / {
+        proxy_pass http://my_server;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```

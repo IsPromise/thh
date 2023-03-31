@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	"github.com/spf13/cast"
 	"io/fs"
 	"net/http"
 	"path"
@@ -80,35 +81,10 @@ func ginUpNP(action func() component.Response) func(c *gin.Context) {
 	}
 }
 
-// ginUpAuth  支持获取user 支持参数 在 auth 中间件后使用
-func ginUpAuth[T any](action func(ctx component.RequestContext, request T) component.Response) func(c *gin.Context) {
-	return func(c *gin.Context) {
-		userIdData, _ := c.Get("userId")
-		userId := userIdData.(uint64)
-		if userId == 0 {
-			c.JSON(http.StatusUnauthorized, resultMap{
-				"message": "un Login",
-			})
-		}
-		var params T
-		_ = c.ShouldBind(&params)
-		err := validate.Struct(params)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, resultMap{
-				"msg": err.Error(),
-			})
-		}
-		response := action(component.RequestContext{
-			UserId: userId,
-		}, params)
-		c.JSON(response.Code, response.Data)
-	}
-}
-
 func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Response) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		userIdData, _ := c.Get("userId")
-		userId := userIdData.(uint64)
+		userId := cast.ToUint64(userIdData)
 		var params T
 		_ = c.ShouldBind(&params)
 		err := validate.Struct(params)

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +18,10 @@ func WebSocketMid(handler func(*websocket.Conn)) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
+			fmt.Println(err)
 			_, err = c.Writer.Write([]byte(err.Error()))
 			if err != nil {
+				fmt.Println(err)
 				return
 			}
 			return

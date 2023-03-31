@@ -9,7 +9,7 @@ const on = "on"
 const off = "off"
 
 func UseMigration() bool {
-	openMigration := config.GetString("database.mysql.openMigration")
+	openMigration := config.GetString("OPEN_MIGRATION")
 	return openMigration == on
 }
 

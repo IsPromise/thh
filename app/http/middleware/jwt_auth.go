@@ -25,6 +25,7 @@ func JWTAuth4Gin(c *gin.Context) {
 			errorMsg = "授权已过期"
 		}
 		c.JSON(http.StatusUnauthorized, errorMsg)
+		c.Abort()
 		return
 	}
 	if token != newToken {

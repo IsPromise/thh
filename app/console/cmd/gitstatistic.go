@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"thh/bundles/config"
 	"time"
 )
 
@@ -26,8 +27,7 @@ const (
 )
 
 func runGitstatistic(_ *cobra.Command, _ []string) {
-	root := "/Users/thh/workspace/" // 指定根目录
-
+	root := config.GetString("WORKSPACE_PATH") // 指定根目录
 	// 遍历指定目录下的所有 Git 项目
 	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
 		if err != nil {

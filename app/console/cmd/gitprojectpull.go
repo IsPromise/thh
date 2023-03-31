@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"thh/bundles/config"
 )
 
 func init() {
@@ -18,12 +19,8 @@ func init() {
 }
 
 func runAllprojectpull(_ *cobra.Command, _ []string) {
-
-	root := "/Users/thh/workspace/" // 指定根目录
-
+	root := config.GetString("WORKSPACE_PATH") // 指定根目录
 	// 定义一个匿名函数，用于处理每个目录
-
-	// 定义一个匿名函数，处理每个目录
 	var visitDirFunc = func(path string, f os.FileInfo, err error) error {
 		if err != nil {
 			return err

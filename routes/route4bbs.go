@@ -10,6 +10,8 @@ func ginBBS(ginApp *gin.Engine) {
 	bbs := ginApp.Group("api/bbs")
 	// 文章列表
 	bbs.POST("get-articles", ginUpJP(controllers.GetArticles))
+	// 文章分页
+	bbs.POST("get-articles-page", ginUpJP(controllers.GetArticlesPage))
 	// 文章详情
 	bbs.POST("get-articles-detail", ginUpJP(controllers.GetArticlesDetail))
 	// 热门链接

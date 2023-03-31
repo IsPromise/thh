@@ -4,6 +4,7 @@ import (
 	"thh/app/http/controllers/component"
 	"thh/app/models/Articles"
 	"thh/app/models/Comment"
+	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/arms"
 	"time"
 )
@@ -14,8 +15,10 @@ type GetArticlesRequest struct {
 }
 
 type ArticlesDto struct {
-	Id      uint64 `json:"id"`
-	Content string `json:"content"`
+	Id             uint64 `json:"id"`
+	Content        string `json:"content"`
+	Title          string `json:"title"`
+	LastUpdateTime string `json:"lastUpdateTime"`
 }
 
 func GetArticles(request GetArticlesRequest) component.Response {
@@ -24,17 +27,46 @@ func GetArticles(request GetArticlesRequest) component.Response {
 	}
 	articles := Articles.GetByMaxIdPage(request.MaxId, request.PageSize)
 	var maxId uint64
+	if len(articles) > 0 {
+		maxId = articles[0].Id
+	}
 	list := arms.ArrayMap(func(t Articles.Articles) ArticlesDto {
-		maxId = t.Id
 		return ArticlesDto{
-			Id:      t.Id,
-			Content: t.Content,
+			Id:             t.Id,
+			Title:          t.Title,
+			Content:        t.Content,
+			LastUpdateTime: t.UpdateTime.Format("2006-01-02 15:04:05"),
 		}
 	}, articles)
 
 	return component.SuccessResponse(map[string]any{
 		"maxId": maxId,
 		"list":  list,
+	})
+}
+
+type GetArticlesPageRequest struct {
+	Page     int    `form:"page"`
+	PageSize int    `form:"pageSize"`
+	Search   string `form:"search"`
+}
+
+func GetArticlesPage(param GetArticlesPageRequest) component.Response {
+	articles := Articles.Page(Articles.PageQuery{Page: param.Page, PageSize: param.PageSize})
+	pageData := FTwitterTweet.Page(FTwitterTweet.PageQuery{
+		Page: param.Page, PageSize: param.PageSize, Search: param.Search,
+	})
+	return component.SuccessResponse(component.DataMap{
+		"list": arms.ArrayMap(func(t Articles.Articles) ArticlesDto {
+			return ArticlesDto{Id: t.Id,
+				Title:          t.Title,
+				Content:        t.Content,
+				LastUpdateTime: t.UpdateTime.Format("2006-01-02 15:04:05"),
+			}
+		}, articles.Data),
+		"size":    pageData.PageSize,
+		"total":   pageData.Total,
+		"current": param.Page,
 	})
 }
 
@@ -67,6 +99,7 @@ func GetArticlesDetail(request GetArticlesDetailRequest) component.Response {
 		}
 	}, comments)
 	return component.SuccessResponse(map[string]any{
+		"articleTitle":   &article.Title,
 		"articleContent": &article.Content,
 		"commentList":    commentList,
 	})

@@ -1,32 +1,26 @@
 <script setup>
 import {NButton, NCard, NList, NListItem, NSpace, NTag, NThing} from 'naive-ui'
 import {onMounted, ref} from "vue";
-import {getArticlesApi, remoteService} from "@/service/remote";
+import {getArticlesPageApi} from "@/service/remote";
 
 const listData = ref([])
 
 let maxId = 0
 
 function getArticlesAction() {
-
-    console.log(maxId)
-    getArticlesApi(maxId).then(r => {
-        console.log(r)
+    getArticlesPageApi(maxId).then(r => {
         let newList = r.data.result.list.map(function (item) {
-            maxId = item.id
             return {
                 id: item.id,
-                title: "title1" + item.id,
+                title: item.title,
                 tag: ["tag1", "tag2"],
                 desc: item.content,
-                lastUpdate: "2022-12-28 01:01:01",
-
+                lastUpdateTime: item.lastUpdateTime,
                 body: item.content
             }
         })
         listData.value.push(...newList)
-    }).catch(e => {
-        console.log(e)
+        maxId += 1
     })
 }
 
@@ -43,10 +37,8 @@ function more() {
 </script>
 <template>
     <n-card style="margin:0 auto">
-
         <n-list>
             <n-list-item v-for="item in listData">
-
                 <router-link :to="{path:'articlesPage',query:{title:item.title,id:item.id}}">
                     <n-thing>
                         <template #description>
@@ -55,17 +47,16 @@ function more() {
                                 <n-tag v-for="itemTag in item.tag" :bordered="false" type="info" size="small"
                                        v-text="itemTag">
                                 </n-tag>
+                                {{ item.lastUpdateTime }}
                             </n-space>
                         </template>
                     </n-thing>
                 </router-link>
             </n-list-item>
             <n-list-item>
-                <n-thing>
-                    <n-button @click="more">
-                        more
-                    </n-button>
-                </n-thing>
+                <n-button @click="more">
+                    more
+                </n-button>
             </n-list-item>
 
         </n-list>

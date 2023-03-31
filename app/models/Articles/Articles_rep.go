@@ -72,3 +72,43 @@ func CantWriteNew(userId uint64, maxCount int64) bool {
 	builder().Where(querybuild.Eq(fieldUserId, userId)).Where(querybuild.Gt(fieldCreateTime, time.Now().Format("2006-01-02"))).Count(&count)
 	return count > maxCount
 }
+
+type PageQuery struct {
+	Page, PageSize int
+	Search         string
+}
+
+func Page(q PageQuery) struct {
+	Page     int
+	PageSize int
+	Total    int64
+	Data     []Articles
+} {
+	var list []Articles
+	if q.Page > 0 {
+		q.Page -= 1
+	} else {
+		q.Page = 0
+	}
+	if q.PageSize < 1 {
+		q.PageSize = 10
+	}
+	b := builder()
+	if q.Search != "" {
+		b.Where(querybuild.Like(fieldContent, q.Search))
+	}
+	b.Limit(q.PageSize).Offset(q.PageSize * q.Page).Order("id desc").Find(&list)
+
+	var total int64
+	if q.Search != "" {
+		builder().Where(querybuild.Like(fieldContent, q.Search)).Count(&total)
+	} else {
+		builder().Count(&total)
+	}
+	return struct {
+		Page     int
+		PageSize int
+		Total    int64
+		Data     []Articles
+	}{Page: q.Page, PageSize: q.PageSize, Data: list, Total: total}
+}

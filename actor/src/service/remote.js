@@ -111,6 +111,14 @@ export function getArticlesApi(maxId) {
     })
 }
 
+export function getArticlesPageApi(page=1,pageSize=10,search="") {
+    return instanceAxios.post('bbs/get-articles-page', {
+        page: page,
+        pageSize: pageSize,
+        search: search
+    })
+}
+
 
 export function getArticlesDetailApi(id, maxCommentId) {
     return instanceAxios.post('bbs/get-articles-detail', {
