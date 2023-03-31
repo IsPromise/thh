@@ -19,8 +19,8 @@ const data = ref([])
 const message = useMessage()
 const searchPage = function (current) {
   getTSpiderHis(current, pagination.pageSize = 10).then(r => {
-    data.value = r.data.data.itemList
-    columns.value = r.data.data.keyList.map(function (item) {
+    data.value = r.data.result.itemList
+    columns.value = r.data.result.keyList.map(function (item) {
       let tData =  {
         title: item, key: item, ellipsis: true
       }
@@ -30,8 +30,8 @@ const searchPage = function (current) {
       return tData
     })
     pagination.page = current
-    pagination.pageCount = parseInt(String(r.data.data.total / r.data.data.size))
-    pagination.itemCount = r.data.data.total
+    pagination.pageCount = parseInt(String(r.data.result.total / r.data.result.size))
+    pagination.itemCount = r.data.result.total
     message.success("success");
   }).catch(e => {
     console.log(e)

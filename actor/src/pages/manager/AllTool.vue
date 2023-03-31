@@ -60,7 +60,7 @@ function showNew() {
 
 function getUserInfoAction() {
     getUserInfo().then(r => {
-        message.success(JSON.stringify(r.data.data))
+        message.success(JSON.stringify(r.data.result))
     })
 }
 

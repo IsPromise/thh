@@ -50,7 +50,7 @@ const formRef = ref([])
 const Search = (searchList) => {
   message.info("开始")
   getTList(searchList).then(r => {
-    dataRef.value = r.data.data
+    dataRef.value = r.data.result
     console.log(r.data)
     message.success("成功")
   }).catch((error) => {

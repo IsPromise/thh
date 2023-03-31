@@ -13,7 +13,7 @@ let maxCommentId = 0
 
 function getArticlesDetail() {
   getArticlesDetailApi(id, maxCommentId).then(r => {
-    console.log(r.data.data)
+    console.log(r.data.result)
     listData.value.push(
         {
           title: "title1",
@@ -21,9 +21,9 @@ function getArticlesDetail() {
           desc: "bodybodybodybodybodybodybody",
           createDate: "2022-12-28 01:01:01",
           lastUpdateDate: "2022-12-28 01:01:01",
-          body: r.data.data.articleContent
+          body: r.data.result.articleContent
         })
-    let commentData = r.data.data.commentList.map(function (item) {
+    let commentData = r.data.result.commentList.map(function (item) {
       return {
         username: "" + item.userId,
         content: item.content,

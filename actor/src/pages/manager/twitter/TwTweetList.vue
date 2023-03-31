@@ -95,10 +95,10 @@ const dataRef = ref([])
 const formRef = ref(null);
 const searchPage = function (current) {
     getTwitterTweetList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
-        dataRef.value = r.data.data.itemList
+        dataRef.value = r.data.result.itemList
         paginationReactive.page = current
-        paginationReactive.pageCount = parseInt(String(r.data.data.total / r.data.data.size))
-        paginationReactive.itemCount = r.data.data.total
+        paginationReactive.pageCount = parseInt(String(r.data.result.total / r.data.result.size))
+        paginationReactive.itemCount = r.data.result.total
         message.success("success");
     }).catch(e => {
         console.log(e)
@@ -136,7 +136,7 @@ function handleValidateClick(e) {
 
 function newSpider(e) {
     runTSpiderMaster().then(r => {
-        message.success(r.data.data.message);
+        message.success(r.data.result.message);
     }).catch(e => {
         console.log(e)
         message.success("error");
@@ -145,7 +145,7 @@ function newSpider(e) {
 
 function getQueueLen(e) {
     getQueueLenApi().then(r => {
-        message.success(r.data.data.message);
+        message.success(r.data.result.message);
     }).catch(e => {
         console.log(e)
         message.success("error");

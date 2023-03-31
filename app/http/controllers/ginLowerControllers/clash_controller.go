@@ -1,4 +1,4 @@
-package lowerControllers
+package ginLowerControllers
 
 import (
 	"github.com/spf13/cast"
@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const config = `port: 7890
+const configData = `port: 7890
 socks-port: 7891
 redir-port: 7892
 allow-lan: false
@@ -28,7 +28,7 @@ func GinGetClashConfig(c *gin.Context) {
 		r := strings.Split(c.Request.Host, ":")
 		host = r[0]
 	}
-	configRep := strings.ReplaceAll(config, "#{host}", host)
+	configRep := strings.ReplaceAll(configData, "#{host}", host)
 	c.String(http.StatusOK, configRep)
 }
 

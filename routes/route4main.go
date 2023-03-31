@@ -4,7 +4,6 @@ import (
 	"github.com/gin-contrib/gzip"
 	"thh/app/http/controllers"
 	"thh/app/http/controllers/ginLowerControllers"
-	"thh/app/http/controllers/lowerControllers"
 	"thh/app/http/middleware"
 	"thh/arms"
 	"thh/arms/app"
@@ -18,8 +17,8 @@ func ginWeb(ginApp *gin.Engine) {
 	} else {
 		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).Static("/actor", "./actor/dist")
 	}
-	ginApp.GET("get-clash-config", lowerControllers.GinGetClashConfig)
-	ginApp.GET("get-clash-config-plus", lowerControllers.GinGetClashConfigPlus)
+	ginApp.GET("get-clash-config", ginLowerControllers.GinGetClashConfig)
+	ginApp.GET("get-clash-config-plus", ginLowerControllers.GinGetClashConfigPlus)
 }
 func ginWs(ginApp *gin.Engine) {
 	ginApp.GET("ws", middleware.WebSocketMid(ginLowerControllers.GinIm))

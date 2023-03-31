@@ -12,7 +12,7 @@ function getArticlesAction() {
     console.log(maxId)
     getArticlesApi(maxId).then(r => {
         console.log(r)
-        let newList = r.data.data.list.map(function (item) {
+        let newList = r.data.result.list.map(function (item) {
             maxId = item.id
             return {
                 id: item.id,

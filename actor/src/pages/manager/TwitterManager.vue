@@ -21,7 +21,7 @@ const activeKey = ref<string>("")
 
 function newSpider(e) {
   runTSpiderMaster().then(r => {
-    message.success(r.data.data.message);
+    message.success(r.data.result.message);
   }).catch(e => {
     console.log(e)
     message.success("error");
@@ -30,7 +30,7 @@ function newSpider(e) {
 
 function getQueueLen(e) {
   getQueueLenApi().then(r => {
-    message.success(r.data.data.message);
+    message.success(r.data.result.message);
   }).catch(e => {
     console.log(e)
     message.success("error");

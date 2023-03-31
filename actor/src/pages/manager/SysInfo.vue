@@ -5,7 +5,7 @@ import {ref, onUnmounted} from "vue"
 
 function reload() {
   getSysInfo().then(r => {
-    sysInfo.value = r.data.data
+    sysInfo.value = r.data.result
   })
 }
 

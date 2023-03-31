@@ -67,9 +67,9 @@ func BuildResponse(code int, data any) Response {
 func SuccessResponse(data any) Response {
 	return BuildResponse(http.StatusOK,
 		map[string]any{
-			"msg":  nil,
-			"data": data,
-			"code": SUCCESS,
+			"msg":    nil,
+			"result": data,
+			"code":   SUCCESS,
 		},
 	)
 }
@@ -77,9 +77,9 @@ func SuccessResponse(data any) Response {
 func FailResponse(msg any) Response {
 	return BuildResponse(http.StatusOK,
 		map[string]any{
-			"msg":  msg,
-			"data": nil,
-			"code": FAIL,
+			"msg":    msg,
+			"result": nil,
+			"code":   FAIL,
 		},
 	)
 }
