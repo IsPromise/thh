@@ -33,7 +33,7 @@ function isDateDisabled(timestamp) {
         <p>比如说有一场无疾而终的恋爱</p>
         <p>或者是一次没有目标的旅程</p>
         <p>所以很好奇</p>
-        <p>一个故事的结局重要吗</p>>
+        <p>一个故事的结局重要吗</p>
       </div>
     </n-list-item>
   </n-list>
