@@ -28,7 +28,8 @@ function isDateDisabled(timestamp) {
   <n-list class="thh-index" :show-divider="false">
     <n-list-item>
       <div class="greetings" style=" text-align: center;">
-        <h1 class="green">本场的辩题是「故事的结局重不重要」</h1>
+        <h1 class="green">本场的辩题是</h1>
+        <h1 class="green">「故事的结局重不重要」</h1>
         <p>故事的结局重不重要呢</p>
         <p>如果有一个绝好的故事</p>
         <p>却以一个烂透了的结局结束</p>
