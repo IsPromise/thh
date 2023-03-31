@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"thh/app/http/controllers/component"
 	"thh/app/models/Users"
 	"thh/arms/jwt"
@@ -83,4 +84,31 @@ func UserInfoV4(req component.BetterRequest[null]) component.Response {
 		return component.FailResponse("账号异常" + err.Error())
 	}
 	return component.SuccessResponse(userEntity)
+}
+
+func GetCaptcha() component.Response {
+	captchaId, captchaImg := GenerateCaptcha()
+	return component.SuccessResponse(map[string]any{
+		"captcha_id":  captchaId,
+		"captcha_img": captchaImg,
+	})
+}
+
+func VerifyCaptchaApi(c *gin.Context) component.Response {
+	captchaId := c.PostForm("captcha_id")
+	captchaCode := c.PostForm("captcha_code")
+
+	if VerifyCaptcha(captchaId, captchaCode) {
+		return component.SuccessResponse("ok")
+	} else {
+		return component.FailResponse("invalid captcha")
+	}
+}
+
+func GenerateCaptcha() (string, string) {
+	return "", ""
+}
+
+func VerifyCaptcha(captchaId, captchaCode string) bool {
+	return true
 }
