@@ -30,6 +30,9 @@ function isDateDisabled(timestamp) {
       <div class="greetings" style=" text-align: center;">
         <h1 class="green">本场的辩题是「故事的结局重不重要」</h1>
         <p>故事的结局重不重要呢</p>
+        <p>如果有一个绝好的故事</p>
+        <p>却以一个烂透了的结局结束</p>
+        <p>那这到底是一个好故事还是烂故事呢</p>
         <p>比如说有一场无疾而终的恋爱</p>
         <p>或者是一次没有目标的旅程</p>
         <p>所以很好奇</p>
