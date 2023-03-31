@@ -28,31 +28,12 @@ function isDateDisabled(timestamp) {
   <n-list class="thh-index" :show-divider="false">
     <n-list-item>
       <div class="greetings" style=" text-align: center;">
-        <h1 class="green">thh</h1>
-        <p>候鸟归来时 羽翼扑满尘</p>
-        <p>容我再等你一个转身</p>
-        <p>斜阳对黄昏 谁的容颜老三分</p>
-        <p>巷子里酒香 越传越深</p>
-        <br>
-        <p>莫等到白发催人泪 徒留悔恨增伤悲</p>
-        <p>莫使金樽空对月 今朝有酒今朝醉</p>
-        <p>莫怪青山换不回 念天地悠悠轮回</p>
-        <p>弹指一挥这一生 也无悔</p>
-        <br>
-        <p>候鸟归来时 羽翼扑满尘</p>
-        <p>容我再等你一个转身</p>
-        <p>斜阳对黄昏 谁的容颜老三分</p>
-        <p>巷子里酒香 越传越深</p>
-        <br>
-        <p>莫等到白发催人泪 徒留悔恨增伤悲</p>
-        <p>莫使金樽空对月 今朝有酒今朝醉</p>
-        <p>莫怪青山换不回 念天地悠悠轮回</p>
-        <p>弹指一挥这一生 也无悔</p>
-        <br>
-        <p>莫等到山河都踏碎 徒留行囊换愚昧</p>
-        <p>莫使年华付流水 敢爱敢恨把你追</p>
-        <p>莫怪烛光不够美 千古诗篇来赞美</p>
-        <p>我许下山盟海誓 永相随</p>
+        <h1 class="green">本场的辩题是「故事的结局重不重要」</h1>
+        <p>故事的结局重不重要呢</p>
+        <p>比如说有一场无疾而终的恋爱</p>
+        <p>或者是一次没有目标的旅程</p>
+        <p>所以很好奇</p>
+        <p>一个故事的结局重要吗</p>>
       </div>
     </n-list-item>
   </n-list>
@@ -92,7 +73,7 @@ h3 {
 
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: #5BACFCFF;
   transition: 0.4s;
 }
 
