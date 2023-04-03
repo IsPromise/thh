@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/gzip"
 	"thh/app/http/controllers"
 	"thh/app/http/controllers/ginLowerControllers"
+	"thh/app/http/controllers/voicechat"
 	"thh/app/http/middleware"
 	"thh/arms"
 	"thh/arms/app"
@@ -22,7 +23,7 @@ func ginWeb(ginApp *gin.Engine) {
 }
 func ginWs(ginApp *gin.Engine) {
 	ginApp.GET("ws", middleware.WebSocketMid(ginLowerControllers.GinIm))
-	ginApp.GET("ws-vc", middleware.WebSocketMid(ginLowerControllers.GinVoiceChat))
+	ginApp.GET("ws-vc", middleware.WebSocketMid(voicechat.GinVoiceChat))
 	ginApp.GET("api/ws-info", ginUpNP(ginLowerControllers.ImInfo))
 	arms.GuardGoRoutine(ginLowerControllers.Broadcaster)
 }

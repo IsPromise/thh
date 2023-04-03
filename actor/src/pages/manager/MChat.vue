@@ -12,8 +12,6 @@
       <n-input
           placeholder="请输入消息..."
           v-model:value.trim="currentMessage"
-          @keydown.enter.prevent="addLineBreak"
-          @keydown.enter.ctrl.prevent="sendMessage"
       ></n-input>
       <n-button @click="sendMessage">发送</n-button>
     </div>

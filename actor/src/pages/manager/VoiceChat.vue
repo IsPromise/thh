@@ -1,94 +1,82 @@
 <script setup>
-import {onMounted, onUnmounted} from "vue";
 import {wsInfo} from "@/service/remote";
+import {onMounted} from "vue";
 
-let ws;
-let localStream;
-let mediaRecorder;
+let websocket;
 
-function init() {
-    // 获取本地媒体流
-    navigator.mediaDevices.getUserMedia({audio: true})
-        .then(async function (stream) {
-            localStream = stream;
+async function start() {
+  let wsInfoData = await wsInfo()
+  let wsLink = 'ws://' + document.domain + ':' + wsInfoData.data.result.ws + '/ws-vc'
+  websocket = new WebSocket(wsLink);
+  console.log("success")
 
-            // 绑定本地媒体流到音频标签
-            let audioElement = document.getElementById("localAudio");
-            audioElement.srcObject = localStream;
-
-
-            // 连接 ws 服务端
-            let wsInfoData = await wsInfo()
-            let wsLink = 'ws://' + document.domain + ':' + wsInfoData.data.result.ws + '/ws-vc'
-            ws = new WebSocket(wsLink);
-
-            // 监听连接事件
-            ws.onopen = function (event) {
-                console.log("连接成功");
-
-                // 开始录制音频
-                mediaRecorder = new MediaRecorder(localStream);
-                mediaRecorder.ondataavailable = function (event) {
-                    ws.send(event.data);
-                }
-                mediaRecorder.start();
-            };
-
-            // 监听消息事件
-            ws.onmessage = function (event) {
-                let data = event.data;
-                console.log("收到消息：" + data);
-
-                // TODO: 处理接收到的消息
-            };
-
-            // 监听错误事件
-            ws.onerror = function (event) {
-                console.log("连接出错");
-            };
-
-            // 监听断开连接事件
-            ws.onclose = function (event) {
-                console.log("连接已关闭");
-            };
-        })
-        .catch(function (error) {
-            console.log("获取本地媒体流失败：" + error);
-        });
-}
-
-// 停止录音，停止音频播放
-function stop() {
-    let audioElement = document.getElementById("localAudio");
-    audioElement.pause();
-    mediaRecorder.stop();
+  websocket.onmessage = function (event) {
+    console.log(event.data)
+    playAudio(event.data);
+  }
 }
 
 
-function close() {
-    if (!ws) {
-        return false;
-    }
-    ws.close();
-    return true;
+function startRecording() {
+  navigator.mediaDevices.getUserMedia({audio: true, video: false})
+      .then(function (stream) {
+        let mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.start();
+
+        let chunks = [];
+
+        mediaRecorder.ondataavailable = function (e) {
+          chunks.push(e.data);
+        }
+
+        mediaRecorder.onstop = function (e) {
+          console.log('recording stopped');
+
+          let blob = new Blob(chunks, {type: 'audio/ogg; codecs=opus'});
+
+          let reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = function () {
+            let base64data = reader.result;//.split(',')[1];
+            console.log(base64data)
+            playAudio(base64data)
+            // 将音频数据发送到服务器
+            console.log("发送")
+            // websocket.send(base64data);
+          }
+        };
+
+        // 添加停止录音的代码
+        setTimeout(function() {
+          mediaRecorder.stop();
+        }, 3000); // 录制5秒钟
+
+      })
+      .catch(function (err) {
+        console.log('getUserMedia error: ' + err);
+      });
+}
+
+function playAudio(base64data) {
+  let audioBlob = new Blob([atob(base64data)], {type: 'audio/ogg'});
+  let audioUrl = URL.createObjectURL(audioBlob);
+
+  let audioElem = document.getElementById('audio');
+  audioElem.src = audioUrl;
+  audioElem.play();
 }
 
 onMounted(() => {
-    init()
+  start();
 })
 
-onUnmounted(() => {
-    close()
-    stop()
-})
+// onUnmounted(() => {
+//   close()
+// })
 </script>
 
 <template>
-    <h1>Voice Chat Room</h1>
-
-  <!-- 消息列表 -->
-    <div id="messageList"></div>
-
-  <!-- 本地音频播放器 -->
-    <audio id="localAudio" autoplay>biubiubiu</audio>
+  <button @click="startRecording()">Start Recording</button>
+  <audio id="audio" muted="muted" controls></audio>
 </template>
