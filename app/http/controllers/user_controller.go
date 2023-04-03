@@ -1,13 +1,12 @@
 package controllers
 
 import (
+	"strconv"
 	"thh/app/http/controllers/component"
 	"thh/app/models/Users"
 	"thh/arms/jwt"
 	"thh/arms/logger"
 	"time"
-
-	"github.com/gin-gonic/gin"
 
 	"github.com/spf13/cast"
 )
@@ -31,7 +30,6 @@ type RegReq struct {
 // 验证后更新验证字段
 // 清除验证码
 func Register(r RegReq) component.Response {
-
 	userEntity := Users.MakeUser(r.Username, r.Password, r.Email)
 	err := Users.Create(userEntity)
 
@@ -50,11 +48,16 @@ func Register(r RegReq) component.Response {
 }
 
 type LoginReq struct {
-	Username string `json:"userName"   validate:"required"`
-	Password string `json:"password"   validate:"required"`
+	Username    string `json:"userName"   validate:"required"`
+	Password    string `json:"password"   validate:"required"`
+	CaptchaId   string `json:"captchaId"`
+	CaptchaCode string `json:"captchaCode"`
 }
 
 func Login(r LoginReq) component.Response {
+	if VerifyCaptcha(r.CaptchaId, r.CaptchaCode) {
+		return component.SuccessResponse("ok")
+	}
 	userEntity, err := Users.Verify(r.Username, r.Password)
 	if err != nil {
 		logger.Info(err)
@@ -71,10 +74,26 @@ func Login(r LoginReq) component.Response {
 	})
 }
 
+func GetCaptcha() component.Response {
+	captchaId, captchaImg := GenerateCaptcha()
+	return component.SuccessResponse(map[string]any{
+		"captchaId":  captchaId,
+		"captchaImg": captchaImg,
+	})
+}
+
+func GenerateCaptcha() (string, string) {
+	return "", ""
+}
+
+func VerifyCaptcha(captchaId, captchaCode string) bool {
+	return true
+}
+
 type null struct {
 }
 
-func UserInfoV4(req component.BetterRequest[null]) component.Response {
+func UserInfo(req component.BetterRequest[null]) component.Response {
 	userEntity, err := req.GetUser()
 	if err != nil {
 		return component.FailResponse("账号异常" + err.Error())
@@ -90,29 +109,9 @@ func EditUserInfo(req component.BetterRequest[EditUserInfoReq]) component.Respon
 	return component.SuccessResponse("success")
 }
 
-func GetCaptcha() component.Response {
-	captchaId, captchaImg := GenerateCaptcha()
+func Invitation(req component.BetterRequest[null]) component.Response {
+	base36 := strconv.FormatInt(int64(req.UserId), 36)
 	return component.SuccessResponse(map[string]any{
-		"captcha_id":  captchaId,
-		"captcha_img": captchaImg,
+		"invitation": base36,
 	})
-}
-
-func VerifyCaptchaApi(c *gin.Context) component.Response {
-	captchaId := c.PostForm("captcha_id")
-	captchaCode := c.PostForm("captcha_code")
-
-	if VerifyCaptcha(captchaId, captchaCode) {
-		return component.SuccessResponse("ok")
-	} else {
-		return component.FailResponse("invalid captcha")
-	}
-}
-
-func GenerateCaptcha() (string, string) {
-	return "", ""
-}
-
-func VerifyCaptcha(captchaId, captchaCode string) bool {
-	return true
 }

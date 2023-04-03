@@ -15,7 +15,7 @@ import (
 func init() {
 	appendCommand(&cobra.Command{
 		Use:   "hexo:tool",
-		Short: "",
+		Short: "hexo tool",
 		Run:   runHexotool,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})

@@ -9,8 +9,8 @@ import (
 
 func init() {
 	appendCommand(&cobra.Command{
-		Use:   "bbsinit",
-		Short: "",
+		Use:   "bbs:init",
+		Short: "bbs初始化",
 		Run:   runBbsinit,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})

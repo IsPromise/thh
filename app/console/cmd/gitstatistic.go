@@ -16,7 +16,7 @@ import (
 func init() {
 	appendCommand(&cobra.Command{
 		Use:   "git:statistic",
-		Short: "",
+		Short: "git 提交记录统计",
 		Run:   runGitstatistic,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})

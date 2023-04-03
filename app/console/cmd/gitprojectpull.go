@@ -13,7 +13,7 @@ import (
 func init() {
 	appendCommand(&cobra.Command{
 		Use:   "git:allpull",
-		Short: "",
+		Short: "git 指定目录下全项目拉取",
 		Run:   runAllprojectpull,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})

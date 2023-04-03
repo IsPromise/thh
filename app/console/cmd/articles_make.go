@@ -29,7 +29,7 @@ func init() {
 
 	appendCommand(&cobra.Command{
 		Use:   "tool:createAndUpdate",
-		Short: "createAndDeleted",
+		Short: "createAndUpdate",
 		Run:   createAndUpdate,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})

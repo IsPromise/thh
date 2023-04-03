@@ -15,7 +15,7 @@ import (
 func init() {
 	appendCommand(&cobra.Command{
 		Use:   "p2p:server",
-		Short: "",
+		Short: "p2p server",
 		Run:   runP2PServer,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})

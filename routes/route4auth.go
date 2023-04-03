@@ -10,9 +10,11 @@ import (
 func ginAuth(ginApp *gin.Engine) {
 	ginApp.Group("api").
 		POST("reg", ginUpJP(controllers.Register)).
-		POST("login", ginUpJP(controllers.Login))
+		POST("login", ginUpJP(controllers.Login)).
+		POST("get-captcha", ginUpNP(controllers.GetCaptcha))
 
 	ginApp.Group("api").Use(middleware.JWTAuth4Gin).
-		GET("get-user-info-v4", UpButterReq(controllers.UserInfoV4)).
-		POST("set-user-info", UpButterReq(controllers.EditUserInfo))
+		GET("get-user-info-v4", UpButterReq(controllers.UserInfo)).
+		POST("set-user-info", UpButterReq(controllers.EditUserInfo)).
+		POST("invitation", UpButterReq(controllers.Invitation))
 }
