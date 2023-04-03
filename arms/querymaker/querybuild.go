@@ -1,4 +1,4 @@
-package querybuild
+package querymaker
 
 import (
 	"fmt"

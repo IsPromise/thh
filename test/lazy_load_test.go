@@ -2,9 +2,10 @@ package test
 
 import (
 	"fmt"
-	"github.com/spf13/cast"
 	"sync"
 	"testing"
+
+	"github.com/spf13/cast"
 )
 
 type lazyCay struct {

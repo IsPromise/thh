@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	"github.com/spf13/cast"
 	"testing"
+
+	"github.com/spf13/cast"
 )
 
 func TestHanming(t *testing.T) {

@@ -2,11 +2,12 @@ package routes
 
 import (
 	"fmt"
-	"github.com/spf13/cast"
 	"io/fs"
 	"net/http"
 	"path"
 	"thh/app/http/controllers/component"
+
+	"github.com/spf13/cast"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

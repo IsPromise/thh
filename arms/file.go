@@ -2,11 +2,12 @@ package arms
 
 import (
 	"fmt"
-	"github.com/spf13/cast"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/spf13/cast"
 )
 
 var basePath string

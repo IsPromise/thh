@@ -2,12 +2,13 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"thh/app/http/controllers/component"
 	"thh/app/models/Users"
 	"thh/arms/jwt"
 	"thh/arms/logger"
 	"time"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/spf13/cast"
 )

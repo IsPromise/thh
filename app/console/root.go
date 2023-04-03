@@ -1,7 +1,6 @@
 package console
 
 import (
-	"github.com/spf13/cobra"
 	"thh/app/console/cmd"
 	"thh/app/console/cmd/demo"
 	"thh/app/console/cmd/p2p"
@@ -13,6 +12,8 @@ import (
 	"thh/arms"
 	"thh/arms/app"
 	"thh/bundles/bootstrap"
+
+	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands

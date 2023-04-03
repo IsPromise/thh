@@ -2,7 +2,7 @@ package Comment
 
 import (
 	"context"
-	querybuild "thh/arms/querymaker"
+	"thh/arms/querymaker"
 )
 
 type Rep struct {
@@ -62,6 +62,6 @@ func IsExist(field, value string) bool {
 }
 
 func GetByMaxIdPage(articleId uint64, id uint64, pageSize int) (entities []Comment) {
-	builder().Where(querybuild.Eq(fieldArticleId, articleId)).Where(querybuild.Gt(pid, id)).Limit(pageSize).Find(&entities)
+	builder().Where(querymaker.Eq(fieldArticleId, articleId)).Where(querymaker.Gt(pid, id)).Limit(pageSize).Find(&entities)
 	return
 }

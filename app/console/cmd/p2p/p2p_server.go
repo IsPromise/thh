@@ -2,13 +2,14 @@ package p2p
 
 import (
 	"fmt"
-	"github.com/spf13/cast"
-	"github.com/spf13/cobra"
 	"net"
 	"os"
 	"sync"
 	"thh/arms"
 	"time"
+
+	"github.com/spf13/cast"
+	"github.com/spf13/cobra"
 )
 
 func init() {

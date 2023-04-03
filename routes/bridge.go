@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"thh/app/http/controllers"
 	"thh/app/http/middleware"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RegisterByGin(ginApp *gin.Engine) {

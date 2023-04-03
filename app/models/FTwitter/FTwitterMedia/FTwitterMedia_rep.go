@@ -1,6 +1,6 @@
 package FTwitterMedia
 
-import querybuild "thh/arms/querymaker"
+import "thh/arms/querymaker"
 
 func Create(entity *FTwitterMedia) int64 {
 	result := builder().Create(entity)
@@ -41,7 +41,7 @@ func GetBy(field, value string) (entity FTwitterMedia) {
 }
 
 func GetByUrl(url string) (entity FTwitterMedia) {
-	builder().Where(querybuild.Eq(fieldUrl, url)).First(&entity)
+	builder().Where(querymaker.Eq(fieldUrl, url)).First(&entity)
 	return
 }
 

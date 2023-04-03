@@ -1236,4 +1236,3 @@ type TFollowList struct {
 		} `json:"user"`
 	} `json:"data"`
 }
-

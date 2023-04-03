@@ -2,7 +2,7 @@ package Users
 
 import (
 	"thh/arms"
-	querybuild "thh/arms/querymaker"
+	"thh/arms/querymaker"
 )
 
 func Get(id any) (entity Users, err error) {
@@ -12,7 +12,7 @@ func Get(id any) (entity Users, err error) {
 
 func Verify(username string, password string) (Users, error) {
 	var user Users
-	err := builder().Where(querybuild.Eq(fieldUsername, username)).First(&user).Error
+	err := builder().Where(querymaker.Eq(fieldUsername, username)).First(&user).Error
 	if err != nil {
 		return user, err
 	}
@@ -39,6 +39,6 @@ func All() (entities []Users) {
 }
 
 func GetByUsername(username string) (entities *Users) {
-	builder().Where(querybuild.Eq(fieldUsername, username)).First(entities)
+	builder().Where(querymaker.Eq(fieldUsername, username)).First(entities)
 	return
 }

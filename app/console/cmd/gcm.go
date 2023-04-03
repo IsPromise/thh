@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"time"
 )
 
 func init() {

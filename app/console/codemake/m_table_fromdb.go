@@ -2,14 +2,15 @@ package codemake
 
 import (
 	"fmt"
+	"regexp"
+	"thh/bundles/config"
+	"thh/bundles/eh"
+
 	"github.com/spf13/cobra"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"regexp"
-	"thh/bundles/config"
-	"thh/bundles/eh"
 )
 
 func init() {

@@ -3,13 +3,14 @@ package p2p
 import (
 	"bufio"
 	"fmt"
-	"github.com/spf13/cast"
-	"github.com/spf13/cobra"
 	"log"
 	"net"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/spf13/cast"
+	"github.com/spf13/cobra"
 )
 
 func init() {

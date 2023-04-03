@@ -1,20 +1,21 @@
 package arms
 
-
 import (
 	"errors"
 	"fmt"
-	"github.com/spf13/cast"
 	"net"
+
+	"github.com/spf13/cast"
 )
 
-func GetLocalIp() string{
+func GetLocalIp() string {
 	ip, err := ExternalIP()
-	if err!=nil{
+	if err != nil {
 		fmt.Println(err)
 	}
 	return cast.ToString(ip)
 }
+
 // 获取ip
 func ExternalIP() (net.IP, error) {
 	ifaces, err := net.Interfaces()
@@ -62,4 +63,3 @@ func getIpFromAddr(addr net.Addr) net.IP {
 
 	return ip
 }
-

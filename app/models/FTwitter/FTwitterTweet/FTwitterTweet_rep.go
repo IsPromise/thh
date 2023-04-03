@@ -1,6 +1,6 @@
 package FTwitterTweet
 
-import querybuild "thh/arms/querymaker"
+import "thh/arms/querymaker"
 
 func Create(entity *FTwitterTweet) int64 {
 	result := builder().Create(entity)
@@ -35,8 +35,8 @@ func Get(id any) (entity FTwitterTweet) {
 	return
 }
 func GetUserTweet(screenName, conversationIdStr string) (entity FTwitterTweet) {
-	builder().Where(querybuild.Eq(fieldScreenName, screenName)).
-		Where(querybuild.Eq(fieldConversationId, conversationIdStr)).First(&entity)
+	builder().Where(querymaker.Eq(fieldScreenName, screenName)).
+		Where(querymaker.Eq(fieldConversationId, conversationIdStr)).First(&entity)
 	return
 }
 
@@ -50,7 +50,7 @@ func All() (entities []FTwitterTweet) {
 	return
 }
 func GetByContent(desc string) (entities []FTwitterTweet) {
-	builder().Where(querybuild.Like(fieldContext, desc)).Order(querybuild.Desc(pid)).Limit(1000).Find(&entities)
+	builder().Where(querymaker.Like(fieldContext, desc)).Order(querymaker.Desc(pid)).Limit(1000).Find(&entities)
 	return
 }
 
@@ -94,13 +94,13 @@ func Page(q PageQuery) struct {
 	}
 	b := builder()
 	if q.Search != "" {
-		b.Where(querybuild.Like(fieldContext, q.Search))
+		b.Where(querymaker.Like(fieldContext, q.Search))
 	}
 	b.Limit(q.PageSize).Offset(q.PageSize * q.Page).Order("id desc").Find(&list)
 
 	var total int64
 	if q.Search != "" {
-		builder().Where(querybuild.Like(fieldContext, q.Search)).Count(&total)
+		builder().Where(querymaker.Like(fieldContext, q.Search)).Count(&total)
 	} else {
 		builder().Count(&total)
 	}

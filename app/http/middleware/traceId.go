@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
 	"thh/arms"
+
+	"github.com/gin-gonic/gin"
 )
 
 func TraceInit(context *gin.Context) {

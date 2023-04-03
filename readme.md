@@ -183,6 +183,11 @@ demo收集部分
 
 - 语音聊天室，代码已在gpt找到，有待实际运行
 
+# 如果考虑引入插件
+
+`github.com/traefik/yaegi/interp`
+  
+
 bbs开发部分
 
 - thh 登录优化

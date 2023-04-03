@@ -3,7 +3,6 @@ package console
 import (
 	"context"
 	"fmt"
-	"github.com/spf13/cast"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +14,8 @@ import (
 	"thh/bundles/config"
 	"thh/routes"
 	"time"
+
+	"github.com/spf13/cast"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"

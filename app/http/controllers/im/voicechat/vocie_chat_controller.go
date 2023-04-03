@@ -1,8 +1,9 @@
 package voicechat
 
 import (
-	"github.com/gorilla/websocket"
 	"log"
+
+	"github.com/gorilla/websocket"
 )
 
 // clients holds the connected WebSocket clients

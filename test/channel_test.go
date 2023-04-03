@@ -3,11 +3,12 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/spf13/cast"
 	"math/rand"
 	"runtime"
 	"testing"
 	"time"
+
+	"github.com/spf13/cast"
 )
 
 func TestChannelSpider(_ *testing.T) {

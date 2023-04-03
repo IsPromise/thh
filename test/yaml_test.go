@@ -2,9 +2,10 @@ package test
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/spf13/cast"
 	"gopkg.in/yaml.v3"
-	"testing"
 )
 
 type buildYml struct {

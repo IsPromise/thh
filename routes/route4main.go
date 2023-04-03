@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-contrib/gzip"
 	"thh/app/http/controllers/ginLowerControllers"
 	"thh/arms/app"
+
+	"github.com/gin-contrib/gzip"
 
 	"github.com/gin-gonic/gin"
 )

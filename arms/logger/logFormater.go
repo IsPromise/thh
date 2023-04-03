@@ -3,8 +3,9 @@ package logger
 import (
 	"bytes"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"thh/arms"
+
+	"github.com/sirupsen/logrus"
 )
 
 // TextFormatter formats logs into text

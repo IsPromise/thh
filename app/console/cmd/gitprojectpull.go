@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"thh/bundles/config"
+
+	"github.com/spf13/cobra"
 )
 
 func init() {
