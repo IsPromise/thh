@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"thh/app/http/controllers/component"
 	"thh/app/models/Users"
 	"thh/arms/jwt"
@@ -18,10 +17,11 @@ const (
 )
 
 type RegReq struct {
-	Email    string `json:"email" validate:"required"`
-	Username string `json:"userName"  validate:"required"`
-	Password string `json:"passWord"  validate:"required"`
-	NickName string `json:"nickName" gorm:"default:'QMPlusUser'"`
+	Email          string `json:"email" validate:"required"`
+	Username       string `json:"userName"  validate:"required"`
+	Password       string `json:"passWord"  validate:"required"`
+	NickName       string `json:"nickName" gorm:"default:'QMPlusUser'"`
+	InvitationCode string `json:"invitationCode"`
 }
 
 // Register
@@ -31,11 +31,6 @@ type RegReq struct {
 // 验证后更新验证字段
 // 清除验证码
 func Register(r RegReq) component.Response {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println(err)
-		}
-	}()
 
 	userEntity := Users.MakeUser(r.Username, r.Password, r.Email)
 	err := Users.Create(userEntity)
@@ -85,6 +80,14 @@ func UserInfoV4(req component.BetterRequest[null]) component.Response {
 		return component.FailResponse("账号异常" + err.Error())
 	}
 	return component.SuccessResponse(userEntity)
+}
+
+type EditUserInfoReq struct {
+	Nickname string `json:"nickname"`
+}
+
+func EditUserInfo(req component.BetterRequest[EditUserInfoReq]) component.Response {
+	return component.SuccessResponse("success")
 }
 
 func GetCaptcha() component.Response {

@@ -25,4 +25,6 @@ func ginBBS(ginApp *gin.Engine) {
 	// 发布评论
 	bbsAuth.POST("articles-comment", ginUpJP(controllers.ArticleComment))
 
+	bbsAuth.POST("apply-show", UpButterReq(controllers.ApplyShow))
+
 }
