@@ -13,17 +13,23 @@ var c = cron.New()
 
 func RunJob() {
 	//mirai.MiraiClientManager()
-	_, err := c.AddFunc("* * * * *", func() {
-		arms.MyTraceInit()
-		defer arms.MyTraceClean()
+	if entryID, err := c.AddFunc("* * * * *", upCmd(func() {
 		logger.Info("HEART_IN_RUN_JOB", time.Now().Format("2006-01-02 15:04:05"))
-	})
-	if err != nil {
+	})); err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Println(entryID, " set success")
 	}
 
-	logger.Info("The task is set successfully")
 	c.Run()
+}
+
+func upCmd(cmd func()) func() {
+	return func() {
+		arms.MyTraceInit()
+		defer arms.MyTraceClean()
+		cmd()
+	}
 }
 
 // 之后如果需要平滑关闭可以参考如下代码

@@ -22,6 +22,7 @@ func ginWeb(ginApp *gin.Engine) {
 }
 func ginWs(ginApp *gin.Engine) {
 	ginApp.GET("ws", middleware.WebSocketMid(ginLowerControllers.GinIm))
+	ginApp.GET("ws-vc", middleware.WebSocketMid(ginLowerControllers.GinVoiceChat))
 	ginApp.GET("api/ws-info", ginUpNP(ginLowerControllers.ImInfo))
 	arms.GuardGoRoutine(ginLowerControllers.Broadcaster)
 }

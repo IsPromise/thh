@@ -9,8 +9,10 @@ import (
 )
 
 var upGrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		return true // 允许跨域请求
 	},
 }
 

@@ -14,7 +14,7 @@ import (
 
 func init() {
 	appendCommand(&cobra.Command{
-		Use:   "m:t",
+		Use:   "migrate:table",
 		Short: "导表助手",
 		Long:  ".env 文件中 TARGET_DATABASE_URL(local) 为导入db地址， ORIGIN_DATABASE_URL(tmp) 为被导入db地址。会获取tmp中的表信息导入至local中",
 		Run:   runMTableFromDb,

@@ -10,6 +10,7 @@ let gridPage = () => import("@/pages/manager/GridPageDemo.vue")
 let allTool = () => import("@/pages/manager/AllTool.vue")
 let traefikManager = () => import("@/pages/manager/TraefikRouterManager.vue")
 let imDemo = () => import("@/pages/manager/ImDemo.vue")
+let voiceChat = () => import("@/pages/manager/VoiceChat.vue")
 // let markdown = ()=>  import("@/pages/manager/MarkdownDemo.vue")
 let index = () => import("@/pages/home/IndexPage.vue")
 let twitterManager = () => import("@/pages/manager/TwitterManager.vue")
@@ -52,6 +53,7 @@ export default [
             {showName: '', path: '', component: allTool, belongMenu: false},
             {showName: 'all tool', path: 'allTool', component: allTool, belongMenu: true},
             {showName: 'Im', path: 'im', component: imDemo, belongMenu: true},
+            {showName: 'voiceChat', path: 'voiceChat', component: voiceChat, belongMenu: true},
             // {showName: 'markdown', path: 'markdown', component: markdown, belongMenu: true},
             {showName: 'grid demo', path: 'gridPage', component: gridPage, belongMenu: true},
             {showName: 'sysInfo', path: 'sysInfo', component: sysInfo, belongMenu: true},

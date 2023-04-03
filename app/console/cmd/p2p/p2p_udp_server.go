@@ -10,7 +10,7 @@ import (
 
 func init() {
 	appendCommand(&cobra.Command{
-		Use:   "runP2PUdpServer",
+		Use:   "p2p:udpServer",
 		Short: "",
 		Run:   runP2PUdpServer,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
