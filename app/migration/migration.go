@@ -3,9 +3,9 @@ package migration
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"thh/app/models/Articles"
-	"thh/app/models/Comment"
 	"thh/app/models/PhoneLocation"
+	"thh/app/models/bbs/Articles"
+	"thh/app/models/bbs/Comment"
 	"thh/arms/app"
 	"thh/arms/logger"
 	"thh/bundles/dbconnect"

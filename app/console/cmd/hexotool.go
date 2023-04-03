@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"thh/app/models/Articles"
+	Articles2 "thh/app/models/bbs/Articles"
 	"thh/bundles/config"
 )
 
@@ -38,8 +38,8 @@ func runHexotool(_ *cobra.Command, _ []string) {
 		return
 	}
 	for _, data := range blogs {
-		art := Articles.Articles{UserId: 1, Content: data.Content, Title: data.Title}
-		Articles.Save(&art)
+		art := Articles2.Articles{UserId: 1, Content: data.Content, Title: data.Title}
+		Articles2.Save(&art)
 	}
 	fmt.Println(len(blogs))
 }

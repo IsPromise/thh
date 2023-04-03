@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"thh/app/http/controllers/component"
-	"thh/app/models/Articles"
-	"thh/app/models/Comment"
 	"thh/app/models/FTwitter/FTwitterTweet"
+	Articles2 "thh/app/models/bbs/Articles"
+	Comment2 "thh/app/models/bbs/Comment"
 	"thh/arms"
 	"time"
 )
@@ -25,12 +25,12 @@ func GetArticles(request GetArticlesRequest) component.Response {
 	if request.PageSize == 0 {
 		request.PageSize = 10
 	}
-	articles := Articles.GetByMaxIdPage(request.MaxId, request.PageSize)
+	articles := Articles2.GetByMaxIdPage(request.MaxId, request.PageSize)
 	var maxId uint64
 	if len(articles) > 0 {
 		maxId = articles[0].Id
 	}
-	list := arms.ArrayMap(func(t Articles.Articles) ArticlesDto {
+	list := arms.ArrayMap(func(t Articles2.Articles) ArticlesDto {
 		return ArticlesDto{
 			Id:             t.Id,
 			Title:          t.Title,
@@ -52,12 +52,12 @@ type GetArticlesPageRequest struct {
 }
 
 func GetArticlesPage(param GetArticlesPageRequest) component.Response {
-	articles := Articles.Page(Articles.PageQuery{Page: param.Page, PageSize: param.PageSize})
+	articles := Articles2.Page(Articles2.PageQuery{Page: param.Page, PageSize: param.PageSize})
 	pageData := FTwitterTweet.Page(FTwitterTweet.PageQuery{
 		Page: param.Page, PageSize: param.PageSize, Search: param.Search,
 	})
 	return component.SuccessResponse(component.DataMap{
-		"list": arms.ArrayMap(func(t Articles.Articles) ArticlesDto {
+		"list": arms.ArrayMap(func(t Articles2.Articles) ArticlesDto {
 			return ArticlesDto{Id: t.Id,
 				Title:          t.Title,
 				Content:        t.Content,
@@ -87,10 +87,10 @@ func GetArticlesDetail(request GetArticlesDetailRequest) component.Response {
 	if request.PageSize == 0 {
 		request.PageSize = 10
 	}
-	article := Articles.Get(request.Id)
-	comments := Comment.GetByMaxIdPage(request.Id, request.MaxCommentId, request.PageSize)
+	article := Articles2.Get(request.Id)
+	comments := Comment2.GetByMaxIdPage(request.Id, request.MaxCommentId, request.PageSize)
 
-	commentList := arms.ArrayMap(func(item Comment.Comment) CommentDto {
+	commentList := arms.ArrayMap(func(item Comment2.Comment) CommentDto {
 		return CommentDto{
 			ArticleId:  item.ArticleId,
 			UserId:     item.UserId,
@@ -112,12 +112,12 @@ type WriteArticleReq struct {
 }
 
 func WriteArticles(req component.BetterRequest[WriteArticleReq]) component.Response {
-	if Articles.CantWriteNew(req.UserId, 66) {
+	if Articles2.CantWriteNew(req.UserId, 66) {
 		return component.FailResponse("您当天已发布较多，为保证质量，请明天再发布新帖")
 	}
-	var article Articles.Articles
+	var article Articles2.Articles
 	if req.Params.Id != 0 {
-		article = Articles.Get(req.Params.Id)
+		article = Articles2.Get(req.Params.Id)
 		if article.UserId != req.UserId {
 			return component.FailResponse("不要更改别人发出的帖子哦")
 		}
@@ -125,7 +125,7 @@ func WriteArticles(req component.BetterRequest[WriteArticleReq]) component.Respo
 		article.UserId = req.UserId
 	}
 	article.Content = req.Params.Content
-	Articles.Save(&article)
+	Articles2.Save(&article)
 	return component.SuccessResponse(map[string]any{})
 }
 
@@ -135,9 +135,9 @@ type ArticleCommentReq struct {
 }
 
 func ArticleComment(req ArticleCommentReq) component.Response {
-	if Articles.Get(req.ArticleId).Id == 0 {
+	if Articles2.Get(req.ArticleId).Id == 0 {
 		return component.FailResponse("文章不存在")
 	}
-	Comment.Save(&Comment.Comment{Content: req.Comment})
+	Comment2.Save(&Comment2.Comment{Content: req.Comment})
 	return component.SuccessResponse(true)
 }

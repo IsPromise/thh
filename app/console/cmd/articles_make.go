@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"thh/app/models/Articles"
-	"thh/app/models/Comment"
 	"thh/app/models/Users"
+	Articles2 "thh/app/models/bbs/Articles"
+	Comment2 "thh/app/models/bbs/Comment"
 	"thh/arms"
 	"time"
 )
@@ -35,27 +35,27 @@ func init() {
 }
 
 func createAndUpdate(_ *cobra.Command, _ []string) {
-	art := Articles.Articles{UserId: 1, Content: `
+	art := Articles2.Articles{UserId: 1, Content: `
 你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
 `}
-	Articles.Save(&art)
+	Articles2.Save(&art)
 
 	art.Content = "haohaohaohaohao"
 
 	time.Sleep(time.Second * 3)
 
-	Articles.Save(&art)
+	Articles2.Save(&art)
 
 	fmt.Println(art)
 }
 
 func createAndDeleted(_ *cobra.Command, _ []string) {
-	art := Articles.Articles{UserId: 1, Content: `
+	art := Articles2.Articles{UserId: 1, Content: `
 你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
 `}
-	Articles.Save(&art)
+	Articles2.Save(&art)
 
-	Articles.Delete(&art)
+	Articles2.Delete(&art)
 
 	fmt.Println(art)
 }
@@ -72,21 +72,21 @@ func runArticlesMake(_ *cobra.Command, _ []string) {
 	ctx := context.WithValue(context.Background(), "traceId", arms.GetTrace())
 	fmt.Println(ctx.Value("traceId"))
 
-	ArticlesRep := Articles.NewRep(&ctx)
-	CommentRep := Comment.NewRep(&ctx)
+	ArticlesRep := Articles2.NewRep(&ctx)
+	CommentRep := Comment2.NewRep(&ctx)
 	for _, user := range userList {
 		for i := 0; i < 10; i++ {
 
-			art := Articles.Articles{UserId: user.Id, Content: `
+			art := Articles2.Articles{UserId: user.Id, Content: `
 你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
 `}
 			ArticlesRep.Save(&art)
 			for _, cUser := range userList {
-				comment := Comment.Comment{UserId: cUser.Id, ArticleId: art.Id, Content: cUser.Username + "觉得不错"}
+				comment := Comment2.Comment{UserId: cUser.Id, ArticleId: art.Id, Content: cUser.Username + "觉得不错"}
 				CommentRep.Save(&comment)
-				comment = Comment.Comment{UserId: cUser.Id, ArticleId: art.Id, Content: cUser.Username + "觉得不错"}
+				comment = Comment2.Comment{UserId: cUser.Id, ArticleId: art.Id, Content: cUser.Username + "觉得不错"}
 				CommentRep.Save(&comment)
-				comment = Comment.Comment{UserId: cUser.Id, ArticleId: art.Id, Content: cUser.Username + "觉得不错"}
+				comment = Comment2.Comment{UserId: cUser.Id, ArticleId: art.Id, Content: cUser.Username + "觉得不错"}
 				CommentRep.Save(&comment)
 			}
 		}

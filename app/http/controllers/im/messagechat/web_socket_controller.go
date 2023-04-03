@@ -1,27 +1,18 @@
-package ginLowerControllers
+package messagechat
 
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"sync"
-	"thh/app/http/controllers/component"
-	"thh/arms"
-	"thh/arms/logger"
-	"thh/bundles/config"
-
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cast"
+	"log"
+	"sync"
+	"thh/arms"
+	"thh/arms/logger"
 )
 
 var idm = arms.IdMakerInOnP{}
 
-func ImInfo() component.Response {
-	var port = config.GetString("APP_OUTSIDE_PORT")
-	return component.SuccessResponse(map[string]any{
-		"ws": port,
-	})
-}
 func GinIm(ws *websocket.Conn) {
 	defer func() {
 		_ = ws.Close()

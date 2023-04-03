@@ -46,7 +46,3 @@ func BroadcastWebSocket() {
 		}
 	}
 }
-
-func init() {
-	go BroadcastWebSocket()
-}

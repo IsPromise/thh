@@ -21,7 +21,7 @@ func runGcm(_ *cobra.Command, _ []string) {
 	timeData := ""
 	if t.Weekday() != time.Sunday && t.Weekday() != time.Saturday {
 		minute := cast.ToString(60 / 24 * cast.ToInt(t.Format("15")))
-		timeData = t.Format("2006-01-02T") + "08:" + minute + t.Format(":05Z07:00")
+		timeData = t.Format("2006-01-02T") + "07:" + minute + t.Format(":05Z07:00")
 	} else {
 		timeData = t.Format(time.RFC3339)
 	}
