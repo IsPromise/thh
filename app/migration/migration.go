@@ -41,7 +41,7 @@ func migration(migration bool, db *gorm.DB) {
 		//&FTwitterUser.FTwitterUser{},
 		//&FTwitterUserHis.FTwitterUserHis{},
 	); err != nil {
-		logger.Std().Error(err)
+		logger.Error(err)
 	} else {
 		logger.Info("migration end")
 	}

@@ -105,7 +105,7 @@ func superFollow(sConfig superTConfig) {
 		i++
 
 		if len(TList.Data.User.Result.Timeline.Timeline.Instructions) == 0 {
-			logger.Std().Info(screenName + "完成")
+			logger.Info(screenName + "完成")
 			break
 		}
 
@@ -145,10 +145,10 @@ func superFollow(sConfig superTConfig) {
 		}
 
 		if activeCount == 0 {
-			logger.Std().Info(screenName + "完成")
+			logger.Info(screenName + "完成")
 			break
 		}
-		logger.Std().Info(screenName, "下一轮", i*pageCount, "-", (i+1)*pageCount)
+		logger.Info(screenName, "下一轮", i*pageCount, "-", (i+1)*pageCount)
 
 		time.Sleep(time.Duration(rand.Intn(3)+1) * time.Second)
 

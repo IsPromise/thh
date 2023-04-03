@@ -11,7 +11,7 @@ import (
 
 func init() {
 	appendCommand(&cobra.Command{
-		Use:   "allprojectpull",
+		Use:   "git:allpull",
 		Short: "",
 		Run:   runAllprojectpull,
 		// Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数

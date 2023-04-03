@@ -31,8 +31,8 @@ var CmdServe = &cobra.Command{
 func runWeb(_ *cobra.Command, _ []string) {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
-	logger.Info("Thousand-hand:start")
-	logger.Info(fmt.Sprintf("Thousand-hand:useMem %d KB", m.Alloc/1024/8))
+	info("Thousand-hand:start")
+	info(fmt.Sprintf("Thousand-hand:useMem %d KB", m.Alloc/1024/8))
 
 	go RunJob()
 
@@ -86,7 +86,7 @@ func ginServe() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	logger.Info("Thousand-hand:listen " + port)
+	info("Thousand-hand:listen " + port)
 	fmt.Printf("use http://localhost:%s\n", port)
 	fmt.Printf("use http://%v:%v\n", arms.GetLocalIp(), port)
 
@@ -102,11 +102,11 @@ func ginServe() {
 	signal.Notify(quit, os.Interrupt)
 	_ = <-quit
 
-	logger.Std().Println("Shutdown Server ...")
+	logger.Println("Shutdown Server ...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logger.Std().Println("Server Shutdown:", err)
+		logger.Println("Server Shutdown:", err)
 	}
-	logger.Std().Println("Server exiting")
+	logger.Println("Server exiting")
 }

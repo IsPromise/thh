@@ -98,7 +98,7 @@ func Broadcaster() {
 	for {
 		select {
 		case msg := <-message:
-			logger.Std().Printf("broadcaster-----------%s send message: %s\n", msg.Name, msg.Message)
+			logger.Printf("broadcaster-----------%s send message: %s\n", msg.Name, msg.Message)
 			for client := range clients {
 				data, err := json.Marshal(msg)
 				if logger.ErrIf(err) {
@@ -111,13 +111,13 @@ func Broadcaster() {
 			break
 		// 有用户加入
 		case client := <-join:
-			logger.Std().Printf("broadcaster-----------%s join in the chat room\n", client.name)
+			logger.Printf("broadcaster-----------%s join in the chat room\n", client.name)
 			joinList(client)
 			message <- Message{1, client.name, fmt.Sprintf("%s join in, there are %d preson in room", client.name, len(clients))}
 			break
 		// 有用户退出
 		case client := <-leave:
-			logger.Std().Printf("broadcaster-----------%s leave the chat room\n", client.name)
+			logger.Printf("broadcaster-----------%s leave the chat room\n", client.name)
 			leaveList(client)
 			// 将用户退出消息放入消息通道
 			message <- Message{2, client.name, fmt.Sprintf("%s leave, there are %d preson in room", client.name, len(clients))}

@@ -27,6 +27,18 @@ func Info(args ...any) {
 	Std().Info(args...)
 }
 
+func Printf(format string, args ...interface{}) {
+	Std().Printf(format, args...)
+}
+
+func Println(args ...interface{}) {
+	Std().Println(args...)
+}
+
+func Error(args ...interface{}) {
+	Std().Error(args...)
+}
+
 func ErrIf(err error) bool {
 	if err != nil {
 		Std().Error(err)
