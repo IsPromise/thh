@@ -222,8 +222,8 @@ func (itself *FileQueue) Pop() (string, error) {
 		return "", err
 	}
 	//valid := int64(oData[0])
-	dataLen := BytesToInt64(oData[1:9])
-	data := oData[9 : 9+dataLen]
+	dataLen := BytesToInt64(oData[blockDataLenConfigOffset:blockDataLenConfigOffsetEnd])
+	data := oData[blockDataLenConfigOffsetEnd : blockDataLenConfigOffsetEnd+dataLen]
 	if err := itself.updateOffset(); err != nil {
 		return "", err
 	}
