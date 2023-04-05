@@ -14,7 +14,11 @@ func NewDefaultFileQueue(dirPath string) (*FileQueue, error) {
 	return NewFileQueue(dirPath, defaultBlockLen)
 }
 
+// NewFileQueue dirPath 是队列目录，blockLen 是队列的块长度，不要小于等于9。前9位用于块数据是否消费/块有效长度等数据。
 func NewFileQueue(dirPath string, blockLen int64) (*FileQueue, error) {
+	if blockLen < 10 {
+		return nil, errors.New("blockLen must be greater than 9 because the first 9 bytes are used to store database block data")
+	}
 	tmp := FileQueue{queueDir: dirPath,
 		header: &QueueHeader{
 			version:    version,

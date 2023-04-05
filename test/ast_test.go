@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -24,4 +25,25 @@ func main() {
 
 	// Print the AST.
 	ast.Print(fset, f)
+}
+
+type adder struct {
+	sum int
+}
+
+func (a *adder) Add(x int) *adder {
+	a.sum += x
+	return a
+}
+
+func add(x int) *adder {
+	return &adder{sum: x}
+}
+
+func TestAdd(t *testing.T) {
+	fmt.Println(add(1).Add(2).sum)                      // 输出 3
+	fmt.Println(add(1).Add(2).Add(3).sum)               // 输出 6
+	fmt.Println(add(2).Add(3).Add(4).Add(5).sum)        // 输出 14
+	fmt.Println(add(1).Add(2).Add(3).Add(4).sum)        // 输出 10
+	fmt.Println(add(1).Add(2).Add(3).Add(4).Add(5).sum) // 输出 15
 }
