@@ -17,13 +17,10 @@ func NewDefaultFileQueue(dirPath string) (*FileQueue, error) {
 func NewFileQueue(dirPath string, blockLen int64) (*FileQueue, error) {
 	tmp := FileQueue{queueDir: dirPath,
 		header: &QueueHeader{
-			version:  version,
-			blockLen: blockLen,
-			offset:   defaultOffset,
-
-			validLen:         defaultValidLen,
-			dateLenConfigLen: defaultDateLenConfigLen,
-			dataMaxLen:       blockLen - defaultValidLen - defaultDateLenConfigLen, // blockLen - validLen - dateLenConfigLen
+			version:    version,
+			blockLen:   blockLen,
+			offset:     defaultOffset,
+			dataMaxLen: blockLen - blockValidLen - blockDataLenConfigOffLen, // blockLen - validLen - dateLenConfigLen
 		}}
 	err := tmp.init()
 	return &tmp, err
@@ -53,6 +50,14 @@ const (
 	blockLenConfigOffset = 8
 	// offsetConfigOffset 偏移量在文件中的下标
 	offsetConfigOffset = 16
+
+	blockValidOffset = 0
+	// defaultValidLen
+	blockValidLen            = 1
+	blockDataLenConfigOffset = blockValidOffset + blockValidLen
+	// 数据长度字节长度
+	blockDataLenConfigOffLen    = 8
+	blockDataLenConfigOffsetEnd = blockDataLenConfigOffset + blockDataLenConfigOffLen
 )
 
 // 下面常量部分配置为默认值。并且有可能会写入文件中
@@ -62,10 +67,6 @@ const (
 	defaultOffset = 0
 	// 默认数据块长度
 	defaultBlockLen = 128
-	// 默认有效位字节
-	defaultValidLen = 1
-	// 默认数据长度字节长度
-	defaultDateLenConfigLen = 8
 )
 
 type QueueHeader struct {
@@ -75,13 +76,8 @@ type QueueHeader struct {
 	blockLen int64
 	// 偏移量，记录了下一个要出队数据的文件坐标
 	offset int64
-
-	// 数据最大长度
+	// 数据最大长度 = 块长度 - 有效位长度 - 实际数据长度记录位长度
 	dataMaxLen int64
-	// 有效位长度
-	validLen int64
-	// 数据长度位置的长度
-	dateLenConfigLen int64
 }
 
 type FileQueue struct {
@@ -268,7 +264,7 @@ func (itself *FileQueue) readHeader() error {
 	itself.header.version = int64(version)
 	itself.header.blockLen = int64(blockLen)
 	itself.header.offset = int64(offset)
-	itself.header.dataMaxLen = itself.header.blockLen - itself.header.validLen - itself.header.dateLenConfigLen
+	itself.header.dataMaxLen = itself.header.blockLen - blockValidLen - blockDataLenConfigOffLen
 	return nil
 }
 
