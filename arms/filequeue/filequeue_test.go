@@ -127,3 +127,76 @@ func TestArrSet(t *testing.T) {
 	ReplaceData(block, data, 3)
 	fmt.Println(block)
 }
+
+func TestFqm2(t *testing.T) {
+	app.InitStart()
+	var q Queue
+	q, err := NewFileQueue("./storage/bigBlockQueue", 1024)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = q.Clean()
+	if err != nil {
+		t.Error(err)
+	}
+
+	maxTest := 1_000_000
+	stopNum := 10_000
+
+	for i := 1; i <= maxTest; i++ {
+		err = q.Push(arms.JsonEncode(TestUnitData{true, cast.ToString(i) + "加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字"}))
+		if err != nil {
+			t.Error(err)
+		}
+		if i%stopNum == 0 {
+			t.Log(app.GetRunTime())
+		}
+	}
+
+	n := 0
+	for {
+		data, popErr := q.Pop()
+		if popErr != nil {
+			t.Log(err)
+			break
+		}
+		n += 1
+		if n%10 == 0 {
+			t.Log(data)
+			t.Log(app.GetRunTime())
+			break
+		}
+	}
+	t.Log("清理数据")
+
+	err = q.Clean()
+	if err != nil {
+		t.Error(err)
+	}
+	arms.Together(func(goId int) {
+		for {
+			data, popErr := q.Pop()
+			if popErr != nil {
+				if popErr == io.EOF {
+					break
+				} else {
+					t.Error(popErr)
+					break
+				}
+			}
+			n += 1
+			if n%stopNum == 0 {
+				t.Log(`n%`+cast.ToString(stopNum), data)
+				t.Log("goId", app.GetRunTime())
+			}
+		}
+	}, 3)
+
+	t.Log("end:", app.GetRunTime())
+	err = q.Clean()
+	if err != nil {
+		t.Error(err)
+	}
+}
