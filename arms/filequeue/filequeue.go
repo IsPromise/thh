@@ -75,6 +75,7 @@ type QueueHeader struct {
 	blockLen int64
 	// 偏移量，记录了下一个要出队数据的文件坐标
 	offset int64
+
 	// 数据最大长度
 	dataMaxLen int64
 	// 有效位长度
@@ -249,9 +250,6 @@ func (itself *FileQueue) writeHeader() error {
 	binary.LittleEndian.PutUint64(data[versionOffset:versionOffset+8], uint64(itself.header.version))
 	binary.LittleEndian.PutUint64(data[blockLenConfigOffset:blockLenConfigOffset+8], uint64(itself.header.blockLen))
 	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
-	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
-	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
-	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
 	binary.LittleEndian.PutUint64(data[24:64], 0)
 	if _, err := itself.queueHandle.WriteAt(data, 0); err != nil {
 		return err
@@ -270,6 +268,7 @@ func (itself *FileQueue) readHeader() error {
 	itself.header.version = int64(version)
 	itself.header.blockLen = int64(blockLen)
 	itself.header.offset = int64(offset)
+	itself.header.dataMaxLen = itself.header.blockLen - itself.header.validLen - itself.header.dateLenConfigLen
 	return nil
 }
 
