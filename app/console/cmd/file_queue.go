@@ -15,7 +15,7 @@ func init() {
 
 func fileQueue(_ *cobra.Command, _ []string) {
 
-	f, err := filequeue.NewFileQueue("./storage/queue")
+	f, err := filequeue.NewDefaultFileQueue("./storage/queue")
 	if err != nil {
 		fmt.Println(err)
 		return

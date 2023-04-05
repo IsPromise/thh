@@ -9,17 +9,21 @@ import (
 	"sync"
 )
 
-// NewFileQueue 标准队列实体，返回一个可以使用的队列管理器
-func NewFileQueue(dirPath string) (*FileQueue, error) {
+// NewDefaultFileQueue 标准队列实体，返回一个可以使用的队列管理器
+func NewDefaultFileQueue(dirPath string) (*FileQueue, error) {
+	return NewFileQueue(dirPath, defaultBlockLen)
+}
+
+func NewFileQueue(dirPath string, blockLen int64) (*FileQueue, error) {
 	tmp := FileQueue{queueDir: dirPath,
 		header: &QueueHeader{
 			version:  version,
-			blockLen: defaultBlockLen,
+			blockLen: blockLen,
 			offset:   defaultOffset,
 
 			validLen:         defaultValidLen,
 			dateLenConfigLen: defaultDateLenConfigLen,
-			dataMaxLen:       defaultBlockLen - defaultValidLen - defaultDateLenConfigLen, // blockLen - validLen - dateLenConfigLen
+			dataMaxLen:       blockLen - defaultValidLen - defaultDateLenConfigLen, // blockLen - validLen - dateLenConfigLen
 		}}
 	err := tmp.init()
 	return &tmp, err
@@ -180,7 +184,11 @@ func (itself *FileQueue) init() error {
 
 // Len 队列有效长度，暂未实现
 func (itself *FileQueue) Len() int64 {
-	return 0
+	itself.drLock.Lock()
+	defer itself.drLock.Unlock()
+	n, _ := itself.queueHandle.Seek(0, io.SeekEnd)
+	return (n - headLen) / itself.header.blockLen
+
 }
 
 // Push 入队
@@ -240,6 +248,9 @@ func (itself *FileQueue) writeHeader() error {
 	data := make([]byte, 64)
 	binary.LittleEndian.PutUint64(data[versionOffset:versionOffset+8], uint64(itself.header.version))
 	binary.LittleEndian.PutUint64(data[blockLenConfigOffset:blockLenConfigOffset+8], uint64(itself.header.blockLen))
+	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
+	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
+	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
 	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
 	binary.LittleEndian.PutUint64(data[24:64], 0)
 	if _, err := itself.queueHandle.WriteAt(data, 0); err != nil {
