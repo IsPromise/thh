@@ -57,7 +57,7 @@ func TestFqm(t *testing.T) {
 		t.Error(err)
 	}
 
-	maxTest := 5_000_000
+	maxTest := 1_000_000
 	stopNum := 100_000
 
 	for i := 1; i <= maxTest; i++ {

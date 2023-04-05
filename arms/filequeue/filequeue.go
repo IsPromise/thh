@@ -1,11 +1,27 @@
 package filequeue
 
 import (
+	"encoding/binary"
 	"errors"
 	"io"
 	"os"
 	"sync"
 )
+
+// FqmStd 标准队列实体，返回一个可以使用的队列管理器
+func FqmStd(dirPath string) (*Fqm, error) {
+	tmp := Fqm{queueDir: dirPath,
+		header: &FqmHeader{
+			version:    1,
+			blockLen:   128,
+			offset:     0,
+			dataMaxLen: 128 - 1 - 8, // blockLen - validLen - lenLen
+			lenLen:     8,
+			validLen:   1,
+		}}
+	err := tmp.init()
+	return &tmp, err
+}
 
 /**
 head
@@ -19,13 +35,31 @@ head version 为版本 blockLen 为块大小 决定后续每个数据块的大�
 |(64B): valid(1B) len(8B) data(小于55B) 0(xB)|
 |(64B): valid(1B) len(8B) data(小于55B) 0(xB)|
 */
+const (
+	// headOffset 起始偏移
+	headOffset = 0
+	// versionOffset 版本号在文件中下标
+	versionOffset = headOffset
+	// blockLenConfigOffset  数据库在文件中下标
+	blockLenConfigOffset = 8
+	// offsetConfigOffset 偏移量在文件中的下标
+	offsetConfigOffset = 16
+	// headLen head 长度 文件前 xB 的数据为header 的存储空间
+	headLen int64 = 64
+)
 
 type FqmHeader struct {
-	version  int64
+	// 版本号
+	version int64
+	// 块长度
 	blockLen int64
-	offset   int64
-	maxLen   int64
-	lenLen   int64
+	// 偏移量，记录了下一个要出队数据的文件坐标
+	offset int64
+	// 数据最大长度
+	dataMaxLen int64
+	// 数据长度位置的长度
+	lenLen int64
+	// 有效位长度
 	validLen int64
 }
 
@@ -33,7 +67,7 @@ type Fqm struct {
 	queueDir    string
 	drLock      sync.Mutex
 	queueHandle *os.File
-	header      FqmHeader
+	header      *FqmHeader
 }
 
 // write 在队列文件写入数据
@@ -91,6 +125,7 @@ func (itself *Fqm) Clean() error {
 	for {
 		lastN, _ := itself.readAt(blockData, itself.header.offset*itself.header.blockLen+headLen+i*int64(mDataLen))
 		if lastN < mDataLen {
+			// 如果获取的数据小于一个数据块儿，说明是最后一块。单独处理
 			lastData := make([]byte, lastN)
 			for di := 0; di < lastN; di++ {
 				lastData[di] = blockData[di]
@@ -151,13 +186,9 @@ func (itself *Fqm) init() error {
 	headerData := make([]byte, headLen)
 	n, err := itself.readAt(headerData, blockLenConfigOffset)
 	if n == 0 {
-		_, err = itself.write(make([]byte, headLen))
-		_, err = itself.writeInt64At(itself.header.version, versionOffset)
-		_, err = itself.writeInt64At(itself.header.blockLen, blockLenConfigOffset)
-		_, err = itself.writeInt64At(itself.header.offset, offsetConfigOffset)
+		err = itself.writeHeader()
 	} else {
-		itself.header.blockLen, err = itself.readInt64At(blockLenConfigOffset)
-		itself.header.offset, err = itself.readInt64At(offsetConfigOffset)
+		err = itself.readHeader()
 	}
 	return err
 }
@@ -175,7 +206,7 @@ func (itself *Fqm) Push(data string) error {
 	defer itself.drLock.Unlock()
 	// 有效表示位
 	dataByte := []byte(data)
-	if len(dataByte) > int(itself.header.maxLen) {
+	if len(dataByte) > int(itself.header.dataMaxLen) {
 		return errors.New("当前数据长度超过最大长度")
 	}
 	unitData := make([]byte, itself.header.blockLen)
@@ -193,42 +224,61 @@ func (itself *Fqm) Push(data string) error {
 func (itself *Fqm) Pop() (string, error) {
 	itself.drLock.Lock()
 	defer itself.drLock.Unlock()
-	// 数据块起始位置
+	// 数据块起始位置 head + block * n
 	blockOffset := itself.header.offset*itself.header.blockLen + headLen
-	// 数据长度位
-	lIndex := blockOffset + 1
-	// 数据长度起始位
-	dataIndex := blockOffset + itself.header.validLen + itself.header.lenLen
+	// 数据长度位 head + block * + valid
+	lIndex := blockOffset + itself.header.validLen
+	// 数据长度起始位  head + block * + valid + 数据长度为位置
+	dataIndex := lIndex + itself.header.lenLen
 
+	//data := make([]byte, itself.header.blockLen)
+	
 	lLen, err := itself.readInt64At(lIndex)
 	if err != nil {
 		return "", err
 	}
 	data := make([]byte, lLen)
-	_, err = itself.readAt(data, dataIndex)
-	if err != nil {
+	if _, err = itself.readAt(data, dataIndex); err != nil {
 		return "", err
 	}
-	itself.header.offset += 1
-	_, err = itself.writeInt64At(itself.header.offset, offsetConfigOffset)
-	if err != nil {
+	if err = itself.updateOffset(); err != nil {
 		return "", err
 	}
-
 	return string(data), nil
 }
 
-// FqmStd 标准队列实体，返回一个可以使用的队列管理器
-func FqmStd(dirPath string) (*Fqm, error) {
-	tmp := Fqm{queueDir: dirPath,
-		header: FqmHeader{
-			version:  1,
-			blockLen: 128,
-			offset:   0,
-			maxLen:   128 - 1 - 8, // blockLen - validLen - lenLen
-			lenLen:   8,
-			validLen: 1,
-		}}
-	err := tmp.init()
-	return &tmp, err
+func (itself *Fqm) updateOffset() error {
+	itself.header.offset += 1
+	_, err := itself.writeInt64At(itself.header.offset, offsetConfigOffset)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// writeHeader 写入头信息
+func (itself *Fqm) writeHeader() error {
+	data := make([]byte, 64)
+	binary.LittleEndian.PutUint64(data[versionOffset:versionOffset+8], uint64(itself.header.version))
+	binary.LittleEndian.PutUint64(data[blockLenConfigOffset:blockLenConfigOffset+8], uint64(itself.header.blockLen))
+	binary.LittleEndian.PutUint64(data[offsetConfigOffset:offsetConfigOffset+8], uint64(itself.header.offset))
+	binary.LittleEndian.PutUint64(data[24:64], 0)
+	if _, err := itself.queueHandle.WriteAt(data, 0); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (itself *Fqm) readHeader() error {
+	data := make([]byte, 64)
+	if _, err := itself.queueHandle.ReadAt(data, 0); err != nil {
+		return err
+	}
+	version := binary.LittleEndian.Uint64(data[:8])
+	blockLen := binary.LittleEndian.Uint64(data[8:16])
+	offset := binary.LittleEndian.Uint64(data[16:24])
+	itself.header.version = int64(version)
+	itself.header.blockLen = int64(blockLen)
+	itself.header.offset = int64(offset)
+	return nil
 }
