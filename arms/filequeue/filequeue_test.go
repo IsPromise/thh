@@ -51,7 +51,7 @@ type TestUnitData struct {
 func TestFqm(t *testing.T) {
 	app.InitStart()
 	var q Queue
-	q, err := FqmStd("./storage/queue")
+	q, err := NewFileQueue("./storage/queue")
 
 	if err != nil {
 		t.Error(err)

@@ -9,16 +9,16 @@ import (
 	"sync"
 )
 
-// FqmStd 标准队列实体，返回一个可以使用的队列管理器
-func FqmStd(dirPath string) (*FileQueue, error) {
+// NewFileQueue 标准队列实体，返回一个可以使用的队列管理器
+func NewFileQueue(dirPath string) (*FileQueue, error) {
 	tmp := FileQueue{queueDir: dirPath,
 		header: &QueueHeader{
-			version:          1,
-			blockLen:         128,
-			offset:           0,
-			dataMaxLen:       128 - 1 - 8, // blockLen - validLen - dateLenConfigLen
-			dateLenConfigLen: 8,
-			validLen:         1,
+			version:          version,
+			blockLen:         defaultBlockLen,
+			offset:           defaultOffset,
+			validLen:         defaultValidLen,
+			dateLenConfigLen: defaultDateLenConfigLen,
+			dataMaxLen:       defaultBlockLen - defaultValidLen - defaultDateLenConfigLen, // blockLen - validLen - dateLenConfigLen
 		}}
 	err := tmp.init()
 	return &tmp, err
@@ -37,8 +37,10 @@ head version 为版本 blockLen 为块大小 决定后续每个数据块的大�
 |(64B): valid(1B) len(8B) data(小于55B) 0(xB)|
 |(64B): valid(1B) len(8B) data(小于55B) 0(xB)|
 */
+
+// 下面部分常量不会记录在文件中
 const (
-	// headLen header 在文件中长度
+	// headLen head 长度 文件前 xB 的数据为header 的存储空间
 	headLen int64 = 64
 	// versionOffset 版本号在文件中下标
 	versionOffset = 0
@@ -46,7 +48,19 @@ const (
 	blockLenConfigOffset = 8
 	// offsetConfigOffset 偏移量在文件中的下标
 	offsetConfigOffset = 16
-	// headLen head 长度 文件前 xB 的数据为header 的存储空间
+)
+
+// 下面常量部分配置为默认值。并且有可能会写入文件中
+const (
+	version = 1
+	// 默认偏移量
+	defaultOffset = 0
+	// 默认数据块长度
+	defaultBlockLen = 128
+	// 默认有效位字节
+	defaultValidLen = 1
+	// 默认数据长度字节长度
+	defaultDateLenConfigLen = 8
 )
 
 type QueueHeader struct {
@@ -58,10 +72,10 @@ type QueueHeader struct {
 	offset int64
 	// 数据最大长度
 	dataMaxLen int64
-	// 数据长度位置的长度
-	dateLenConfigLen int64
 	// 有效位长度
 	validLen int64
+	// 数据长度位置的长度
+	dateLenConfigLen int64
 }
 
 type FileQueue struct {
@@ -113,7 +127,7 @@ func (itself *FileQueue) Clean() error {
 		i += 1
 	}
 	// 新队列重制偏移量
-	itself.header.offset = 0
+	itself.header.offset = defaultOffset
 	_, err = tmpQueueHandle.WriteAt(Int64ToBytes(itself.header.offset), offsetConfigOffset)
 	if err != nil {
 		return err
