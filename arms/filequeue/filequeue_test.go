@@ -57,7 +57,12 @@ func TestFqm(t *testing.T) {
 		t.Error(err)
 	}
 
-	maxTest := 1_000
+	err = q.Clean()
+	if err != nil {
+		t.Error(err)
+	}
+
+	maxTest := 1_000_000
 	stopNum := 10_000
 
 	for i := 1; i <= maxTest; i++ {

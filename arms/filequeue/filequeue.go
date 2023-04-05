@@ -9,9 +9,9 @@ import (
 )
 
 // FqmStd 标准队列实体，返回一个可以使用的队列管理器
-func FqmStd(dirPath string) (*Fqm, error) {
-	tmp := Fqm{queueDir: dirPath,
-		header: &FqmHeader{
+func FqmStd(dirPath string) (*FileQueue, error) {
+	tmp := FileQueue{queueDir: dirPath,
+		header: &QueueHeader{
 			version:          1,
 			blockLen:         128,
 			offset:           0,
@@ -49,7 +49,7 @@ const (
 	headLen int64 = 64
 )
 
-type FqmHeader struct {
+type QueueHeader struct {
 	// 版本号
 	version int64
 	// 块长度
@@ -64,35 +64,35 @@ type FqmHeader struct {
 	validLen int64
 }
 
-type Fqm struct {
+type FileQueue struct {
 	queueDir    string
 	drLock      sync.Mutex
 	queueHandle *os.File
-	header      *FqmHeader
+	header      *QueueHeader
 }
 
 // write 在队列文件写入数据
-func (itself *Fqm) write(data []byte) (int, error) {
+func (itself *FileQueue) write(data []byte) (int, error) {
 	return itself.queueHandle.Write(data)
 }
 
 // writeAt 在队列文件指定位置写入数据
-func (itself *Fqm) writeAt(data []byte, off int64) (int, error) {
+func (itself *FileQueue) writeAt(data []byte, off int64) (int, error) {
 	return itself.queueHandle.WriteAt(data, off)
 }
 
-// writeAt 在队列文件指定位置写入一个int64的数据
-func (itself *Fqm) writeInt64At(data int64, off int64) (int, error) {
+// writeInt64At 在队列文件指定位置写入一个int64的数据
+func (itself *FileQueue) writeInt64At(data int64, off int64) (int, error) {
 	return itself.queueHandle.WriteAt(Int64ToBytes(data), off)
 }
 
 // readAt 在队列文件指定位置读取数据
-func (itself *Fqm) readAt(b []byte, off int64) (n int, err error) {
+func (itself *FileQueue) readAt(b []byte, off int64) (n int, err error) {
 	return itself.queueHandle.ReadAt(b, off)
 }
 
 // readInt64At 在队列文件指定位置读取一个int64的数据
-func (itself *Fqm) readInt64At(off int64) (data int64, err error) {
+func (itself *FileQueue) readInt64At(off int64) (data int64, err error) {
 	b := Int64ToBytes(1)
 	_, err = itself.readAt(b, off)
 	if err != nil {
@@ -103,7 +103,7 @@ func (itself *Fqm) readInt64At(off int64) (data int64, err error) {
 }
 
 // Clean 压缩文件，清理已经出队的数据
-func (itself *Fqm) Clean() error {
+func (itself *FileQueue) Clean() error {
 	itself.drLock.Lock()
 	itself.drLock.Unlock()
 	var err error
@@ -166,19 +166,19 @@ func (itself *Fqm) Clean() error {
 }
 
 // getQueuePath 队列文件，当前只有一个文件，内容为 header + queueBlockList
-func (itself *Fqm) getQueuePath() string {
+func (itself *FileQueue) getQueuePath() string {
 	return itself.queueDir + "/1_000_000_000.q"
 }
 
 // getQueueTmpPath 获取队列临时目录，这个是用来清理消费时的新文件
-func (itself *Fqm) getQueueTmpPath() string {
+func (itself *FileQueue) getQueueTmpPath() string {
 	return itself.queueDir + "/1_000_000_000.q.tmp"
 }
 
 // init 文件队列初始化函数
 // 会检测是否存在队列仓库目录，没有的话进行创建，同时初始化队列文件的header
 // 如果存在则读取上次的header ,header 中存在version ，当前队列下标信息
-func (itself *Fqm) init() error {
+func (itself *FileQueue) init() error {
 	var err error
 	itself.queueHandle, err = OpenOrCreateFile(itself.getQueuePath())
 	if err != nil {
@@ -195,14 +195,14 @@ func (itself *Fqm) init() error {
 }
 
 // Len 队列有效长度，暂未实现
-func (itself *Fqm) Len() int64 {
+func (itself *FileQueue) Len() int64 {
 	return 0
 }
 
 // Push 入队
 // 传入数据 ，拼接数据块 有效位 长度 真实数据位
 // 追加至文件尾
-func (itself *Fqm) Push(data string) error {
+func (itself *FileQueue) Push(data string) error {
 	itself.drLock.Lock()
 	defer itself.drLock.Unlock()
 	// 有效表示位
@@ -222,7 +222,7 @@ func (itself *Fqm) Push(data string) error {
 // Pop 出队
 // 计算偏移量 ，读取 数据块 ，读取长度位 ，读取对应长度数据
 // 读取成功 设置最新的下标并写入文件
-func (itself *Fqm) Pop() (string, error) {
+func (itself *FileQueue) Pop() (string, error) {
 	itself.drLock.Lock()
 	defer itself.drLock.Unlock()
 	// 数据块起始位置 head + block * n
@@ -242,7 +242,7 @@ func (itself *Fqm) Pop() (string, error) {
 }
 
 // 更新偏移
-func (itself *Fqm) updateOffset() error {
+func (itself *FileQueue) updateOffset() error {
 	itself.header.offset += 1
 	_, err := itself.writeInt64At(itself.header.offset, offsetConfigOffset)
 	if err != nil {
@@ -252,7 +252,7 @@ func (itself *Fqm) updateOffset() error {
 }
 
 // writeHeader 写入头信息
-func (itself *Fqm) writeHeader() error {
+func (itself *FileQueue) writeHeader() error {
 	data := make([]byte, 64)
 	binary.LittleEndian.PutUint64(data[versionOffset:versionOffset+8], uint64(itself.header.version))
 	binary.LittleEndian.PutUint64(data[blockLenConfigOffset:blockLenConfigOffset+8], uint64(itself.header.blockLen))
@@ -264,7 +264,7 @@ func (itself *Fqm) writeHeader() error {
 	return nil
 }
 
-func (itself *Fqm) readHeader() error {
+func (itself *FileQueue) readHeader() error {
 	data := make([]byte, 64)
 	if _, err := itself.queueHandle.ReadAt(data, 0); err != nil {
 		return err
