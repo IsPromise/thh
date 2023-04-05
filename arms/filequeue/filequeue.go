@@ -13,9 +13,10 @@ import (
 func NewFileQueue(dirPath string) (*FileQueue, error) {
 	tmp := FileQueue{queueDir: dirPath,
 		header: &QueueHeader{
-			version:          version,
-			blockLen:         defaultBlockLen,
-			offset:           defaultOffset,
+			version:  version,
+			blockLen: defaultBlockLen,
+			offset:   defaultOffset,
+
 			validLen:         defaultValidLen,
 			dateLenConfigLen: defaultDateLenConfigLen,
 			dataMaxLen:       defaultBlockLen - defaultValidLen - defaultDateLenConfigLen, // blockLen - validLen - dateLenConfigLen
