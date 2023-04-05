@@ -46,7 +46,7 @@ func fileQueue(_ *cobra.Command, _ []string) {
 	}
 	fmt.Println("清理数据")
 
-	err = f.VACUUM()
+	err = f.Clean()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -64,5 +64,5 @@ func fileQueue(_ *cobra.Command, _ []string) {
 			fmt.Println(app.GetRunTime())
 		}
 	}
-	_ = f.VACUUM()
+	_ = f.Clean()
 }

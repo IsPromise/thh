@@ -14,13 +14,20 @@ type Queue interface {
 	Push(data string) error
 	Pop() (string, error)
 	Len() int64
-	VACUUM() error
+	Clean() error
 }
 
 func TestData(t *testing.T) {
 	data, _ := arms.FileGetContents("/Users/thh/workspace/about/tmp/b.b")
 	fmt.Println(len(data))
 	fmt.Println(data[0:])
+}
+
+func TestData2(t *testing.T) {
+	_, err := OpenOrCreateFile("./storage/queue2/1_000_000_0020.q")
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func TestCheckQueueData(t *testing.T) {
@@ -79,7 +86,7 @@ func TestFqm(t *testing.T) {
 	}
 	t.Log("清理数据")
 
-	err = q.VACUUM()
+	err = q.Clean()
 	if err != nil {
 		t.Error(err)
 	}
@@ -103,7 +110,7 @@ func TestFqm(t *testing.T) {
 	}, 3)
 
 	t.Log("end:", app.GetRunTime())
-	err = q.VACUUM()
+	err = q.Clean()
 	if err != nil {
 		t.Error(err)
 	}

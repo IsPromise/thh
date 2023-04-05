@@ -1,6 +1,10 @@
 package filequeue
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"os"
+	"path/filepath"
+)
 
 const (
 	// header
@@ -28,9 +32,18 @@ func BytesToInt64(buf []byte) int64 {
 	return int64(binary.BigEndian.Uint64(buf))
 }
 
+// ReplaceData 替换指定位置之后的数据
 func ReplaceData(o []byte, d []byte, i int) {
 	for _, item := range d {
 		o[i] = item
 		i += 1
 	}
+}
+
+func OpenOrCreateFile(path string) (*os.File, error) {
+	err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+	return os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
 }

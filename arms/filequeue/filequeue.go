@@ -5,12 +5,7 @@ import (
 	"io"
 	"os"
 	"sync"
-	"thh/arms"
 )
-
-/*
-帮我实现一个go的队列，要保存到本地文件，文件分为队列内容和header部分，header部分一共64B，分别存储代码版本，数据块长度，偏移量，当前队列长度,队列部分的数据块大小与header中数据块长度相同。可以入队和出队
-*/
 
 /**
 head
@@ -72,13 +67,12 @@ func (itself *Fqm) readInt64At(off int64) (data int64, err error) {
 	return
 }
 
-// VACUUM 压缩文件，清理已经出队的数据
-func (itself *Fqm) VACUUM() error {
+// Clean 压缩文件，清理已经出队的数据
+func (itself *Fqm) Clean() error {
 	itself.drLock.Lock()
 	itself.drLock.Unlock()
 	var err error
-	arms.IsExistOrCreate(itself.getQueueTmpPath(), "")
-	tmpQueueHandle, err := os.OpenFile(itself.getQueueTmpPath(), os.O_RDWR, 0666)
+	tmpQueueHandle, err := OpenOrCreateFile(itself.getQueueTmpPath())
 	if err != nil {
 		return err
 	}
@@ -150,8 +144,7 @@ func (itself *Fqm) getQueueTmpPath() string {
 // 如果存在则读取上次的header ,header 中存在version ，当前队列下标信息
 func (itself *Fqm) init() error {
 	var err error
-	arms.IsExistOrCreate(itself.getQueuePath(), "")
-	itself.queueHandle, err = os.OpenFile(itself.getQueuePath(), os.O_RDWR, 0666)
+	itself.queueHandle, err = OpenOrCreateFile(itself.getQueuePath())
 	if err != nil {
 		return err
 	}
