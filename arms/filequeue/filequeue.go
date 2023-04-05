@@ -227,27 +227,21 @@ func (itself *Fqm) Pop() (string, error) {
 	defer itself.drLock.Unlock()
 	// 数据块起始位置 head + block * n
 	blockOffset := itself.header.offset*itself.header.blockLen + headLen
-	// 数据长度位 head + block * + valid
-	lIndex := blockOffset + itself.header.validLen
-	// 数据长度起始位  head + block * + valid + 数据长度为位置
-	dataIndex := lIndex + itself.header.dateLenConfigLen
+	oData := make([]byte, itself.header.blockLen)
 
-	//data := make([]byte, itself.header.blockLen)
-
-	lLen, err := itself.readInt64At(lIndex)
-	if err != nil {
+	if _, err := itself.readAt(oData, blockOffset); err != nil {
 		return "", err
 	}
-	data := make([]byte, lLen)
-	if _, err = itself.readAt(data, dataIndex); err != nil {
-		return "", err
-	}
-	if err = itself.updateOffset(); err != nil {
+	//valid := int64(oData[0])
+	dataLen := BytesToInt64(oData[1:9])
+	data := oData[9 : 9+dataLen]
+	if err := itself.updateOffset(); err != nil {
 		return "", err
 	}
 	return string(data), nil
 }
 
+// 更新偏移
 func (itself *Fqm) updateOffset() error {
 	itself.header.offset += 1
 	_, err := itself.writeInt64At(itself.header.offset, offsetConfigOffset)
