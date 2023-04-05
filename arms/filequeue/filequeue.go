@@ -12,18 +12,19 @@ import (
 func FqmStd(dirPath string) (*Fqm, error) {
 	tmp := Fqm{queueDir: dirPath,
 		header: &FqmHeader{
-			version:    1,
-			blockLen:   128,
-			offset:     0,
-			dataMaxLen: 128 - 1 - 8, // blockLen - validLen - lenLen
-			lenLen:     8,
-			validLen:   1,
+			version:          1,
+			blockLen:         128,
+			offset:           0,
+			dataMaxLen:       128 - 1 - 8, // blockLen - validLen - dateLenConfigLen
+			dateLenConfigLen: 8,
+			validLen:         1,
 		}}
 	err := tmp.init()
 	return &tmp, err
 }
 
-/**
+/*
+*
 head
 这里所用的都是字节(byte) 非位(bit)
 |(64B) :version(8B) blockLen(8B) offset(8B) 0(8B) 0(8B) 0(8B) 0(8B) 0(8B) |
@@ -58,7 +59,7 @@ type FqmHeader struct {
 	// 数据最大长度
 	dataMaxLen int64
 	// 数据长度位置的长度
-	lenLen int64
+	dateLenConfigLen int64
 	// 有效位长度
 	validLen int64
 }
@@ -229,10 +230,10 @@ func (itself *Fqm) Pop() (string, error) {
 	// 数据长度位 head + block * + valid
 	lIndex := blockOffset + itself.header.validLen
 	// 数据长度起始位  head + block * + valid + 数据长度为位置
-	dataIndex := lIndex + itself.header.lenLen
+	dataIndex := lIndex + itself.header.dateLenConfigLen
 
 	//data := make([]byte, itself.header.blockLen)
-	
+
 	lLen, err := itself.readInt64At(lIndex)
 	if err != nil {
 		return "", err

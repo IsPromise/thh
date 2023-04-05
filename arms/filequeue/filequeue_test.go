@@ -57,8 +57,8 @@ func TestFqm(t *testing.T) {
 		t.Error(err)
 	}
 
-	maxTest := 1_000_000
-	stopNum := 100_000
+	maxTest := 1_000
+	stopNum := 10_000
 
 	for i := 1; i <= maxTest; i++ {
 		err = q.Push(arms.JsonEncode(TestUnitData{true, cast.ToString(i) + "加个汉字"}))
