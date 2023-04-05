@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -37,16 +38,15 @@ head version 为版本 blockLen 为块大小 决定后续每个数据块的大�
 |(64B): valid(1B) len(8B) data(小于55B) 0(xB)|
 */
 const (
-	// headOffset 起始偏移
-	headOffset = 0
+	// headLen header 在文件中长度
+	headLen int64 = 64
 	// versionOffset 版本号在文件中下标
-	versionOffset = headOffset
+	versionOffset = 0
 	// blockLenConfigOffset  数据库在文件中下标
 	blockLenConfigOffset = 8
 	// offsetConfigOffset 偏移量在文件中的下标
 	offsetConfigOffset = 16
 	// headLen head 长度 文件前 xB 的数据为header 的存储空间
-	headLen int64 = 64
 )
 
 type QueueHeader struct {
@@ -71,37 +71,6 @@ type FileQueue struct {
 	header      *QueueHeader
 }
 
-// write 在队列文件写入数据
-func (itself *FileQueue) write(data []byte) (int, error) {
-	return itself.queueHandle.Write(data)
-}
-
-// writeAt 在队列文件指定位置写入数据
-func (itself *FileQueue) writeAt(data []byte, off int64) (int, error) {
-	return itself.queueHandle.WriteAt(data, off)
-}
-
-// writeInt64At 在队列文件指定位置写入一个int64的数据
-func (itself *FileQueue) writeInt64At(data int64, off int64) (int, error) {
-	return itself.queueHandle.WriteAt(Int64ToBytes(data), off)
-}
-
-// readAt 在队列文件指定位置读取数据
-func (itself *FileQueue) readAt(b []byte, off int64) (n int, err error) {
-	return itself.queueHandle.ReadAt(b, off)
-}
-
-// readInt64At 在队列文件指定位置读取一个int64的数据
-func (itself *FileQueue) readInt64At(off int64) (data int64, err error) {
-	b := Int64ToBytes(1)
-	_, err = itself.readAt(b, off)
-	if err != nil {
-		return
-	}
-	data = BytesToInt64(b)
-	return
-}
-
 // Clean 压缩文件，清理已经出队的数据
 func (itself *FileQueue) Clean() error {
 	itself.drLock.Lock()
@@ -112,7 +81,7 @@ func (itself *FileQueue) Clean() error {
 		return err
 	}
 	// 迁移头
-	header := make([]byte, 64)
+	header := make([]byte, headLen)
 	if _, err = itself.readAt(header, 0); err != nil {
 		return err
 	}
@@ -167,12 +136,12 @@ func (itself *FileQueue) Clean() error {
 
 // getQueuePath 队列文件，当前只有一个文件，内容为 header + queueBlockList
 func (itself *FileQueue) getQueuePath() string {
-	return itself.queueDir + "/1_000_000_000.q"
+	return itself.queueDir + "/q.dat"
 }
 
 // getQueueTmpPath 获取队列临时目录，这个是用来清理消费时的新文件
 func (itself *FileQueue) getQueueTmpPath() string {
-	return itself.queueDir + "/1_000_000_000.q.tmp"
+	return itself.getQueuePath() + ".tmp"
 }
 
 // init 文件队列初始化函数
@@ -276,4 +245,66 @@ func (itself *FileQueue) readHeader() error {
 	itself.header.blockLen = int64(blockLen)
 	itself.header.offset = int64(offset)
 	return nil
+}
+
+// write 在队列文件写入数据
+func (itself *FileQueue) write(data []byte) (int, error) {
+	return itself.queueHandle.Write(data)
+}
+
+// writeAt 在队列文件指定位置写入数据
+func (itself *FileQueue) writeAt(data []byte, off int64) (int, error) {
+	return itself.queueHandle.WriteAt(data, off)
+}
+
+// writeInt64At 在队列文件指定位置写入一个int64的数据
+func (itself *FileQueue) writeInt64At(data int64, off int64) (int, error) {
+	return itself.queueHandle.WriteAt(Int64ToBytes(data), off)
+}
+
+// readAt 在队列文件指定位置读取数据
+func (itself *FileQueue) readAt(b []byte, off int64) (n int, err error) {
+	return itself.queueHandle.ReadAt(b, off)
+}
+
+// readInt64At 在队列文件指定位置读取一个int64的数据
+func (itself *FileQueue) readInt64At(off int64) (data int64, err error) {
+	b := Int64ToBytes(1)
+	_, err = itself.readAt(b, off)
+	if err != nil {
+		return
+	}
+	data = BytesToInt64(b)
+	return
+}
+
+// util
+
+func Int64ToBytes(i int64) []byte {
+	buf := make([]byte, 8)
+	binary.LittleEndian.PutUint64(buf, uint64(i))
+	return buf
+}
+
+func BytesToInt64(buf []byte) int64 {
+	if len(buf) < 8 {
+		buf = append(make([]byte, 8-len(buf)), buf...)
+	}
+	return int64(binary.LittleEndian.Uint64(buf))
+}
+
+// ReplaceData 替换指定位置之后的数据
+func ReplaceData(o []byte, d []byte, i int) {
+	for _, item := range d {
+		o[i] = item
+		i += 1
+	}
+}
+
+func OpenOrCreateFile(path string) (*os.File, error) {
+	err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+	return os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
 }
