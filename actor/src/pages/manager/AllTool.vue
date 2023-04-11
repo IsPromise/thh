@@ -23,6 +23,7 @@ import {ref} from 'vue'
 import {useIsMobile, useIsSmallDesktop, useIsTablet} from "@/utils/composables";
 import {getUserInfo} from "@/service/remote"
 import MChat from "@/pages/manager/MChat.vue";
+import CpTool from "@/pages/manager/tool/CpTool.vue";
 
 const message = useMessage()
 const listData = ref([
@@ -68,7 +69,7 @@ const mdData = ref("# h1")
 </script>
 <template>
     <n-space vertical>
-      <MChat></MChat>
+        <n-card><cp-tool></cp-tool></n-card>
         <n-card>
             <n-button @click="getUserInfoAction"> 获取用户信息</n-button>
         </n-card>
@@ -207,6 +208,7 @@ const mdData = ref("# h1")
                 </n-list-item>
 
             </n-list>
+            <MChat></MChat>
 
         </n-card>
     </n-space>
