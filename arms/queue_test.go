@@ -2,9 +2,11 @@ package arms
 
 import (
 	"fmt"
+	"github.com/spf13/cast"
 	"strings"
 	"sync"
 	"testing"
+	"thh/arms/app"
 )
 
 func TestQueue(t *testing.T) {
@@ -39,4 +41,124 @@ func TestQueue(t *testing.T) {
 
 	wg.Wait()
 	fmt.Println("end")
+}
+
+var maxTest = 300_000_000
+var stopNum = 1_000_000
+
+func TestQueueB(t *testing.T) {
+	app.InitStart()
+	key := "queueKey"
+	type TestUnitData struct {
+		Valid bool   `json:"valid"`
+		Data  string `json:"data"`
+	}
+	data := "加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字"
+	for i := 1; i <= maxTest; i++ {
+		QueueRPush(key, data)
+		if i%stopNum == 0 {
+			t.Log(app.GetRunTime())
+		}
+	}
+	n := 0
+	Together(func(goId int) {
+		for {
+			data, popErr := QueueLPop(key)
+			if popErr != nil {
+				break
+			}
+			n += 1
+			if n%stopNum == 0 {
+				t.Log(`n%`+cast.ToString(stopNum), data)
+				t.Log("goId", app.GetRunTime())
+			}
+		}
+	}, 3)
+	t.Log("end:", app.GetRunTime())
+}
+
+// Memory Queue
+type MemoryQueue struct {
+	head *node
+	tail *node
+	len  int
+	lock sync.Mutex
+}
+
+// Node
+type node struct {
+	value any
+	next  *node
+}
+
+// New queue
+func NewMemoryQueue() *MemoryQueue {
+	return &MemoryQueue{nil, nil, 0, sync.Mutex{}}
+}
+
+// Push to queue tail
+func (q *MemoryQueue) Push(v any) {
+	n := &node{v, nil}
+	q.lock.Lock()
+	defer q.lock.Unlock()
+	if q.head == nil {
+		q.head = n
+		q.tail = n
+	} else {
+		q.tail.next = n
+		q.tail = n
+	}
+	q.len++
+}
+
+// Pop from queue head
+func (q *MemoryQueue) Pop() any {
+	q.lock.Lock()
+	defer q.lock.Unlock()
+	if q.head == nil {
+		return nil
+	}
+	n := q.head
+	q.head = n.next
+	q.len--
+	if q.len == 0 {
+		q.tail = nil
+	}
+	return n.value
+}
+
+// Length of the queue
+func (q *MemoryQueue) Len() int {
+	return q.len
+}
+
+func TestFastQ(t *testing.T) {
+	app.InitStart()
+	q := NewMemoryQueue()
+	type TestUnitData struct {
+		Valid bool   `json:"valid"`
+		Data  string `json:"data"`
+	}
+	data := "加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字加个汉字"
+	for i := 1; i <= maxTest; i++ {
+		q.Push(data)
+		if i%stopNum == 0 {
+			t.Log(app.GetRunTime())
+		}
+	}
+	n := 0
+	Together(func(goId int) {
+		for {
+			data := q.Pop()
+			if data == nil {
+				break
+			}
+			n += 1
+			if n%stopNum == 0 {
+				t.Log(`n%`+cast.ToString(stopNum), data)
+				t.Log("goId", app.GetRunTime())
+			}
+		}
+	}, 3)
+	t.Log("end:", app.GetRunTime())
 }

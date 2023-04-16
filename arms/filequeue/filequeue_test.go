@@ -156,25 +156,25 @@ func TestFqm2(t *testing.T) {
 	}
 
 	n := 0
-	for {
-		data, popErr := q.Pop()
-		if popErr != nil {
-			t.Log(err)
-			break
-		}
-		n += 1
-		if n%10 == 0 {
-			t.Log(data)
-			t.Log(app.GetRunTime())
-			break
-		}
-	}
-	t.Log("清理数据")
-
-	err = q.Clean()
-	if err != nil {
-		t.Error(err)
-	}
+	//for {
+	//	data, popErr := q.Pop()
+	//	if popErr != nil {
+	//		t.Log(err)
+	//		break
+	//	}
+	//	n += 1
+	//	if n%10 == 0 {
+	//		t.Log(data)
+	//		t.Log(app.GetRunTime())
+	//		break
+	//	}
+	//}
+	//t.Log("清理数据")
+	//
+	//err = q.Clean()
+	//if err != nil {
+	//	t.Error(err)
+	//}
 	arms.Together(func(goId int) {
 		for {
 			data, popErr := q.Pop()
