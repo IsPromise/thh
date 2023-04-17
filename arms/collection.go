@@ -11,8 +11,8 @@ func InArray[vT any](need vT, haystack []vT) bool {
 	return false
 }
 
-func ArrayMap[T, T2 any](f func(T) T2, list []T) (result []T2) {
-	result = make([]T2, len(list))
+func ArrayMap[T, R any](f func(T) R, list []T) (result []R) {
+	result = make([]R, len(list))
 	for index, item := range list {
 		result[index] = f(item)
 	}
@@ -28,8 +28,8 @@ func ArrayFilter[T any](f func(T) bool, list []T) (result []T) {
 	return
 }
 
-func ArrayFill[t any](startIndex int, num uint, value t) map[int]t {
-	result := make(map[int]t, num)
+func ArrayFill[T any](startIndex int, num uint, value T) map[int]T {
+	result := make(map[int]T, num)
 	var i uint
 	for i = 0; i < num; i++ {
 		result[startIndex] = value
@@ -77,7 +77,6 @@ func Map2Map[mK comparable, mV any, newK comparable, newV any](oldMap map[mK]mV,
 	return newMap
 }
 
-// cant run
 //type RangeType[K comparable, V any] interface {
 //	map[K]V | []V
 //}

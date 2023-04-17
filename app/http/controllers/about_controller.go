@@ -19,19 +19,22 @@ func Api(c *gin.Context) {
 	})
 }
 
+const (
+	contentTypeHTML      = "text/html"
+	errorCodeNotFound    = 404
+	errorMessageNotFound = "路由未定义，请确认 url 和请求方法是否正确。"
+)
+
 func NotFound(c *gin.Context) {
-	acceptString := c.Request.Header.Get("Accept")
-	if strings.Contains(acceptString, "text/html") {
-		//c.Request.URL.Path = "/actor"
+	acceptString := c.GetHeader("Accept")
+	if strings.Contains(acceptString, contentTypeHTML) {
 		c.Redirect(http.StatusTemporaryRedirect, "/actor")
-		//ginApp.HandleContext(c)
-	} else {
-		// 默认返回 JSON
-		c.JSON(http.StatusNotFound, component.DataMap{
-			"error_code":    404,
-			"error_message": "路由未定义，请确认 url 和请求方法是否正确。",
-		})
+		return
 	}
+	c.JSON(http.StatusNotFound, component.DataMap{
+		"error_code":    errorCodeNotFound,
+		"error_message": errorMessageNotFound,
+	})
 }
 
 func GetUseMem() component.Response {
