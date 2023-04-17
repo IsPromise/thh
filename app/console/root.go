@@ -21,7 +21,7 @@ var rootCmd = &cobra.Command{
 	Use:   "thh",
 	Short: "A brief description of your application",
 	Long:  `thh`,
-	PersistentPreRun: func(command *cobra.Command, args []string) {
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if !arms.IsExist("./.env") {
 			err := arms.Put([]byte(app.GetEnvExample()), "./.env")
 			if err != nil {
