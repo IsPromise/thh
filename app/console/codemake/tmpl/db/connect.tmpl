@@ -13,7 +13,7 @@ func builder() *gorm.DB {
 	return db.Std().Table(tableName)
 }
 
-func first(db *gorm.DB) (el *{{.ModelName}}) {
+func first(db *gorm.DB) (el {{.ModelName}}) {
 	db.First(&el)
 	return
 }

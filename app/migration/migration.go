@@ -2,7 +2,6 @@ package migration
 
 import (
 	"fmt"
-	"thh/app/models/PhoneLocation"
 	"thh/app/models/bbs/Articles"
 	"thh/app/models/bbs/Comment"
 	"thh/arms/app"
@@ -26,7 +25,6 @@ func migration(migration bool, db *gorm.DB) {
 	var err error
 
 	if err = db.AutoMigrate(
-		&PhoneLocation.PhoneLocation{},
 		&Comment.Comment{},
 		&Articles.Articles{},
 		//&DataReps.DataReps{},

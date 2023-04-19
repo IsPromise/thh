@@ -30,7 +30,7 @@ func GetArticles(request GetArticlesRequest) component.Response {
 	if len(articles) > 0 {
 		maxId = articles[0].Id
 	}
-	list := arms.ArrayMap(func(t Articles.Articles) ArticlesDto {
+	list := arms.ArrayMap(func(t *Articles.Articles) ArticlesDto {
 		return ArticlesDto{
 			Id:             t.Id,
 			Title:          t.Title,

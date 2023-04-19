@@ -62,7 +62,7 @@ func IsExist(field, value string) bool {
 	return count > 0
 }
 
-func GetByMaxIdPage(id uint64, pageSize int) (entities []Articles) {
+func GetByMaxIdPage(id uint64, pageSize int) (entities []*Articles) {
 	builder().Where(querymaker.Gt(pid, id)).Order(querymaker.Desc(fieldUpdateTime)).Limit(pageSize).Find(&entities)
 	return
 }

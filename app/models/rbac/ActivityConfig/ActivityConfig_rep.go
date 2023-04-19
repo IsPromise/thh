@@ -5,14 +5,6 @@ func Get(id any) (entity ActivityConfig) {
 	return
 }
 
-func Update(entity *ActivityConfig) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities []ActivityConfig) {
-	builder().Save(entities)
-}
-
 func Delete(entity *ActivityConfig) {
 	builder().Delete(entity)
 }

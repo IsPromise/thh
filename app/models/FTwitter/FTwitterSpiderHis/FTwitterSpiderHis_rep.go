@@ -25,7 +25,7 @@ func UpdateAll(entities *[]FTwitterSpiderHis) {
 	builder().Save(entities)
 }
 
-func Delete(entity FTwitterSpiderHis) int64 {
+func Delete(entity *FTwitterSpiderHis) int64 {
 	result := builder().Delete(&entity)
 	return result.RowsAffected
 }

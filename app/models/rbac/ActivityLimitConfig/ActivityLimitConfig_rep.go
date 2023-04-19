@@ -5,15 +5,7 @@ func Get(id any) (entity ActivityLimitConfig) {
 	return
 }
 
-func Update(entity *ActivityLimitConfig) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]ActivityLimitConfig) {
-	builder().Save(entities)
-}
-
-func Delete(entity ActivityLimitConfig) {
+func Delete(entity *ActivityLimitConfig) {
 	builder().Delete(&entity)
 }
 

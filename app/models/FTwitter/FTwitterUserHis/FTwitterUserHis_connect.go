@@ -13,12 +13,12 @@ func builder() *gorm.DB {
 	return db.Std().Table(tableName)
 }
 
-func First(db *gorm.DB) (el FTwitterUserHis) {
+func first(db *gorm.DB) (el FTwitterUserHis) {
 	db.First(&el)
 	return
 }
 
-func List(db *gorm.DB) (el []FTwitterUserHis) {
+func List(db *gorm.DB) (el []*FTwitterUserHis) {
 	db.Find(&el)
 	return
 }

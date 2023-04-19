@@ -25,7 +25,7 @@ func UpdateAll(entities *[]FTwitterTweet) {
 	builder().Save(entities)
 }
 
-func Delete(entity FTwitterTweet) int64 {
+func Delete(entity *FTwitterTweet) int64 {
 	result := builder().Delete(&entity)
 	return result.RowsAffected
 }

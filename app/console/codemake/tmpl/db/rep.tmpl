@@ -20,7 +20,7 @@ func deleteEntity(entity *{{.ModelName}}) int64 {
 	return result.RowsAffected
 }
 
-func get(id any) (entity *{{.ModelName}}) {
+func Get(id any) (entity {{.ModelName}}) {
 	builder().Where(pid, id).First(entity)
 	return
 }

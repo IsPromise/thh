@@ -20,7 +20,7 @@ import "thh/bundles/dbconnect"
 //	builder().Save(&entities)
 //}
 //
-//func Delete(entity DataReps) int64 {
+//func Delete(entity *DataReps) int64 {
 //	result := builder().Delete(&entity)
 //	return result.RowsAffected
 //}

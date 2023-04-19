@@ -15,14 +15,6 @@ func SaveAll(entities *[]Role) int64 {
 	return result.RowsAffected
 }
 
-func Update(entity *Role) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]Role) {
-	builder().Save(entities)
-}
-
 func Delete(entity *Role) int64 {
 	result := builder().Delete(entity)
 	return result.RowsAffected
@@ -30,16 +22,6 @@ func Delete(entity *Role) int64 {
 
 func Get(id any) (entity Role) {
 	builder().Where(pid, id).First(&entity)
-	return
-}
-
-func GetByName(field, value string) (entity Role) {
-	builder().Where(field, value).First(&entity)
-	return
-}
-
-func All() (entities []Role) {
-	builder().Find(&entities)
 	return
 }
 

@@ -40,7 +40,7 @@ func Delete(entity *Comment) int64 {
 	return result.RowsAffected
 }
 
-func Get(id any) (entity *Comment) {
+func Get(id any) (entity Comment) {
 	builder().Where(pid, id).First(entity)
 	return
 }
