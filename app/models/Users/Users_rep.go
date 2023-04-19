@@ -10,17 +10,17 @@ func Get(id any) (entity Users, err error) {
 	return
 }
 
-func Verify(username string, password string) (Users, error) {
+func Verify(username string, password string) (*Users, error) {
 	var user Users
 	err := builder().Where(querymaker.Eq(fieldUsername, username)).First(&user).Error
 	if err != nil {
-		return user, err
+		return &user, err
 	}
 	err = arms.VerifyPassword(user.Password, password)
 	if err != nil {
-		return Users{}, err
+		return &Users{}, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 func MakeUser(name string, password string, email string) *Users {
@@ -33,7 +33,7 @@ func Create(entity *Users) error {
 	return builder().Create(&entity).Error
 }
 
-func All() (entities []Users) {
+func All() (entities []*Users) {
 	builder().Find(&entities)
 	return
 }

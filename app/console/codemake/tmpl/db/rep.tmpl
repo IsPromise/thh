@@ -10,7 +10,7 @@ func save(entity *{{.ModelName}}) int64 {
 	return result.RowsAffected
 }
 
-func saveAll(entities *[]{{.ModelName}}) int64 {
+func saveAll(entities []*{{.ModelName}}) int64 {
 	result := builder().Save(entities)
 	return result.RowsAffected
 }
@@ -25,12 +25,12 @@ func get(id any) (entity *{{.ModelName}}) {
 	return
 }
 
-func getBy(field, value string) (entity {{.ModelName}}) {
+func getBy(field, value string) (entity *{{.ModelName}}) {
 	builder().Where(field + " = ?", value).First(&entity)
 	return
 }
 
-func all() (entities []{{.ModelName}}) {
+func all() (entities []*{{.ModelName}}) {
 	builder().Find(&entities)
 	return
 }

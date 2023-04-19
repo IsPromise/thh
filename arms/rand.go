@@ -115,8 +115,8 @@ func (itself *Trace) GetNextTrace() string {
 	return fmt.Sprintf("%v:%v", itself.traceId, itself.number)
 }
 
-func GetTrace() Trace {
-	return Trace{
+func GetTrace() *Trace {
+	return &Trace{
 		traceId: uuid.NewString(),
 	}
 }
@@ -134,7 +134,7 @@ func GoID() int {
 }
 
 var lock sync.Mutex
-var traceManager = map[int]Trace{}
+var traceManager = map[int]*Trace{}
 
 func MyTraceClean() {
 	lock.Lock()
@@ -143,19 +143,19 @@ func MyTraceClean() {
 	delete(traceManager, id)
 }
 
-func MyTrace() Trace {
+func MyTrace() *Trace {
 	lock.Lock()
 	defer lock.Unlock()
 	id := GoID()
 	if trace, ok := traceManager[id]; ok {
 		return trace
 	}
-	return Trace{
+	return &Trace{
 		traceId: `00000000-0000-0000-0000-000000000000`,
 	}
 }
 
-func MyTraceInit() Trace {
+func MyTraceInit() *Trace {
 	lock.Lock()
 	defer lock.Unlock()
 	id := GoID()
