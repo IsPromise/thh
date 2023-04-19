@@ -76,37 +76,3 @@ func Map2Map[mK comparable, mV any, newK comparable, newV any](oldMap map[mK]mV,
 	}
 	return newMap
 }
-
-//type RangeType[K comparable, V any] interface {
-//	map[K]V | []V
-//}
-//
-//func ToSplice[K comparable, V, V2 any, CollectionType map[K]V | []V](f func(K, V) V2, collection CollectionType) []V2 {
-//	r := make([]V2, len(collection))
-//	i := 0
-//	for k, v := range collection {
-//		r[i] = f(k, v)
-//		i += 1
-//	}
-//	return r
-//}
-
-type OrderedType interface {
-	Integer | Float | ~string
-}
-
-type Integer interface {
-	Signed | Unsigned
-}
-
-type Signed interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64
-}
-
-type Unsigned interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
-}
-
-type Float interface {
-	~float32 | ~float64
-}
