@@ -12,7 +12,6 @@ import (
 var c = cron.New()
 
 func RunJob() {
-	//mirai.MiraiClientManager()
 	if entryID, err := c.AddFunc("* * * * *", upCmd(func() {
 		logger.Info("HEART_IN_RUN_JOB", time.Now().Format("2006-01-02 15:04:05"))
 	})); err != nil {

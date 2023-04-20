@@ -15,5 +15,4 @@ func Save(entity *RolePermission) {
 
 func Create(entity *RolePermission) {
 	builder().Create(&entity)
-
 }

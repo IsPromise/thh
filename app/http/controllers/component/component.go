@@ -36,23 +36,6 @@ func (r *BetterRequest[T]) GetUser() (Users.Users, error) {
 	return r.userInfo, nil
 }
 
-type RequestContext struct {
-	UserId   uint64
-	userSet  bool
-	userInfo Users.Users
-}
-
-func (r *RequestContext) GetUser() (Users.Users, error) {
-	if r.userSet != false {
-		return r.userInfo, nil
-	}
-	user, _ := Users.Get(r.UserId)
-
-	r.userSet = true
-	r.userInfo = user
-	return r.userInfo, nil
-}
-
 type Response struct {
 	Code int
 	Data any
