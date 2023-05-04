@@ -6,7 +6,6 @@ import (
 	"thh/app/console/cmd/p2p"
 	"thh/app/console/cmd/tspider"
 	"thh/app/console/codemake"
-	"thh/app/console/one"
 	"thh/app/console/shadow"
 	"thh/app/migration"
 	"thh/bundles/app"
@@ -40,7 +39,6 @@ func init() {
 	rootCmd.AddCommand(CmdServe)
 	rootCmd.AddCommand(codemake.GetCommands()...)
 	rootCmd.AddCommand(demo.GetCommands()...)
-	rootCmd.AddCommand(one.GetCommands()...)
 	rootCmd.AddCommand(cmd.GetCommands()...)
 	rootCmd.AddCommand(shadow.GetCommands()...)
 	rootCmd.AddCommand(tspider.GetCommands()...)
