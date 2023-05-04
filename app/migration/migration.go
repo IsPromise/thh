@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"thh/app/models/DataReps"
 	"thh/bundles/app"
-	"thh/bundles/dbconnect"
-	"thh/bundles/logger"
+	"thh/bundles/connect/dbconnect"
+	"thh/bundles/logging"
 
 	"gorm.io/gorm"
 )
@@ -37,8 +37,8 @@ func migration(migration bool, db *gorm.DB) {
 		//&FTwitterUser.FTwitterUser{},
 		//&FTwitterUserHis.FTwitterUserHis{},
 	); err != nil {
-		logger.Error(err)
+		logging.Error(err)
 	} else {
-		logger.Info("migration end")
+		logging.Info("migration end")
 	}
 }

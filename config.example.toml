@@ -6,11 +6,20 @@ port = 9010
 debug = true
 
 [db]
-migration = 'off' # OPEN_MIGRATION in on,off
-connection = 'sqlite'# in mysql sqlite
-url = 'db_user:db_pass@tcp(db_host:3306)/db_name?charset=utf8mb4&parseTime=True&loc=Local'
-path = './storage/data/sqlite.db'# :memory:|./storage/data/sqlite.db
+migration = "off" # OPEN_MIGRATION in on,off
 
+[db.default]
+connection = "sqlite"# in mysql sqlite
+url = "root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local"
+path = "./storage/data/sqlite.db"# :memory:|./storage/data/sqlite.db
+maxIdleConnections = 50
+maxOpenConnections = 50
+maxLifeSeconds = 300
+
+[db.local]
+connection = "mysql"# in mysql sqlite
+url = "root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local"
+path = "./storage/data/sqlite.db"# :memory:|./storage/data/sqlite.db
 maxIdleConnections = 50
 maxOpenConnections = 50
 maxLifeSeconds = 300
@@ -19,14 +28,15 @@ maxLifeSeconds = 300
 type = 'stdout'# LOG_TYPE stdout,file
 path = './storage/logs/thh.log'
 
-[tspider]
-output = './storage/tmp/'
-screename = 'laravelphp'
-max_spider_page = 4
+[spider.twitter]
+output = "./storage/tmp/"
+screename = "laravelphp"
+screenameList = ["laravelphp"]
+maxPage = 4
 downmedia = false
 allusepush = false
 onlymaster = true
-proxy = 'http://localhost:11000'
+proxy = "http://localhost:11000"
 
 [dbTool]
 targetUrl = 'root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local'

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 	"thh/app/service/twservice"
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 	"time"
 
 	"github.com/leancodebox/goose/preferences"
@@ -28,11 +28,11 @@ func init() {
 // tFollow 抓取关注的列表
 func tFollow(_ *cobra.Command, _ []string) {
 	var maxRoutineNum = 3
-	rootPrefix = preferences.GetString("tspider.output", "./storage/tmp/")
+	rootPrefix = preferences.GetString("sprider.twitter.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
 	queueKey = "twitter:screenName:list"
-	downMedia := preferences.GetBool("tspider.downmedia", false)
-	screenNamesFromEnv := preferences.GetString("tspider.screename", "")
+	downMedia := preferences.GetBool("sprider.twitter.downmedia", false)
+	screenNamesFromEnv := preferences.GetString("sprider.twitter.screename", "")
 	ch := make(chan int, maxRoutineNum)
 	var wg4master sync.WaitGroup
 
@@ -106,7 +106,7 @@ func superFollow(sConfig superTConfig) {
 		i++
 
 		if len(TList.Data.User.Result.Timeline.Timeline.Instructions) == 0 {
-			logger.Info(screenName + "完成")
+			logging.Info(screenName + "完成")
 			break
 		}
 
@@ -146,10 +146,10 @@ func superFollow(sConfig superTConfig) {
 		}
 
 		if activeCount == 0 {
-			logger.Info(screenName + "完成")
+			logging.Info(screenName + "完成")
 			break
 		}
-		logger.Info(screenName, "下一轮", i*pageCount, "-", (i+1)*pageCount)
+		logging.Info(screenName, "下一轮", i*pageCount, "-", (i+1)*pageCount)
 
 		time.Sleep(time.Duration(rand.Intn(3)+1) * time.Second)
 

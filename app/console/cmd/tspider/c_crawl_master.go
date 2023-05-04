@@ -15,7 +15,7 @@ import (
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/service/twservice"
 	"thh/arms/restytool"
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 	"time"
 
 	"github.com/leancodebox/goose/preferences"
@@ -70,13 +70,13 @@ func tMasterSpider(_ *cobra.Command, _ []string) {
 
 func TMasterRun() {
 
-	rootPrefix = preferences.GetString("tspider.output", "./storage/tmp/")
+	rootPrefix = preferences.GetString("sprider.twitter.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
 	queueKey = "twitter:screenName:list"
-	allUsePush := preferences.GetBool("tspider.allusepush", false)
-	downMedia := preferences.GetBool("tspider.downmedia", false)
-	screenNamesFromEnv := preferences.GetString("tspider.screename", "")
-	tDeep = preferences.GetInt("tspider.deep", 0)
+	allUsePush := preferences.GetBool("sprider.twitter.allusepush", false)
+	downMedia := preferences.GetBool("sprider.twitter.downmedia", false)
+	screenNamesFromEnv := preferences.GetString("sprider.twitter.screename", "")
+	tDeep = preferences.GetInt("sprider.twitter.deep", 0)
 	proxyPath := preferences.GetString("t.proxy")
 
 	var screenNameMap map[string]bool
@@ -131,7 +131,7 @@ func TMasterRun() {
 			break
 		}
 		if screenNameMap[screenName] {
-			logger.Info(screenName + "当前已经查询过，跳过")
+			logging.Info(screenName + "当前已经查询过，跳过")
 			continue
 		}
 		screenNameMap[screenName] = true
@@ -151,8 +151,8 @@ func TMasterRun() {
 }
 
 func superT(sConfig superTConfig) {
-	tScreenNameList := preferences.GetString("tspider.screename", "")
-	tMaxPage := preferences.GetInt("tspider.max_spider_page", "")
+	tScreenNameList := preferences.GetString("sprider.twitter.screename", "")
+	tMaxPage := preferences.GetInt("sprider.twitter.maxPage", "")
 	tScreenNameSlice := strings.Split(tScreenNameList, ",")
 	screenName := sConfig.screenName
 	usePush := sConfig.usePush
@@ -189,7 +189,7 @@ func superT(sConfig superTConfig) {
 		tweetResponse := jsonopt.Decode[UserTweetsResponse](r.String())
 		i++
 		if len(tweetResponse.Data.User.Result.TimelineV2.Timeline.Instructions) == 0 || i >= tMaxPage {
-			logger.Info(screenName + "完成··································")
+			logging.Info(screenName + "完成··································")
 			break
 		}
 

@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +25,6 @@ func GinLogger(c *gin.Context) {
 		clientIP,
 		reqMethod,
 		reqUri)
-	logger.Info(info)
+	logging.Info(info)
 
 }

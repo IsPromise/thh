@@ -118,9 +118,10 @@ type Field struct {
 }
 
 func buildModelContent(tmpTableName string, list []genColumns) (string, string, string) {
-	dbStd := fmt.Sprintf(`"%v"`, preferences.GetString("db.connect", `app/dbconnect`))
+	dbStd := fmt.Sprintf(`"%v"`, preferences.GetString("dbTool.dbConnect", `app/dbconnect`))
 
 	importList := map[string]string{}
+	var hasPid = false
 	var fieldList []Field
 
 	for _, value := range list {
@@ -154,6 +155,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 		if value.Key == "PRI" {
 			typeString = `autoIncrement`
 			fieldName = `pid`
+			hasPid = true
 		}
 		typeString += ";"
 
@@ -202,6 +204,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 			"ModelName":  stropt.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
+			"hasPid":     hasPid,
 		},
 		"tmpl/db/rep.tmpl",
 	)

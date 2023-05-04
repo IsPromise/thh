@@ -6,7 +6,7 @@ import (
 	"github.com/leancodebox/goose/luckrand"
 	"log"
 	"sync"
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cast"
@@ -31,7 +31,7 @@ func GinIm(ws *websocket.Conn) {
 
 	if !clients[client] {
 		join <- client
-		logger.Info("user:", client.name, "websocket connect success!")
+		logging.Info("user:", client.name, "websocket connect success!")
 	}
 	for {
 		if msgType, msg, err = ws.ReadMessage(); err != nil {
@@ -90,26 +90,26 @@ func Broadcaster() {
 	for {
 		select {
 		case msg := <-message:
-			logger.Printf("broadcaster-----------%s send message: %s\n", msg.Name, msg.Message)
+			logging.Printf("broadcaster-----------%s send message: %s\n", msg.Name, msg.Message)
 			for client := range clients {
 				data, err := json.Marshal(msg)
-				if logger.ErrIf(err) {
+				if logging.ErrIf(err) {
 					continue
 				}
-				if logger.ErrIf(client.conn.WriteMessage(websocket.TextMessage, data)) {
+				if logging.ErrIf(client.conn.WriteMessage(websocket.TextMessage, data)) {
 					leaveList(client)
 				}
 			}
 			break
 		// 有用户加入
 		case client := <-join:
-			logger.Printf("broadcaster-----------%s join in the chat room\n", client.name)
+			logging.Printf("broadcaster-----------%s join in the chat room\n", client.name)
 			joinList(client)
 			message <- Message{1, client.name, fmt.Sprintf("%s join in, there are %d preson in room", client.name, len(clients))}
 			break
 		// 有用户退出
 		case client := <-leave:
-			logger.Printf("broadcaster-----------%s leave the chat room\n", client.name)
+			logging.Printf("broadcaster-----------%s leave the chat room\n", client.name)
 			leaveList(client)
 			// 将用户退出消息放入消息通道
 			message <- Message{2, client.name, fmt.Sprintf("%s leave, there are %d preson in room", client.name, len(clients))}

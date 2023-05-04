@@ -17,7 +17,7 @@ var headersMap = map[string]string{}
 func newTClient() tClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
-	client.SetProxy(preferences.GetString("tspider.proxy"))
+	client.SetProxy(preferences.GetString("sprider.twitter.proxy"))
 	client.SetBaseURL("https://api.twitter.com/")
 	client.SetHeaders(headersMap)
 	//client.SetAuthToken("")
@@ -165,14 +165,14 @@ var stdToolClient toolClient
 func newToolClient() toolClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
-	proxyPath := preferences.GetString("tspider.proxy")
+	proxyPath := preferences.GetString("sprider.twitter.proxy")
 	client.SetProxy(proxyPath)
 	//client.SetOutputDirectory("")
 	return toolClient{client: client}
 }
 
 func (itself toolClient) downMedia(url string, filename string) {
-	downMedia := preferences.GetBool("tspider.downmedia", false)
+	downMedia := preferences.GetBool("sprider.twitter.downmedia", false)
 	if !downMedia {
 		return
 	}

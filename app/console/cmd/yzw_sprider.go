@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 	"thh/arms/restytool"
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/go-resty/resty/v2"
@@ -127,7 +127,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 
 			r, _ := client.querySchAction(item.Name, sItem.Code[:4], sItem.Name)
 			wr := restytool.GetCurlByR(*r)
-			logger.Info(wr.String())
+			logging.Info(wr.String())
 			doc, _ := htmlquery.Parse(strings.NewReader(r.String()))
 			list := htmlquery.Find(doc, "//tbody/*")
 			sTmp := Speciality{Name: sItem.Name, Code: sItem.Code}
@@ -139,7 +139,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 
 				r, _ := client.kskm(vUrl)
 				wr := restytool.GetCurlByR(*r)
-				logger.Info(wr.String())
+				logging.Info(wr.String())
 
 				mItem, _ := htmlquery.Parse(strings.NewReader(r.String()))
 
@@ -169,7 +169,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 					Number:      number,      //人数
 					TeacherInfo: teacherInfo, //指导老师：
 				}
-				logger.Info(jsonopt.Encode(sTmp))
+				logging.Info(jsonopt.Encode(sTmp))
 
 				r, _ = client.queryAction(item.Name, sItem.Code[:4], sItem.Name)
 				mItem, _ = htmlquery.Parse(strings.NewReader(r.String()))

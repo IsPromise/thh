@@ -1,6 +1,8 @@
 package DataReps
 
-import "thh/bundles/dbconnect"
+import (
+	"thh/bundles/connect/dbconnect"
+)
 
 //func Create(entity *DataReps) int64 {
 //	result := builder().Create(&entity)

@@ -1,7 +1,7 @@
 package eh
 
 import (
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 )
 
 type Logger interface {
@@ -10,7 +10,7 @@ type Logger interface {
 
 func PrIF(err error) bool {
 	if err != nil {
-		logger.Error(err)
+		logging.Error(err)
 		return true
 	}
 	return false

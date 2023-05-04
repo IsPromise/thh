@@ -20,11 +20,13 @@ func deleteEntity(entity *{{.ModelName}}) int64 {
 	return result.RowsAffected
 }
 
+{{ if .hasPid}}
 func Get(id any) (entity {{.ModelName}}) {
 	builder().Where(pid, id).First(entity)
 	return
 }
 
+{{ end}}
 func getBy(field, value string) (entity *{{.ModelName}}) {
 	builder().Where(field + " = ?", value).First(&entity)
 	return

@@ -48,13 +48,6 @@ func Std() *gorm.DB {
 	return dbIns
 }
 
-// NewMysql dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
-// NewMysql
-func NewMysql(dsn string) (*gorm.DB, error) {
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	return db, err
-}
-
 // ConnectDB 初始化模型
 func connectDB() {
 

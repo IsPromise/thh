@@ -1,10 +1,10 @@
 package console
 
 import (
-	"thh/bundles/logger"
+	"thh/bundles/logging"
 )
 
 var (
-	info  = logger.Info
-	error = logger.Error
+	info  = logging.Info
+	error = logging.Error
 )

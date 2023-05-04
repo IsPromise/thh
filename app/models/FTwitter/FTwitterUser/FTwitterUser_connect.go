@@ -1,9 +1,8 @@
 package FTwitterUser
 
 import (
-	db "thh/bundles/dbconnect"
-
 	"gorm.io/gorm"
+	db "thh/bundles/connect/dbconnect"
 )
 
 // Prohibit manual changes
