@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"github.com/leancodebox/goose/jwt"
 	"strconv"
 	"thh/app/http/controllers/component"
 	"thh/app/models/Users"
 	"thh/bundles/logging"
 	"time"
+
+	"github.com/leancodebox/goose/jwt"
 
 	"github.com/spf13/cast"
 )

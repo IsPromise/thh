@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/array"
-	"github.com/leancodebox/goose/fileopt"
-	"github.com/leancodebox/goose/jsonopt"
 	"strings"
 	"sync"
 	"thh/arms/restytool"
 	"thh/bundles/logging"
+
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/jsonopt"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/go-resty/resty/v2"

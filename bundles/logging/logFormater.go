@@ -3,6 +3,7 @@ package logging
 import (
 	"bytes"
 	"fmt"
+
 	"github.com/leancodebox/goose/luckrand"
 	"github.com/sirupsen/logrus"
 )

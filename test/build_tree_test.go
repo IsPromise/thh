@@ -2,9 +2,10 @@ package test
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/jsonopt"
 	"sort"
 	"testing"
+
+	"github.com/leancodebox/goose/jsonopt"
 )
 
 type Node struct {

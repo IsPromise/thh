@@ -2,6 +2,7 @@ package demo
 
 import (
 	"fmt"
+
 	"github.com/leancodebox/goose/lineopt"
 	"github.com/spf13/cobra"
 )

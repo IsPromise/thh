@@ -1,12 +1,12 @@
 package ginLowerControllers
 
 import (
-	"github.com/leancodebox/goose/fileopt"
-	"github.com/spf13/cast"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/spf13/cast"
 )
 
 const configData = `port: 7890

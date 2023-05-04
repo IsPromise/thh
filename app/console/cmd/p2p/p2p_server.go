@@ -2,11 +2,12 @@ package p2p
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/jsonopt"
 	"net"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/leancodebox/goose/jsonopt"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"

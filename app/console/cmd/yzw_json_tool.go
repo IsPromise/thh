@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"sort"
+	"strings"
+
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/jsonopt"
 	"github.com/spf13/cobra"
-	"sort"
-	"strings"
 )
 
 func init() {

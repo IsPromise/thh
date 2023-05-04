@@ -3,14 +3,15 @@ package codemake
 import (
 	"bufio"
 	"fmt"
-	"github.com/leancodebox/goose/fileopt"
-	"github.com/leancodebox/goose/stropt"
 	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
 	"thh/bundles/eh"
+
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/stropt"
 
 	"github.com/leancodebox/goose/preferences"
 

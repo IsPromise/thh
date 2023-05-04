@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"strings"
+
 	"github.com/go-resty/resty/v2"
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/spf13/cobra"
 	"gorm.io/gorm/utils"
-	"net/url"
-	"strings"
 )
 
 var commands = make([]*cobra.Command, 0)

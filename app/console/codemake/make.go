@@ -5,14 +5,15 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
-	"github.com/iancoleman/strcase"
-	"github.com/leancodebox/goose/fileopt"
-	"github.com/leancodebox/goose/stropt"
-	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
 	"text/template"
 	"thh/arms/output"
+
+	"github.com/iancoleman/strcase"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/stropt"
+	"github.com/spf13/cobra"
 )
 
 type Model struct {

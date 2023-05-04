@@ -1,12 +1,13 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/leancodebox/goose/power"
 	"thh/app/http/controllers/im"
 	"thh/app/http/controllers/im/messagechat"
 	"thh/app/http/controllers/im/voicechat"
 	"thh/app/http/middleware"
+
+	"github.com/gin-gonic/gin"
+	"github.com/leancodebox/goose/power"
 )
 
 func ginWs(ginApp *gin.Engine) {

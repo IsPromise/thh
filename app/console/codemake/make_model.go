@@ -2,6 +2,7 @@ package codemake
 
 import (
 	"fmt"
+
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/preferences"
 	"github.com/leancodebox/goose/stropt"

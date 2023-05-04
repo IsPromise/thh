@@ -3,12 +3,13 @@ package p2p
 import (
 	"bufio"
 	"fmt"
-	"github.com/leancodebox/goose/jsonopt"
 	"io"
 	"net"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/leancodebox/goose/jsonopt"
 
 	"github.com/spf13/cast"
 

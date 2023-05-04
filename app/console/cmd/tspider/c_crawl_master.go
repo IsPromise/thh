@@ -2,9 +2,6 @@ package tspider
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/array"
-	"github.com/leancodebox/goose/jsonopt"
-	"github.com/leancodebox/goose/memqueue"
 	"math/rand"
 	"net/url"
 	"path"
@@ -17,6 +14,10 @@ import (
 	"thh/arms/restytool"
 	"thh/bundles/logging"
 	"time"
+
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/jsonopt"
+	"github.com/leancodebox/goose/memqueue"
 
 	"github.com/leancodebox/goose/preferences"
 

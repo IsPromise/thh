@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"github.com/leancodebox/goose/jwt"
 	"net/http"
 	"strings"
+
+	"github.com/leancodebox/goose/jwt"
 
 	"github.com/gin-gonic/gin"
 )

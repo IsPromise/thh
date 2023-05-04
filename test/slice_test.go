@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/jsonopt"
 	"testing"
+
+	"github.com/leancodebox/goose/jsonopt"
 )
 
 type SliceCat struct {

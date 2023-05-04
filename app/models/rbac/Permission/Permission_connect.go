@@ -1,8 +1,9 @@
 package Permission
 
 import (
-	"gorm.io/gorm"
 	db "thh/bundles/connect/dbconnect"
+
+	"gorm.io/gorm"
 )
 
 // Prohibit manual changes

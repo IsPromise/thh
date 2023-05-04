@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"github.com/leancodebox/goose/serverinfo"
 	"net/http"
 	"runtime"
 	"strings"
 	"thh/app/http/controllers/component"
 	"thh/bundles/logging"
+
+	"github.com/leancodebox/goose/serverinfo"
 
 	"github.com/gin-gonic/gin"
 

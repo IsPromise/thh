@@ -2,9 +2,10 @@ package console
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/luckrand"
 	"thh/bundles/logging"
 	"time"
+
+	"github.com/leancodebox/goose/luckrand"
 
 	"github.com/robfig/cron/v3"
 )

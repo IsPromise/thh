@@ -2,9 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/array"
-	"github.com/leancodebox/goose/memqueue"
-	"github.com/spf13/cast"
 	"reflect"
 	"sync"
 	"thh/app/console/cmd/tspider"
@@ -12,6 +9,10 @@ import (
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/models/FTwitter/FTwitterUser"
+
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/memqueue"
+	"github.com/spf13/cast"
 )
 
 type TLink struct {

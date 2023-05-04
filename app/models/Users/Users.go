@@ -1,8 +1,9 @@
 package Users
 
 import (
-	"github.com/leancodebox/goose/luckrand"
 	"time"
+
+	"github.com/leancodebox/goose/luckrand"
 )
 
 const tableName = "users"

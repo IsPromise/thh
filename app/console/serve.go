@@ -3,7 +3,6 @@ package console
 import (
 	"context"
 	"fmt"
-	"github.com/leancodebox/goose/serverinfo"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +12,8 @@ import (
 	"thh/bundles/logging"
 	"thh/routes"
 	"time"
+
+	"github.com/leancodebox/goose/serverinfo"
 
 	"github.com/leancodebox/goose/preferences"
 
