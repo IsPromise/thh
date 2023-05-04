@@ -5,6 +5,10 @@ url = 'http://localhost'
 port = 9010
 debug = true
 
+[log]
+type = 'stdout'# LOG_TYPE stdout,file
+path = './storage/logs/thh.log'
+
 [db]
 migration = "off" # OPEN_MIGRATION in on,off
 
@@ -23,10 +27,6 @@ path = "./storage/data/sqlite.db"# :memory:|./storage/data/sqlite.db
 maxIdleConnections = 50
 maxOpenConnections = 50
 maxLifeSeconds = 300
-
-[log]
-type = 'stdout'# LOG_TYPE stdout,file
-path = './storage/logs/thh.log'
 
 [spider.twitter]
 output = "./storage/tmp/"
@@ -48,6 +48,6 @@ output = './storage/model/'
 targetDir = '/Users/thh/workspace/api-doc'
 output = './storage/model/'
 
-[PATH]
+[path]
 hexo = ''
 workspace = ''
