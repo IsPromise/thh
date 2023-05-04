@@ -2,12 +2,11 @@ package dbconnect
 
 import (
 	"fmt"
-	logger2 "thh/bundles/logger"
+	"thh/bundles/logging"
 
 	"github.com/glebarez/sqlite"
 	"github.com/leancodebox/goose/preferences"
 
-	//"gorm.io/driver/sqlite"
 	"log"
 	"os"
 	"path/filepath"
@@ -25,13 +24,17 @@ import (
 //}
 
 var (
-	connection         = preferences.Get(`db.connection`, `sqlite`)
-	debug              = preferences.GetBool(`app.debug`, true)
-	dbUrl              = preferences.Get(`db.url`)
-	dbPath             = preferences.Get(`db.path`, `:memory:`)
-	maxIdleConnections = preferences.GetInt(`db.maxIdleConnections`, 2)
-	maxOpenConnections = preferences.GetInt(`db.maxOpenConnections`, 2)
-	maxLifeSeconds     = preferences.GetInt(`db.maxLifeSeconds`, 60)
+	debug    = dbConfig.GetBool(`app.debug`, true)
+	dbConfig = preferences.GetExclusivePreferences("db")
+)
+
+var (
+	connection         = dbConfig.Get(`connection`, `sqlite`)
+	dbUrl              = dbConfig.Get(`url`)
+	dbPath             = dbConfig.Get(`path`, `:memory:`)
+	maxIdleConnections = dbConfig.GetInt(`maxIdleConnections`, 2)
+	maxOpenConnections = dbConfig.GetInt(`maxOpenConnections`, 2)
+	maxLifeSeconds     = dbConfig.GetInt(`maxLifeSeconds`, 60)
 )
 
 func init() {
@@ -58,16 +61,16 @@ func connectDB() {
 	var err error
 	switch connection {
 	case "sqlite":
-		logger2.Info("use sqlite")
-		dbIns, err = connectSqlLiteDB(logger2.NewGormLogger())
+		logging.Info("use sqlite")
+		dbIns, err = connectSqlLiteDB(logging.NewGormLogger())
 		break
 	case "mysql":
-		logger2.Info("use mysql")
-		dbIns, err = connectMysqlDB(logger2.NewGormLogger())
+		logging.Info("use mysql")
+		dbIns, err = connectMysqlDB(logging.NewGormLogger())
 		break
 	default:
-		logger2.Info("use sqlite because unselect db")
-		dbIns, err = connectSqlLiteDB(logger2.NewGormLogger())
+		logging.Info("use sqlite because unselect db")
+		dbIns, err = connectSqlLiteDB(logging.NewGormLogger())
 		break
 	}
 
