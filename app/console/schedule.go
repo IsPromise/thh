@@ -17,7 +17,7 @@ func RunJob() {
 	})); err != nil {
 		fmt.Println(err)
 	} else {
-		fmt.Println(entryID, " set success")
+		fmt.Println("schedule entryId:", entryID, " set success")
 	}
 
 	c.Run()

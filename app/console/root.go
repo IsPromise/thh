@@ -1,6 +1,7 @@
 package console
 
 import (
+	"github.com/leancodebox/goose/fileopt"
 	"thh/app/console/cmd"
 	"thh/app/console/cmd/demo"
 	"thh/app/console/cmd/p2p"
@@ -9,7 +10,6 @@ import (
 	"thh/app/console/one"
 	"thh/app/console/shadow"
 	"thh/app/migration"
-	"thh/arms"
 	"thh/arms/app"
 	"thh/bundles/bootstrap"
 
@@ -22,13 +22,13 @@ var rootCmd = &cobra.Command{
 	Short: "A brief description of your application",
 	Long:  `thh`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		if !arms.IsExist("./.env") {
-			err := arms.Put([]byte(app.GetEnvExample()), "./.env")
+		if !fileopt.IsExist("config.toml") {
+			err := fileopt.Put([]byte(app.GetOConfig()), "./config.toml")
 			if err != nil {
 				panic(err)
 			}
 		}
-		arms.SetBasePath("storage/")
+		fileopt.SetBasePath("storage/")
 		bootstrap.Run()
 		migration.M()
 	},

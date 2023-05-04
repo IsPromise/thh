@@ -2,11 +2,10 @@ package codemake
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/preferences"
+	"github.com/spf13/cobra"
 	"thh/arms"
 	"thh/arms/str"
-	"thh/bundles/config"
-
-	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -128,7 +127,7 @@ func makeModel(_ *cobra.Command, _ []string) {
 }
 
 func outPutModel(modelName string, list []genColumns) {
-	outputRoot := config.GetString("MODEL_OUTPUT_DIR", "./storage/model/")
+	outputRoot := preferences.GetString("dbtool.output", "./storage/model/")
 	outputRoot = `./storage/model/`
 	modelPath := modelName
 	modelEntityPath := outputRoot + modelPath + "/" + modelPath + ".go"

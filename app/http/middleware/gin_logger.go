@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func GinLogger(c *gin.Context) {
@@ -21,12 +20,11 @@ func GinLogger(c *gin.Context) {
 	statusCode := c.Writer.Status()
 	clientIP := c.ClientIP()
 
-	logger.Std().WithFields(logrus.Fields{
-		"http_status": statusCode,
-		"total_time":  latencyTime,
-		"ip":          clientIP,
-		"method":      reqMethod,
-		"uri":         reqUri,
-	}).Info("access")
+	info := fmt.Sprintf("access http_status:%v total_time:%v ip:%v method:%v uri:%v", statusCode,
+		latencyTime,
+		clientIP,
+		reqMethod,
+		reqUri)
+	logger.Info(info)
 
 }

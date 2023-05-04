@@ -2,8 +2,8 @@ package codemake
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/preferences"
 	"regexp"
-	"thh/bundles/config"
 	"thh/bundles/eh"
 
 	"github.com/spf13/cobra"
@@ -25,8 +25,8 @@ func init() {
 
 func runMTableFromDb(_ *cobra.Command, _ []string) {
 	// init
-	dataSourceName := config.GetString("ORIGIN_DATABASE_URL")
-	localSourceName := config.GetString("TARGET_DATABASE_URL")
+	dataSourceName := preferences.GetString("dbtool.originUrl")
+	localSourceName := preferences.GetString("dbtool.targetUrl")
 	localDb, err := gorm.Open(mysql.Open(localSourceName), &gorm.Config{PrepareStmt: false,
 		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 全局禁用表名复数
 		Logger:         logger.Default})

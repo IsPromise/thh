@@ -2,17 +2,13 @@ package dbconnect
 
 import (
 	"fmt"
-	"thh/bundles/bootstrap"
-
 	"github.com/glebarez/sqlite"
-
+	"github.com/leancodebox/goose/preferences"
 	//"gorm.io/driver/sqlite"
 	"log"
 	"os"
 	"path/filepath"
-	"thh/arms"
 	"thh/arms/logger"
-	"thh/bundles/config"
 	"time"
 
 	"gorm.io/gorm"
@@ -22,8 +18,22 @@ import (
 	"gorm.io/driver/mysql"
 )
 
+//func init() {
+//	bootstrap.AddDInit(connectDB)
+//}
+
+var (
+	connection         = preferences.Get(`db.connection`, `sqlite`)
+	debug              = preferences.GetBool(`app.debug`, `sqlite`)
+	dbUrl              = preferences.Get(`db.url`)
+	dbPath             = preferences.Get(`db.path`, `:memory:`)
+	maxIdleConnections = preferences.GetInt(`db.maxIdleConnections`, 2)
+	maxOpenConnections = preferences.GetInt(`db.maxOpenConnections`, 2)
+	maxLifeSeconds     = preferences.GetInt(`db.maxLifeSeconds`, 60)
+)
+
 func init() {
-	bootstrap.AddDInit(connectDB)
+	connectDB()
 }
 
 // DB gorm.DB 对象
@@ -42,10 +52,9 @@ func NewMysql(dsn string) (*gorm.DB, error) {
 
 // ConnectDB 初始化模型
 func connectDB() {
-	fmt.Println("init connectDB")
-	var debug = config.GetBool("APP_DEBUG")
+
 	var err error
-	switch config.GetString("DB_CONNECTION", "sqlite") {
+	switch connection {
 	case "sqlite":
 		logger.Info("use sqlite")
 		dbIns, err = connectSqlLiteDB(logger.NewGormLogger())
@@ -72,25 +81,16 @@ func connectDB() {
 
 	// 获取底层的 sqlDB
 	sqlDB, _ := dbIns.DB()
-	var (
-		maxOpenCoons = config.GetInt("DB_MAX_IDLE_CONNECTIONS", 20)
-		maxIdleCoons = config.GetInt("DB_MAX_OPEN_CONNECTIONS", 20)
-		maxLifetime  = time.Duration(config.GetInt("DB_MAX_LIFE_SECONDS", 300))
-	)
 	// 设置最大连接数
-	sqlDB.SetMaxOpenConns(maxOpenCoons)
+	sqlDB.SetMaxOpenConns(maxOpenConnections)
 	// 设置最大空闲连接数
-	sqlDB.SetMaxIdleConns(maxIdleCoons)
+	sqlDB.SetMaxIdleConns(maxIdleConnections)
 	// 设置每个链接的过期时间
-	sqlDB.SetConnMaxLifetime(maxLifetime * time.Second)
+	sqlDB.SetConnMaxLifetime(time.Duration(maxLifeSeconds) * time.Second)
 }
 
 func connectMysqlDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 	// 初始化 MySQL 连接信息
-	var (
-		dbUrl = config.GetString("DATABASE_URL", "db_user:db_pass@tcp(db_host:3306)/db_name?charset=utf8mb4&parseTime=True&loc=Local")
-	)
-
 	gormConfig := mysql.New(mysql.Config{
 		DSN: dbUrl,
 	})
@@ -103,20 +103,24 @@ func connectMysqlDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 }
 
 func connectSqlLiteDB(_logger gormlogger.Interface) (*gorm.DB, error) {
-	var (
-		dbPath = config.Get("DB_PATH", ":memory:")
-	)
-
-	dbDir := filepath.Dir(dbPath)
 	if dbPath == ":memory:" {
-
-	} else if !arms.IsExist(dbPath) {
-		if err := os.MkdirAll(dbDir, os.ModePerm); err != nil {
-
-		}
-		arms.PutContent(dbPath, "")
+		// ":memory:"
+	} else if err := createFileIfNotExists(dbPath); err != nil {
+		return nil, err
 	}
-	// ":memory:"
 	db, err := gorm.Open(sqlite.Open(dbPath+"?_pragma=busy_timeout(5000)"), &gorm.Config{Logger: _logger})
 	return db, err
+}
+
+func createFileIfNotExists(filePath string) error {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		if err := os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
+			return err
+		}
+
+		if err := os.WriteFile(filePath, []byte(""), 0644); err != nil {
+			return err
+		}
+	}
+	return nil
 }

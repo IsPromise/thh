@@ -2,10 +2,9 @@ package tspider
 
 import (
 	"fmt"
-	"thh/arms"
-	"thh/bundles/config"
-
 	"github.com/go-resty/resty/v2"
+	"github.com/leancodebox/goose/preferences"
+	"thh/arms"
 )
 
 type tClient struct {
@@ -18,7 +17,7 @@ var headersMap = map[string]string{}
 func newTClient() tClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
-	client.SetProxy(config.GetString("T_PROXY"))
+	client.SetProxy(preferences.GetString("tspider.proxy"))
 	client.SetBaseURL("https://api.twitter.com/")
 	client.SetHeaders(headersMap)
 	//client.SetAuthToken("")
@@ -166,14 +165,14 @@ var stdToolClient toolClient
 func newToolClient() toolClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
-	proxyPath := config.GetString("T_PROXY")
+	proxyPath := preferences.GetString("tspider.proxy")
 	client.SetProxy(proxyPath)
 	//client.SetOutputDirectory("")
 	return toolClient{client: client}
 }
 
 func (itself toolClient) downMedia(url string, filename string) {
-	downMedia := config.GetBool("T_DOWNMEDIA", false)
+	downMedia := preferences.GetBool("tspider.downmedia", false)
 	if !downMedia {
 		return
 	}

@@ -3,7 +3,7 @@ name = 'app'
 env = 'production' # APP_ENV in local,production
 url = 'http://localhost'
 port = 9010
-debug = false
+debug = true
 
 [db]
 migration = 'off' # OPEN_MIGRATION in on,off

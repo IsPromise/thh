@@ -10,13 +10,13 @@ import (
 //go:embed  all:actor/dist/**
 var actorFS embed.FS
 
-//go:embed .env.example
-var envExample string
+//go:embed config.example.toml
+var oConfig string
 
 func main() {
 	// 注册静态资源
 	app.InitStart()
 	app.ActorSave(actorFS)
-	app.EnvExample(envExample)
+	app.SetOConfig(oConfig)
 	console.Execute()
 }

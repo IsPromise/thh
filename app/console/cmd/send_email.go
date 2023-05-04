@@ -2,8 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"thh/bundles/config"
-
+	"github.com/leancodebox/goose/preferences"
 	"github.com/spf13/cobra"
 	"gopkg.in/gomail.v2"
 )
@@ -17,13 +16,13 @@ func init() {
 }
 
 func runSendEmail(_ *cobra.Command, _ []string) {
-	config.GetString("MAIL_DRIVER")
-	host := config.GetString("MAIL_HOST")
-	port := config.GetInt("MAIL_PORT")
-	user := config.GetString("MAIL_USERNAME")
-	password := config.GetString("MAIL_PASSWORD")
-	config.GetString("MAIL_FROM_ADDRESS")
-	config.GetString("MAIL_ENCRYPTION")
+	preferences.GetString("MAIL_DRIVER")
+	host := preferences.GetString("MAIL_HOST")
+	port := preferences.GetInt("MAIL_PORT")
+	user := preferences.GetString("MAIL_USERNAME")
+	password := preferences.GetString("MAIL_PASSWORD")
+	preferences.GetString("MAIL_FROM_ADDRESS")
+	preferences.GetString("MAIL_ENCRYPTION")
 	if len(host) == 0 {
 		fmt.Println("未设置邮箱地址，无法发送")
 		return

@@ -3,6 +3,7 @@ package console
 import (
 	"context"
 	"fmt"
+	"github.com/leancodebox/goose/preferences"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +12,6 @@ import (
 	"thh/arms"
 	"thh/arms/app"
 	"thh/arms/logger"
-	"thh/bundles/config"
 	"thh/routes"
 	"time"
 
@@ -38,7 +38,7 @@ func runWeb(_ *cobra.Command, _ []string) {
 	go RunJob()
 
 	// 初始化应用程序
-	if config.GetBool("APP_DEBUG", true) {
+	if preferences.GetBool("app.debug", true) {
 		go func() {
 			// go tool pprof http://localhost:6060/debug/pprof/profile
 			//http://127.0.0.1:7070/debug/pprof/
@@ -62,8 +62,8 @@ const (
 func ginServe() {
 
 	var (
-		port   = config.GetString("APP_PORT", 8080)
-		isProd = config.Get("APP_ENV") == EnvProd
+		port   = preferences.GetString("app.port", 8080)
+		isProd = preferences.Get("app.env") == EnvProd
 	)
 	var engine *gin.Engine
 	switch isProd {

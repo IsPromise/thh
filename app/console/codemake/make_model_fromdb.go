@@ -3,6 +3,7 @@ package codemake
 import (
 	"bufio"
 	"fmt"
+	"github.com/leancodebox/goose/preferences"
 	"os"
 	"os/exec"
 	"regexp"
@@ -10,7 +11,6 @@ import (
 	"strings"
 	"thh/arms"
 	"thh/arms/str"
-	"thh/bundles/config"
 	"thh/bundles/eh"
 
 	"github.com/spf13/cobra"
@@ -48,8 +48,8 @@ type genColumns struct {
 func runGModel(_ *cobra.Command, _ []string) {
 
 	// init
-	dataSourceName := config.GetString("ORIGIN_DATABASE_URL")
-	outputRoot := config.GetString("MODEL_OUTPUT_DIR", "./storage/model/")
+	dataSourceName := preferences.GetString("dbTool.originUrl")
+	outputRoot := preferences.GetString("dbTool.output", "./storage/model/")
 
 	db, err := gorm.Open(mysql.Open(dataSourceName), &gorm.Config{PrepareStmt: false,
 		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 全局禁用表名复数
@@ -117,7 +117,7 @@ type Field struct {
 }
 
 func buildModelContent(tmpTableName string, list []genColumns) (string, string, string) {
-	dbStd := fmt.Sprintf(`"%v"`, config.GetString("DB_CONNECT", `app/dbconnect`))
+	dbStd := fmt.Sprintf(`"%v"`, preferences.GetString("db.connect", `app/dbconnect`))
 
 	importList := map[string]string{}
 	var fieldList []Field

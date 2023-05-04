@@ -34,7 +34,7 @@ func GinGetClashConfig(c *gin.Context) {
 }
 
 func GinGetClashConfigPlus(c *gin.Context) {
-	data, _ := arms.FileGetContents("/Users/thh/workspace/thh/storage/logs/config.yaml")
+	data, _ := arms.FileGetContents("./storage/logs/config.yaml")
 	if len(data) == 0 {
 		data = []byte("空")
 	}

@@ -2,6 +2,7 @@ package tspider
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/preferences"
 	"math/rand"
 	"net/url"
 	"path"
@@ -14,7 +15,6 @@ import (
 	"thh/arms"
 	"thh/arms/logger"
 	"thh/arms/restytool"
-	"thh/bundles/config"
 	"time"
 
 	"github.com/spf13/cast"
@@ -66,11 +66,19 @@ func tMasterSpider(_ *cobra.Command, _ []string) {
 }
 
 func TMasterRun() {
+
+	rootPrefix = preferences.GetString("tspider.output", "./storage/tmp/")
+	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
+	queueKey = "twitter:screenName:list"
+	allUsePush := preferences.GetBool("tspider.allusepush", false)
+	downMedia := preferences.GetBool("tspider.downmedia", false)
+	screenNamesFromEnv := preferences.GetString("tspider.screename", "")
+	tDeep = preferences.GetInt("tspider.deep", 0)
+	proxyPath := preferences.GetString("t.proxy")
+
 	var screenNameMap map[string]bool
 	screenNameMap = make(map[string]bool, 2048)
 	var maxRoutineNum = 3
-
-	proxyPath := config.GetString("T_PROXY")
 	resp, err := restytool.StdLonelyClient().SetProxy(proxyPath).Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
 		fmt.Println("获取queryId失败")
@@ -95,14 +103,6 @@ func TMasterRun() {
 		}
 	}
 	//fmt.Println(arms.JsonEncode(queryIdMap))
-
-	rootPrefix = config.GetString("T_OUTPUT", "./storage/tmp/")
-	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
-	queueKey = "twitter:screenName:list"
-	allUsePush := config.GetBool("T_ALLUSEPUSH", false)
-	downMedia := config.GetBool("T_DOWNMEDIA", false)
-	screenNamesFromEnv := config.GetString("T_SCREENAME", "")
-	tDeep = config.GetInt("T_DEEP", 0)
 
 	ch := make(chan int, maxRoutineNum)
 
@@ -148,8 +148,8 @@ func TMasterRun() {
 }
 
 func superT(sConfig superTConfig) {
-	tScreenNameList := config.GetString("T_SCREENAME", "")
-	tMaxPage := config.GetInt("T_MAX_SPIDER_PAGE", "")
+	tScreenNameList := preferences.GetString("tspider.screename", "")
+	tMaxPage := preferences.GetInt("tspider.max_spider_page", "")
 	tScreenNameSlice := strings.Split(tScreenNameList, ",")
 	screenName := sConfig.screenName
 	usePush := sConfig.usePush

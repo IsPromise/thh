@@ -2,13 +2,13 @@ package tspider
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/preferences"
 	"math/rand"
 	"strings"
 	"sync"
 	"thh/app/service/twservice"
 	"thh/arms"
 	"thh/arms/logger"
-	"thh/bundles/config"
 	"time"
 
 	"github.com/spf13/cast"
@@ -27,11 +27,11 @@ func init() {
 // tFollow 抓取关注的列表
 func tFollow(_ *cobra.Command, _ []string) {
 	var maxRoutineNum = 3
-	rootPrefix = config.GetString("T_OUTPUT", "./storage/tmp/")
+	rootPrefix = preferences.GetString("tspider.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
 	queueKey = "twitter:screenName:list"
-	downMedia := config.GetBool("T_DOWNMEDIA", false)
-	screenNamesFromEnv := config.GetString("T_SCREENAME", "")
+	downMedia := preferences.GetBool("tspider.downmedia", false)
+	screenNamesFromEnv := preferences.GetString("tspider.screename", "")
 	ch := make(chan int, maxRoutineNum)
 	var wg4master sync.WaitGroup
 
