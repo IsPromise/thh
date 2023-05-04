@@ -1,13 +1,14 @@
 [app]
-name = 'app'
-env = 'production' # APP_ENV in local,production
-url = 'http://localhost'
+name = "app"
+env = "production" # APP_ENV in local,production
+url = "http://localhost"
 port = 9010
+outsitePort = 3097
 debug = true
 
 [log]
-type = 'stdout'# LOG_TYPE stdout,file
-path = './storage/logs/thh.log'
+type = "stdout"# LOG_TYPE stdout,file
+path = "./storage/logs/thh.log"
 
 [db]
 migration = "off" # OPEN_MIGRATION in on,off
@@ -39,15 +40,15 @@ onlymaster = true
 proxy = "http://localhost:11000"
 
 [dbTool]
-targetUrl = 'root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local'
-originUrl = 'root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local'
-dbConnect = 'dt/config/dbconnect'
-output = './storage/model/'
+targetUrl = "root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local"
+originUrl = "root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local"
+dbConnect = "dt/config/dbconnect"
+output = "./storage/model/"
 
 [mkMdList]
-targetDir = '/Users/thh/workspace/api-doc'
-output = './storage/model/'
+targetDir = "/Users/thh/workspace/api-doc"
+output = "./storage/model/"
 
 [path]
-hexo = ''
-workspace = ''
+hexo = ""
+workspace = ""
