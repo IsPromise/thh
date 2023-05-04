@@ -1,7 +1,7 @@
 package Users
 
 import (
-	"thh/arms"
+	"github.com/leancodebox/goose/luckrand"
 	"time"
 )
 
@@ -39,6 +39,6 @@ func (Users) TableName() string {
 }
 
 func (itself *Users) SetPassword(password string) *Users {
-	itself.Password = arms.MakePassword(password)
+	itself.Password = luckrand.MakePassword(password)
 	return itself
 }

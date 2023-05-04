@@ -3,16 +3,16 @@ package messagechat
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/leancodebox/goose/luckrand"
 	"log"
 	"sync"
-	"thh/arms"
-	"thh/arms/logger"
+	"thh/bundles/logger"
 
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cast"
 )
 
-var idm = arms.IdMakerInOnP{}
+var idm = &luckrand.IdMakerInOnP{}
 
 func GinIm(ws *websocket.Conn) {
 	defer func() {

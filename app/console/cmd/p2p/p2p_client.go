@@ -3,11 +3,11 @@ package p2p
 import (
 	"bufio"
 	"fmt"
+	"github.com/leancodebox/goose/jsonopt"
 	"io"
 	"net"
 	"os"
 	"strings"
-	"thh/arms"
 	"time"
 
 	"github.com/spf13/cast"
@@ -122,7 +122,7 @@ func onMessageReceived(conn *net.TCPConn) {
 	}
 	for {
 		msg, err := reader.ReadString('\n')
-		peerMap = arms.JsonDecode[map[string]string](cast.ToString(msg))
+		peerMap = jsonopt.Decode[map[string]string](cast.ToString(msg))
 		fmt.Println("server:" + msg)
 		fmt.Println(conn.LocalAddr().String())
 

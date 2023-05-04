@@ -2,9 +2,9 @@ package test
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/jsonopt"
 	"sort"
 	"testing"
-	"thh/arms"
 )
 
 type Node struct {
@@ -67,5 +67,5 @@ func TestBuildTree(t *testing.T) {
 	}
 	root := ConvertToTree(nodes)
 
-	fmt.Println(arms.JsonEncodeFormat(root))
+	fmt.Println(jsonopt.EncodeFormat(root))
 }

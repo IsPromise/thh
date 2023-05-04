@@ -1,6 +1,6 @@
 package FTwitterTweet
 
-import "thh/arms/querymaker"
+import "github.com/leancodebox/goose/querymaker"
 
 func Create(entity *FTwitterTweet) int64 {
 	result := builder().Create(entity)

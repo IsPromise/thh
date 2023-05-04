@@ -104,29 +104,7 @@ export function getTSpiderHis(page = 1, pageSize = 10) {
     })
 }
 
-export function getArticlesApi(maxId) {
-    return instanceAxios.post('bbs/get-articles', {
-        maxId: maxId,
-        pageSize: 10,
-    })
-}
 
-export function getArticlesPageApi(page=1,pageSize=10,search="") {
-    return instanceAxios.post('bbs/get-articles-page', {
-        page: page,
-        pageSize: pageSize,
-        search: search
-    })
-}
-
-
-export function getArticlesDetailApi(id, maxCommentId) {
-    return instanceAxios.post('bbs/get-articles-detail', {
-        maxCommentId: maxCommentId,
-        id: parseInt(id),
-        pageSize: 10,
-    })
-}
 
 export function writeArticlesDetail() {
 

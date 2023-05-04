@@ -1,8 +1,8 @@
 package Users
 
 import (
-	"thh/arms"
-	"thh/arms/querymaker"
+	"github.com/leancodebox/goose/luckrand"
+	"github.com/leancodebox/goose/querymaker"
 )
 
 func Get(id any) (entity Users, err error) {
@@ -16,7 +16,7 @@ func Verify(username string, password string) (*Users, error) {
 	if err != nil {
 		return &user, err
 	}
-	err = arms.VerifyPassword(user.Password, password)
+	err = luckrand.VerifyPassword(user.Password, password)
 	if err != nil {
 		return &Users{}, err
 	}

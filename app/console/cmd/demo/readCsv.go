@@ -2,8 +2,7 @@ package demo
 
 import (
 	"fmt"
-	"thh/arms"
-
+	"github.com/leancodebox/goose/lineopt"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +24,7 @@ func readCsv(_ *cobra.Command, _ []string) {
 		fmt.Println(r)
 	}
 	fmt.Println("readCsv")
-	for r := range arms.ReadCsv("./tmp/t.csv") {
+	for r := range lineopt.ReadCsv("./tmp/t.csv") {
 		fmt.Println(r)
 	}
 }

@@ -3,12 +3,13 @@ package logger
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/luckrand"
 	"github.com/leancodebox/goose/preferences"
 	"github.com/sirupsen/logrus"
-	"os"
-	"path/filepath"
 )
 
 const (

@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"thh/arms/app"
-	"thh/arms/filequeue"
+	"thh/bundles/app"
+
+	"github.com/leancodebox/goose/filequeue"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"

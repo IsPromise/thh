@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/jsonopt"
+	"github.com/spf13/cobra"
 	"sort"
 	"strings"
-	"thh/arms"
-
-	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -19,11 +19,11 @@ func init() {
 }
 
 func runYzwJsonTool(_ *cobra.Command, _ []string) {
-	vJson := arms.StorageGet("vlist.json")
-	vList := arms.JsonDecode[[]v](vJson)
-	var newVList []v
+	vJson := fileopt.StorageGet("vlist.json")
+	vList := jsonopt.Decode[[]schoolInfo](vJson)
+	var newVList []schoolInfo
 
-	arms.StoragePut("t.csv", "城市,博士点,招生单位,院系,专业,方向,学习方式,招生人数,考试方式,政治,英语,专业课1,专业科2,信息源\n", false)
+	fileopt.PutContent("t.csv", "城市,博士点,招生单位,院系,专业,方向,学习方式,招生人数,考试方式,政治,英语,专业课1,专业科2,信息源\n")
 	fmt.Println(len(vList))
 
 	// Less
@@ -35,7 +35,7 @@ func runYzwJsonTool(_ *cobra.Command, _ []string) {
 	sort.SliceStable(vList, func(i, j int) bool {
 		return vList[i].City < vList[j].City
 	})
-	hMap := map[string]v{}
+	hMap := map[string]schoolInfo{}
 	for _, vItem := range vList {
 		if _, ok := hMap[vItem.Name]; ok {
 			continue
@@ -44,7 +44,7 @@ func runYzwJsonTool(_ *cobra.Command, _ []string) {
 		newVList = append(newVList, vItem)
 		for _, vtItem := range vItem.SpecialityList {
 			for _, sItem := range vtItem.Info {
-				t := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,研招网2022信息\n",
+				t := fmt.Sprintf("%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,%schoolInfo,研招网2022信息\n",
 					replaceDot(vItem.City),      // 城市
 					replaceDot(vtItem.IsDoctor), // 博士点
 					replaceDot(sItem.Zsdw),      // 招生单位
@@ -59,12 +59,12 @@ func runYzwJsonTool(_ *cobra.Command, _ []string) {
 					replaceDot(sItem.B1),        // 专业课1
 					replaceDot(sItem.B2),        // 专业科2
 				)
-				arms.StoragePut("t.csv", t, true)
+				fileopt.AppendPutContent("t.csv", t)
 			}
 		}
 	}
-	vListString := arms.JsonEncode(newVList)
-	arms.StoragePut("final2.json", vListString, false)
+	vListString := jsonopt.Encode(newVList)
+	fileopt.PutContent("final2.json", vListString)
 }
 
 func replaceDot(s string) string {

@@ -5,15 +5,14 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
+	"github.com/iancoleman/strcase"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/stropt"
+	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
 	"text/template"
-	"thh/arms"
 	"thh/arms/output"
-	"thh/arms/str"
-
-	"github.com/iancoleman/strcase"
-	"github.com/spf13/cobra"
 )
 
 type Model struct {
@@ -43,20 +42,20 @@ func init() {
 // makeModelFromString 格式化用户输入的内容
 func makeModelFromString(name string) Model {
 	model := Model{}
-	model.StructName = str.Singular(strcase.ToCamel(name))
-	model.PackageName = str.Snake(model.StructName)
-	model.ClientName = str.Camel(model.StructName)
+	model.StructName = stropt.Singular(strcase.ToCamel(name))
+	model.PackageName = stropt.Snake(model.StructName)
+	model.ClientName = stropt.Camel(model.StructName)
 	return model
 }
 
 func buildWithOutput(data map[string]any, filePath string, tmplPath string) {
 	outputData := buildByTmpl(data, tmplPath)
 	dirPath := filepath.Dir(filePath)
-	if !arms.IsExist(filePath) {
+	if !fileopt.IsExist(filePath) {
 		if err := os.MkdirAll(dirPath, 0666); err != nil {
 		}
 	}
-	err := arms.Put([]byte(outputData), filePath)
+	err := fileopt.Put([]byte(outputData), filePath)
 	if err != nil {
 		output.Exit(err.Error())
 	}

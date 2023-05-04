@@ -2,10 +2,10 @@ package codemake
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/preferences"
+	"github.com/leancodebox/goose/stropt"
 	"github.com/spf13/cobra"
-	"thh/arms"
-	"thh/arms/str"
 )
 
 func init() {
@@ -134,18 +134,15 @@ func outPutModel(modelName string, list []genColumns) {
 	connectPath := outputRoot + modelPath + "/" + modelPath + "_connect.go"
 	repPath := outputRoot + modelPath + "/" + modelPath + "_rep.go"
 
-	modelStr, connectStr, repStr := buildModelContent(str.Snake(modelName), list)
+	modelStr, connectStr, repStr := buildModelContent(stropt.Snake(modelName), list)
 
 	fmt.Println(modelStr, connectStr, repStr)
 	fmt.Println(modelEntityPath)
 	fmt.Println(connectPath)
 	fmt.Println(repPath)
-	arms.PutContent(modelEntityPath, modelStr)
-	arms.PutContent(connectPath, connectStr)
-
-	if !arms.IsExist(repPath) {
-		arms.PutContent(repPath, repStr)
-	}
+	fileopt.PutContent(modelEntityPath, modelStr)
+	fileopt.PutContent(connectPath, connectStr)
+	fileopt.IsExistOrCreate(repPath, repStr)
 }
 
 func GetStringP(value string) *string {

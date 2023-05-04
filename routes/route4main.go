@@ -2,7 +2,7 @@ package routes
 
 import (
 	"thh/app/http/controllers/ginLowerControllers"
-	"thh/arms/app"
+	app2 "thh/bundles/app"
 
 	"github.com/gin-contrib/gzip"
 
@@ -10,8 +10,8 @@ import (
 )
 
 func ginWeb(ginApp *gin.Engine) {
-	if app.IsProduction() {
-		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).StaticFS("/actor", PFilSystem("./actor/dist", app.GetActorFS()))
+	if app2.IsProduction() {
+		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).StaticFS("/actor", PFilSystem("./actor/dist", app2.GetActorFS()))
 	} else {
 		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).Static("/actor", "./actor/dist")
 	}

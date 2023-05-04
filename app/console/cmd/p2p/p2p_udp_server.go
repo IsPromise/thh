@@ -41,7 +41,7 @@ func runP2PUdpServer(_ *cobra.Command, argv []string) {
 	n, addr, _ = listener.ReadFromUDP(buf)
 	fmt.Printf("read from <%s>:%s\n", addr.String(), buf[:n])
 	peers[1] = addr
-	fmt.Println("begin nat \n")
+	fmt.Println("begin nat")
 	//将A和B分别介绍
 	listener.WriteToUDP([]byte(peers[0].String()), peers[1])
 	listener.WriteToUDP([]byte(peers[1].String()), peers[0])

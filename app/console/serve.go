@@ -3,17 +3,18 @@ package console
 import (
 	"context"
 	"fmt"
-	"github.com/leancodebox/goose/preferences"
+	"github.com/leancodebox/goose/serverinfo"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"runtime"
-	"thh/arms"
-	"thh/arms/app"
-	"thh/arms/logger"
+	"thh/bundles/app"
+	"thh/bundles/logger"
 	"thh/routes"
 	"time"
+
+	"github.com/leancodebox/goose/preferences"
 
 	"github.com/spf13/cast"
 
@@ -89,7 +90,8 @@ func ginServe() {
 	}
 	info("Thousand-hand:listen " + port)
 	fmt.Printf("use http://localhost:%s\n", port)
-	fmt.Printf("use http://%v:%v\n", arms.GetLocalIp(), port)
+	ip, _ := serverinfo.GetLocalIp()
+	fmt.Printf("use %v://%v:%v\n", "http", ip, port)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {

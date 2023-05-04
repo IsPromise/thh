@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/memqueue"
+	"github.com/spf13/cast"
 	"reflect"
 	"sync"
 	"thh/app/console/cmd/tspider"
@@ -9,9 +12,6 @@ import (
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/models/FTwitter/FTwitterUser"
-	"thh/arms"
-
-	"github.com/spf13/cast"
 )
 
 type TLink struct {
@@ -32,7 +32,7 @@ func TListV2(request TListRequest) component.Response {
 		if desc == "" {
 			continue
 		}
-		list1 := arms.ArrayMap(func(item FTwitterUser.FTwitterUser) TLink {
+		list1 := array.ArrayMap(func(item FTwitterUser.FTwitterUser) TLink {
 			return TLink{
 				ScreenName: item.ScreenName,
 				Name:       item.Name,
@@ -42,7 +42,7 @@ func TListV2(request TListRequest) component.Response {
 			}
 		}, FTwitterUser.GetByDesc(desc))
 		list = append(list, list1...)
-		list2 := arms.ArrayMap(func(item FTwitterTweet.FTwitterTweet) TLink {
+		list2 := array.ArrayMap(func(item FTwitterTweet.FTwitterTweet) TLink {
 			return TLink{
 				ScreenName: item.ScreenName,
 				Name:       "tweet",
@@ -69,7 +69,7 @@ func GetTwitterTweetList(param GetTwitterTweetListParam) component.Response {
 		Page: param.Page, PageSize: param.PageSize, Search: param.Search,
 	})
 	return component.SuccessResponse(component.DataMap{
-		"itemList": arms.ArrayMap(func(item FTwitterTweet.FTwitterTweet) TLink {
+		"itemList": array.ArrayMap(func(item FTwitterTweet.FTwitterTweet) TLink {
 			return TLink{
 				ScreenName:       item.ScreenName,
 				OriginScreenName: item.OriginScreenName,
@@ -97,7 +97,7 @@ func GetTwitterUserList(param GetTwitterUserListParam) component.Response {
 	})
 
 	return component.SuccessResponse(component.DataMap{
-		"itemList": arms.ArrayMap(func(item FTwitterUser.FTwitterUser) TLink {
+		"itemList": array.ArrayMap(func(item FTwitterUser.FTwitterUser) TLink {
 			return TLink{
 				ScreenName: item.ScreenName,
 				Name:       item.Name,
@@ -132,7 +132,7 @@ func RunTSpiderMaster() component.Response {
 
 func GetQueueLen() component.Response {
 	return component.SuccessResponse(component.DataMap{
-		"message": "当前队列长度:" + cast.ToString(arms.QueueLen("twitter:screenName:list")),
+		"message": "当前队列长度:" + cast.ToString(memqueue.QueueLen("twitter:screenName:list")),
 	})
 }
 
@@ -169,7 +169,7 @@ func GetTSpiderHis(req GetTSpiderReq) component.Response {
 
 	return component.SuccessResponse(component.DataMap{
 		"keyList": THisItemKey,
-		"itemList": arms.ArrayMap(func(item FTwitterSpiderHis.FTwitterSpiderHis) THisItem {
+		"itemList": array.ArrayMap(func(item FTwitterSpiderHis.FTwitterSpiderHis) THisItem {
 			sContent := "有数据"
 			if item.Content == "" {
 				sContent = "无数据无数据无数据无数据无数据无数据"

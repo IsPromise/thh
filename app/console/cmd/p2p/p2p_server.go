@@ -2,10 +2,10 @@ package p2p
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/jsonopt"
 	"net"
 	"os"
 	"sync"
-	"thh/arms"
 	"time"
 
 	"github.com/spf13/cast"
@@ -93,7 +93,7 @@ func handleClient(conn net.Conn) {
 			fmt.Println(conn.RemoteAddr().Network(), string(cMsg))
 			switch string(cMsg) {
 			case "getMap\n":
-				data := arms.JsonEncode(peerMap)
+				data := jsonopt.Encode(peerMap)
 				conn.Write([]byte(cast.ToString(data) + "\n"))
 			default:
 				conn.Write([]byte(date + " service msg\n"))

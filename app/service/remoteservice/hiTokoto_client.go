@@ -2,9 +2,9 @@ package remoteservice
 
 import (
 	"sync"
-	"thh/arms"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/leancodebox/goose/jsonopt"
 )
 
 type HiTokotoClient struct {
@@ -35,7 +35,7 @@ func (itself *HiTokotoClient) GetOneTokotoV2() (result ClientResponse[HiTokotoRe
 
 func (itself *HiTokotoClient) GetOneTokotoV3() (result HiTokotoResponse) {
 	a, _ := itself.httpClient.R().Get("/")
-	result = arms.JsonDecode[HiTokotoResponse]([]byte(a.String()))
+	result = jsonopt.Decode[HiTokotoResponse]([]byte(a.String()))
 	return
 }
 

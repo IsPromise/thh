@@ -1,7 +1,6 @@
 package console
 
 import (
-	"github.com/leancodebox/goose/fileopt"
 	"thh/app/console/cmd"
 	"thh/app/console/cmd/demo"
 	"thh/app/console/cmd/p2p"
@@ -10,8 +9,10 @@ import (
 	"thh/app/console/one"
 	"thh/app/console/shadow"
 	"thh/app/migration"
-	"thh/arms/app"
+	"thh/bundles/app"
 	"thh/bundles/bootstrap"
+
+	"github.com/leancodebox/goose/fileopt"
 
 	"github.com/spf13/cobra"
 )

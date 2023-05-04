@@ -1,6 +1,8 @@
 package console
 
-import "thh/arms/logger"
+import (
+	"thh/bundles/logger"
+)
 
 var (
 	info  = logger.Info

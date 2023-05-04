@@ -1,12 +1,12 @@
 package controllers
 
 import (
+	"github.com/leancodebox/goose/serverinfo"
 	"net/http"
 	"runtime"
 	"strings"
 	"thh/app/http/controllers/component"
-	"thh/arms"
-	"thh/arms/logger"
+	"thh/bundles/logger"
 
 	"github.com/gin-gonic/gin"
 
@@ -50,19 +50,19 @@ func About() component.Response {
 }
 
 func SysInfo() component.Response {
-	var s arms.Server
+	var s serverinfo.Server
 	var err error
-	s.Os = arms.InitOS()
-	if s.Cpu, err = arms.InitCPU(); err != nil {
+	s.Os = serverinfo.InitOS()
+	if s.Cpu, err = serverinfo.InitCPU(); err != nil {
 		logger.ErrIf(err)
 
 	}
 
-	if s.Ram, err = arms.InitRAM(); err != nil {
+	if s.Ram, err = serverinfo.InitRAM(); err != nil {
 		logger.ErrIf(err)
 	}
 
-	if s.Disk, err = arms.InitDisk(); err != nil {
+	if s.Disk, err = serverinfo.InitDisk(); err != nil {
 		logger.ErrIf(err)
 	}
 

@@ -4,13 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"strings"
-	"thh/arms"
-
 	"github.com/go-resty/resty/v2"
+	"github.com/leancodebox/goose/fileopt"
 	"github.com/spf13/cobra"
 	"gorm.io/gorm/utils"
+	"net/url"
+	"strings"
 )
 
 var commands = make([]*cobra.Command, 0)
@@ -38,9 +37,9 @@ func GetDocumentByR(r resty.Response, filename string) {
 	document = strings.Replace(document, "#{response}", mdCode(string(jData), "json"), -1)
 	byR := GetCurlByR(r)
 	document = strings.Replace(document, "#{curl}", mdCode(byR.String(), "shell"), -1)
-	err = arms.FilePutContents(filename+"/data.md", []byte(document), true)
-	err = arms.FilePutContents(filename+"/data.json", []byte(jData), true)
-	err = arms.FilePutContents(filename+"/data.sh", []byte(byR.String()), true)
+	err = fileopt.FilePutContents(filename+"/data.md", []byte(document), true)
+	err = fileopt.FilePutContents(filename+"/data.json", []byte(jData), true)
+	err = fileopt.FilePutContents(filename+"/data.sh", []byte(byR.String()), true)
 	ifErr(err)
 }
 

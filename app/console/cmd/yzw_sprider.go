@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/jsonopt"
 	"strings"
 	"sync"
-	"thh/arms"
-	"thh/arms/logger"
 	"thh/arms/restytool"
+	"thh/bundles/logger"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/go-resty/resty/v2"
@@ -43,14 +45,14 @@ type Speciality struct {
 	IsDoctor string
 	Info     []SpecialityInfo
 }
-type v struct {
+type schoolInfo struct {
 	Name string
 	City string
 
 	SpecialityList []Speciality
 }
 
-var vList []v
+var schoolInfoList []schoolInfo
 
 type SimpleSType struct {
 	Name  string
@@ -80,13 +82,17 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 		{"学前教育学", "040105", "10"},
 		{"学前教育", "045118", "20"},
 	}
-	vJson := arms.StorageGet("vlist.json")
-	vList = arms.JsonDecode[[]v](vJson)
+	vJson, err := fileopt.FileGetContents("vlist.json")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	schoolInfoList = jsonopt.Decode[[]schoolInfo](vJson)
 	client := newYZWClient()
 
-	vMap := map[string]v{}
+	vMap := map[string]schoolInfo{}
 
-	if len(vList) == 0 {
+	if len(schoolInfoList) == 0 {
 		r, _ := client.getSpecialCategory()
 		for _, speciality := range specialityList {
 			r, _ = client.specialityDetail(speciality.Name, speciality.Code, speciality.Cckey)
@@ -100,7 +106,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 					//value.SpecialityList = append(value.SpecialityList, Speciality{Name: speciality.Name, Code: speciality.Code})
 					vMap[vName] = value
 				} else {
-					vMap[vName] = v{Name: vName, SpecialityList: []Speciality{
+					vMap[vName] = schoolInfo{Name: vName, SpecialityList: []Speciality{
 						//{Name: speciality.Name, Code: speciality.Code},
 					}}
 					fmt.Println(vMap)
@@ -109,13 +115,13 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 			}
 		}
 		for _, value := range vMap {
-			vList = append(vList, value)
+			schoolInfoList = append(schoolInfoList, value)
 		}
-		vList = append(vList, v{Name: "北京大学"})
+		schoolInfoList = append(schoolInfoList, schoolInfo{Name: "北京大学"})
 	}
-	vList = arms.ArrayMap(func(item v) v {
+	schoolInfoList = array.ArrayMap(func(item schoolInfo) schoolInfo {
 		city := ""
-		item.SpecialityList = arms.ArrayMap(func(sItem SimpleSType) Speciality {
+		item.SpecialityList = array.ArrayMap(func(sItem SimpleSType) Speciality {
 
 			isDoctor := ""
 
@@ -125,7 +131,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 			doc, _ := htmlquery.Parse(strings.NewReader(r.String()))
 			list := htmlquery.Find(doc, "//tbody/*")
 			sTmp := Speciality{Name: sItem.Name, Code: sItem.Code}
-			sTmp.Info = arms.ArrayMap(func(infoItem *html.Node) SpecialityInfo {
+			sTmp.Info = array.ArrayMap(func(infoItem *html.Node) SpecialityInfo {
 
 				hItem := htmlquery.FindOne(infoItem, "/td[8]/a/@href")
 				vUrl := strings.TrimSpace(htmlquery.InnerText(hItem))
@@ -163,7 +169,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 					Number:      number,      //人数
 					TeacherInfo: teacherInfo, //指导老师：
 				}
-				logger.Info(arms.JsonEncode(sTmp))
+				logger.Info(jsonopt.Encode(sTmp))
 
 				r, _ = client.queryAction(item.Name, sItem.Code[:4], sItem.Name)
 				mItem, _ = htmlquery.Parse(strings.NewReader(r.String()))
@@ -185,10 +191,10 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 		}, specialityList)
 		item.City = city
 		return item
-	}, vList)
+	}, schoolInfoList)
 
-	vListString := arms.JsonEncode(vList)
-	arms.StoragePut("vlist.json", vListString, false)
+	vListString := jsonopt.Encode(schoolInfoList)
+	fileopt.StoragePut("vlist.json", vListString, false)
 
 }
 

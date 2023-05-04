@@ -3,15 +3,16 @@ package codemake
 import (
 	"bufio"
 	"fmt"
-	"github.com/leancodebox/goose/preferences"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/stropt"
 	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
-	"thh/arms"
-	"thh/arms/str"
 	"thh/bundles/eh"
+
+	"github.com/leancodebox/goose/preferences"
 
 	"github.com/spf13/cobra"
 	"gorm.io/driver/mysql"
@@ -77,17 +78,17 @@ func runGModel(_ *cobra.Command, _ []string) {
 		db.Raw("show FULL COLUMNS from " + tmpTableName).Scan(&list)
 
 		modelStr, connectStr, repStr := buildModelContent(tmpTableName, list)
-		modelPath := str.Camel(tmpTableName)
+		modelPath := stropt.Camel(tmpTableName)
 
 		modelEntityPath := outputRoot + modelPath + "/" + modelPath + ".go"
 		connectPath := outputRoot + modelPath + "/" + modelPath + "_connect.go"
 		repPath := outputRoot + modelPath + "/" + modelPath + "_rep.go"
 
-		arms.PutContent(modelEntityPath, modelStr)
-		arms.PutContent(connectPath, connectStr)
+		fileopt.PutContent(modelEntityPath, modelStr)
+		fileopt.PutContent(connectPath, connectStr)
 
-		if !arms.IsExist(repPath) {
-			arms.PutContent(repPath, repStr)
+		if !fileopt.IsExist(repPath) {
+			fileopt.PutContent(repPath, repStr)
 		}
 	}
 	o, e := exec.Command("gofmt", "-w", outputRoot).Output()
@@ -125,9 +126,9 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	for _, value := range list {
 		var field string
 		if IsNum(string(value.Field[0])) {
-			field = "Column" + str.Camel(value.Field)
+			field = "Column" + stropt.Camel(value.Field)
 		} else {
-			field = str.Camel(value.Field)
+			field = stropt.Camel(value.Field)
 		}
 		if pkgName, ok := EImportsHead[getTypeName(value.Type, false)]; ok {
 			importList[pkgName] = pkgName
@@ -148,7 +149,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 			defaultStr += ";"
 		}
 
-		fieldName := "field" + str.Camel(str.LowerCamel(value.Field))
+		fieldName := "field" + stropt.Camel(stropt.LowerCamel(value.Field))
 		typeString := `type:` + value.Type
 		if value.Key == "PRI" {
 			typeString = `autoIncrement`
@@ -162,7 +163,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 			Field:           value.Field,
 			FieldName:       fieldName,
 			StructFieldName: field,
-			JsonName:        str.LowerCamel(value.Field),
+			JsonName:        stropt.LowerCamel(value.Field),
 			Index:           value.Key,
 			Type:            getTypeName(value.Type, value.Null != "NO"),
 			Pid:             value.Key == "PRI",
@@ -179,7 +180,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	modelStr := buildByTmpl(
 		map[string]any{
 			"TableName":  tmpTableName,
-			"ModelName":  str.Camel(tmpTableName),
+			"ModelName":  stropt.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
 		},
@@ -188,7 +189,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	connectStr := buildByTmpl(
 		map[string]any{
 			"TableName":  tmpTableName,
-			"ModelName":  str.Camel(tmpTableName),
+			"ModelName":  stropt.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
 			"DBPkg":      dbStd,
@@ -198,7 +199,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	repStr := buildByTmpl(
 		map[string]any{
 			"TableName":  tmpTableName,
-			"ModelName":  str.Camel(tmpTableName),
+			"ModelName":  stropt.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
 		},

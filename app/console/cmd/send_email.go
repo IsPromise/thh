@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/leancodebox/goose/preferences"
 	"github.com/spf13/cobra"
 	"gopkg.in/gomail.v2"

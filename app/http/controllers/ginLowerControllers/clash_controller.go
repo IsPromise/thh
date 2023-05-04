@@ -1,11 +1,10 @@
 package ginLowerControllers
 
 import (
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/spf13/cast"
 	"net/http"
 	"strings"
-	"thh/arms"
-
-	"github.com/spf13/cast"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,7 +33,7 @@ func GinGetClashConfig(c *gin.Context) {
 }
 
 func GinGetClashConfigPlus(c *gin.Context) {
-	data, _ := arms.FileGetContents("./storage/logs/config.yaml")
+	data, _ := fileopt.FileGetContents("./storage/logs/config.yaml")
 	if len(data) == 0 {
 		data = []byte("空")
 	}

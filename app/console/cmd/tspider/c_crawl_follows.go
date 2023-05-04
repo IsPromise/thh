@@ -2,14 +2,15 @@ package tspider
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/preferences"
+	"github.com/leancodebox/goose/jsonopt"
 	"math/rand"
 	"strings"
 	"sync"
 	"thh/app/service/twservice"
-	"thh/arms"
-	"thh/arms/logger"
+	"thh/bundles/logger"
 	"time"
+
+	"github.com/leancodebox/goose/preferences"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -73,7 +74,7 @@ func superFollow(sConfig superTConfig) {
 	if ifErr(err) {
 		return
 	}
-	userInfo := arms.JsonDecode[TUserInfo](r.String())
+	userInfo := jsonopt.Decode[TUserInfo](r.String())
 	restId := userInfo.Data.User.Result.RestID
 	desc := userInfo.Data.User.Result.Legacy.Description
 	name := userInfo.Data.User.Result.Legacy.Name
@@ -100,7 +101,7 @@ func superFollow(sConfig superTConfig) {
 		r, err = client.getFollowList(restId, pageCount, cursor)
 		twservice.SaveTSpiderHis(followListType, screenName+"_follow_"+cast.ToString(i)+cast.ToString(time.Now().UnixMilli()), r, err)
 
-		TList := arms.JsonDecode[TFollowList](r.String())
+		TList := jsonopt.Decode[TFollowList](r.String())
 
 		i++
 

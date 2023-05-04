@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"github.com/leancodebox/goose/jwt"
 	"net/http"
 	"strings"
-	"thh/arms/jwt"
 
 	"github.com/gin-gonic/gin"
 )

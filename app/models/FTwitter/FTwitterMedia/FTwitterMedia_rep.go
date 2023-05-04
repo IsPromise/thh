@@ -1,6 +1,6 @@
 package FTwitterMedia
 
-import "thh/arms/querymaker"
+import "github.com/leancodebox/goose/querymaker"
 
 func Create(entity *FTwitterMedia) int64 {
 	result := builder().Create(entity)

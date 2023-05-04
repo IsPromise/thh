@@ -1,7 +1,7 @@
 package eh
 
 import (
-	"thh/arms/logger"
+	"thh/bundles/logger"
 )
 
 type Logger interface {

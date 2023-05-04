@@ -1,8 +1,9 @@
 package im
 
 import (
-	"github.com/leancodebox/goose/preferences"
 	"thh/app/http/controllers/component"
+
+	"github.com/leancodebox/goose/preferences"
 )
 
 func ImInfo() component.Response {

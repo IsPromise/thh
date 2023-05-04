@@ -2,7 +2,9 @@ package tspider
 
 import (
 	"fmt"
-	"github.com/leancodebox/goose/preferences"
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/jsonopt"
+	"github.com/leancodebox/goose/memqueue"
 	"math/rand"
 	"net/url"
 	"path"
@@ -12,10 +14,11 @@ import (
 	"thh/app/models/FTwitter/FTwitterMedia"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/service/twservice"
-	"thh/arms"
-	"thh/arms/logger"
 	"thh/arms/restytool"
+	"thh/bundles/logger"
 	"time"
+
+	"github.com/leancodebox/goose/preferences"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -102,7 +105,7 @@ func TMasterRun() {
 			queryIdMap[item[2]] = item[1]
 		}
 	}
-	//fmt.Println(arms.JsonEncode(queryIdMap))
+	//fmt.Println(jsonopt.Encode(queryIdMap))
 
 	ch := make(chan int, maxRoutineNum)
 
@@ -116,13 +119,13 @@ func TMasterRun() {
 	}
 
 	for _, jobScreenName := range dataList {
-		arms.QueueRPushObj(queueKey, QueueUnit{jobScreenName, 0})
+		memqueue.QueueRPushObj(queueKey, QueueUnit{jobScreenName, 0})
 	}
 
 	time.Sleep(15 * time.Second)
 	var wg sync.WaitGroup
 	for {
-		qu, err := arms.QueueLPopObj[QueueUnit](queueKey)
+		qu, err := memqueue.QueueLPopObj[QueueUnit](queueKey)
 		screenName := qu.ScreenName
 		if err != nil {
 			break
@@ -162,7 +165,7 @@ func superT(sConfig superTConfig) {
 	if ifErr(err) {
 		return
 	}
-	userInfo := arms.JsonDecode[TUserInfo](r.String())
+	userInfo := jsonopt.Decode[TUserInfo](r.String())
 	restId := userInfo.Data.User.Result.RestID
 	desc := userInfo.Data.User.Result.Legacy.Description
 	name := userInfo.Data.User.Result.Legacy.Name
@@ -183,7 +186,7 @@ func superT(sConfig superTConfig) {
 	for {
 		r, err = client.getTList(restId, 40, cursor)
 		twservice.SaveTSpiderHis(tweetListType, screenName+"_tweetList_"+cast.ToString(i), r, err)
-		tweetResponse := arms.JsonDecode[UserTweetsResponse](r.String())
+		tweetResponse := jsonopt.Decode[UserTweetsResponse](r.String())
 		i++
 		if len(tweetResponse.Data.User.Result.TimelineV2.Timeline.Instructions) == 0 || i >= tMaxPage {
 			logger.Info(screenName + "完成··································")
@@ -226,12 +229,12 @@ func superT(sConfig superTConfig) {
 						}
 						// 允许后续扩散查询 非原创 且深度
 						if usePush && isForwarded && sConfig.spiderDeep < tDeep {
-							arms.QueueRPushObj(queueKey, QueueUnit{orgUserResult.Legacy.ScreenName, sConfig.spiderDeep + 1})
+							memqueue.QueueRPushObj(queueKey, QueueUnit{orgUserResult.Legacy.ScreenName, sConfig.spiderDeep + 1})
 							fmt.Println(orgUserResult.Legacy.ScreenName, "进入后续查询队列")
 						}
 
 						userTweetEntity := FTwitterTweet.GetUserTweet(screenName, conversationIdStr)
-						if userTweetEntity.Id != 0 && !arms.InArray(screenName, tScreenNameSlice) {
+						if userTweetEntity.Id != 0 && !array.InArray(screenName, tScreenNameSlice) {
 							continue
 						}
 						userTweetEntity.ScreenName = screenName
@@ -246,7 +249,7 @@ func superT(sConfig superTConfig) {
 						FTwitterTweet.Save(&userTweetEntity)
 
 						// 当为转发，且属于目标转发，进行木匾转发统计，和原用户信息录入
-						if isForwarded && arms.InArray(screenName, tScreenNameSlice) {
+						if isForwarded && array.InArray(screenName, tScreenNameSlice) {
 							userInLegacy := orgUserResult.Legacy
 							twservice.SaveUserEntity(orgUserResult.RestId, userInLegacy.ScreenName, userInLegacy.Description, userInLegacy.Name)
 						}

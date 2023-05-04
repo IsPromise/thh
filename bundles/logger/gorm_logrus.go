@@ -3,7 +3,7 @@ package logger
 import (
 	"context"
 	"errors"
-	"thh/arms"
+	"fmt"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -63,7 +63,7 @@ func (l GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (strin
 	// 通用字段
 	logFields := logrus.Fields{
 		"sql":  sql,
-		"time": arms.MicrosecondsStr(elapsed),
+		"time": fmt.Sprintf("%.3fms", float64(elapsed.Nanoseconds())/1e6),
 		"rows": rows,
 	}
 

@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/jsonopt"
 	"testing"
-	"thh/arms"
 )
 
 type SliceCat struct {
@@ -42,11 +42,11 @@ func updateCS3(l *[]SliceCat) {
 
 func TestNewSlice2(t *testing.T) {
 	l := []*SliceCat{{1}, {1}, {1}, {1}, {1}}
-	fmt.Println(arms.JsonEncode(l))
+	fmt.Println(jsonopt.Encode(l))
 	updateCS22(l)
-	fmt.Println(arms.JsonEncode(l))
+	fmt.Println(jsonopt.Encode(l))
 	updateCS21(l)
-	fmt.Println(arms.JsonEncode(l))
+	fmt.Println(jsonopt.Encode(l))
 }
 
 func updateCS21(l []*SliceCat) {

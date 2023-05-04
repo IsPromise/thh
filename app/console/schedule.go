@@ -2,8 +2,8 @@ package console
 
 import (
 	"fmt"
-	"thh/arms"
-	"thh/arms/logger"
+	"github.com/leancodebox/goose/luckrand"
+	"thh/bundles/logger"
 	"time"
 
 	"github.com/robfig/cron/v3"
@@ -25,8 +25,8 @@ func RunJob() {
 
 func upCmd(cmd func()) func() {
 	return func() {
-		arms.MyTraceInit()
-		defer arms.MyTraceClean()
+		luckrand.MyTraceInit()
+		defer luckrand.MyTraceClean()
 		cmd()
 	}
 }

@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"thh/arms/logger"
+	"thh/bundles/logger"
 	"time"
 
 	"github.com/gin-gonic/gin"

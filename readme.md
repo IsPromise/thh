@@ -63,8 +63,7 @@ go test ./helpers/array_test.go ./helpers/array.go ./helpers/types.go
 ## 代码格式化相关
 
 ```shell    
-gofmt -w .
-goimports -w .   
+gofmt -w . && goimports -w .   
 ```
 
 ## 编译相关

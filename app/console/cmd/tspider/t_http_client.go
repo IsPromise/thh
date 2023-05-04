@@ -3,8 +3,8 @@ package tspider
 import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/leancodebox/goose/jsonopt"
 	"github.com/leancodebox/goose/preferences"
-	"thh/arms"
 )
 
 type tClient struct {
@@ -39,7 +39,7 @@ func (itself tClient) getFollowList(userId string, count int, cursor string) (*r
 	}
 
 	return itself.httpClient.R().SetQueryParams(map[string]string{
-		"variables": arms.JsonEncode(variables{
+		"variables": jsonopt.Encode(variables{
 			UserId:                      userId,
 			Count:                       count,
 			Cursor:                      cursor,
@@ -50,7 +50,7 @@ func (itself tClient) getFollowList(userId string, count int, cursor string) (*r
 			WithReactionsPerspective:    false,
 			WithSuperFollowsTweetFields: true,
 		}),
-		"features": arms.JsonEncode(map[string]any{
+		"features": jsonopt.Encode(map[string]any{
 			"responsive_web_twitter_blue_verified_badge_is_enabled":             true,
 			"responsive_web_graphql_exclude_directive_enabled":                  false,
 			"verified_phone_label_enabled":                                      false,
@@ -90,7 +90,7 @@ func (itself tClient) getTList(userId string, count int, cursor string) (*resty.
 		WithV2Timeline                         bool   `json:"withV2Timeline"`
 	}
 	return itself.httpClient.R().SetQueryParams(map[string]string{
-		"variables": arms.JsonEncode(variables{
+		"variables": jsonopt.Encode(variables{
 			UserID:                                 userId,
 			Count:                                  count,
 			Cursor:                                 cursor,
@@ -104,7 +104,7 @@ func (itself tClient) getTList(userId string, count int, cursor string) (*resty.
 			WithVoice:                              true,
 			WithV2Timeline:                         true,
 		}),
-		"features": arms.JsonEncode(map[string]any{
+		"features": jsonopt.Encode(map[string]any{
 			"responsive_web_twitter_blue_verified_badge_is_enabled":             true,
 			"responsive_web_graphql_exclude_directive_enabled":                  false,
 			"verified_phone_label_enabled":                                      false,
@@ -143,12 +143,12 @@ func (itself tClient) getUserInfo(ScreenName string) (*resty.Response, error) {
 	}
 
 	return itself.httpClient.R().SetQueryParams(map[string]string{
-		"variables": arms.JsonEncode(variables{
+		"variables": jsonopt.Encode(variables{
 			ScreenName:                 ScreenName,
 			WithSafetyModeUserFields:   true,
 			WithSuperFollowsUserFields: true,
 		}),
-		"features": arms.JsonEncode(features{
+		"features": jsonopt.Encode(features{
 			ResponsiveWebTwitterBlueVerifiedBadgeIsEnabled: true,
 			VerifiedPhoneLabelEnabled:                      false,
 			ResponsiveWebGraphqlTimelineNavigationEnabled:  true,

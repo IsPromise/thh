@@ -2,11 +2,10 @@ package migration
 
 import (
 	"fmt"
-	"thh/app/models/bbs/Articles"
-	"thh/app/models/bbs/Comment"
-	"thh/arms/app"
-	"thh/arms/logger"
+	"thh/app/models/DataReps"
+	"thh/bundles/app"
 	"thh/bundles/dbconnect"
+	"thh/bundles/logger"
 
 	"gorm.io/gorm"
 )
@@ -25,9 +24,7 @@ func migration(migration bool, db *gorm.DB) {
 	var err error
 
 	if err = db.AutoMigrate(
-		&Comment.Comment{},
-		&Articles.Articles{},
-		//&DataReps.DataReps{},
+		&DataReps.DataReps{},
 		//&Users.Users{},
 		//&Role.Role{},
 		//&RolePermission.RolePermission{},
