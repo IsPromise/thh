@@ -5,8 +5,8 @@ const pid = "key"
 const fieldValue = "value"
 
 type DataReps struct {
-	Key   string `gorm:"primaryKey;column:key;autoIncrement;not null;default:'';" json:"key"` //
-	Value string `gorm:"column:value;type:varchar(255);not null;default:'';" json:"value"`    //
+	Key   string `gorm:"primaryKey;column:key;not null;default:'';" json:"key"`            //
+	Value string `gorm:"column:value;type:varchar(255);not null;default:'';" json:"value"` //
 
 }
 
