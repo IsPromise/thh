@@ -4,7 +4,7 @@ import (
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterUser"
 	"thh/app/models/FTwitter/FTwitterUserHis"
-	"thh/bundles/restyopt"
+	"thh/app/service/ropt"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -29,7 +29,7 @@ func SaveUserEntity(restId, screenName, desc, name string) FTwitterUser.FTwitter
 }
 
 func SaveTSpiderHis(typeId int, target string, r *resty.Response, err error) int64 {
-	curlBuildStr := restyopt.GetCurlByR(*r)
+	curlBuildStr := ropt.GetCurlByR(*r)
 	successStr := "0"
 	if err != nil {
 		successStr = cast.ToString(err.Error())

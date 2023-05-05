@@ -3,8 +3,8 @@ package migration
 import (
 	"fmt"
 	"thh/app/models/DataReps"
-	"thh/bundles/app"
 	"thh/bundles/connect/dbconnect"
+	"thh/bundles/kernel"
 	"thh/bundles/logging"
 
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ import (
 func M() {
 	fmt.Println("init migration")
 	// 数据库迁移
-	migration(app.UseMigration(), dbconnect.Std())
+	migration(kernel.UseMigration(), dbconnect.Std())
 }
 
 func migration(migration bool, db *gorm.DB) {

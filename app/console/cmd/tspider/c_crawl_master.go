@@ -10,9 +10,9 @@ import (
 	"sync"
 	"thh/app/models/FTwitter/FTwitterMedia"
 	"thh/app/models/FTwitter/FTwitterTweet"
+	"thh/app/service/ropt"
 	"thh/app/service/twservice"
 	"thh/bundles/logging"
-	"thh/bundles/restyopt"
 	"time"
 
 	"github.com/leancodebox/goose/array"
@@ -83,8 +83,8 @@ func TMasterRun() {
 	var screenNameMap map[string]bool
 	screenNameMap = make(map[string]bool, 2048)
 	var maxRoutineNum = 3
-	restyopt.SetProxy(proxyPath)
-	resp, _, err := restyopt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
+	ropt.SetProxy(proxyPath)
+	resp, _, err := ropt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
 		fmt.Println("获取queryId失败")
 		return

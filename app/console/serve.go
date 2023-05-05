@@ -8,7 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"thh/bundles/app"
+	"thh/bundles/kernel"
 	"thh/bundles/logging"
 	"thh/routes"
 	"time"
@@ -100,7 +100,7 @@ func ginServe() {
 		}
 	}()
 
-	fmt.Println("start use:" + cast.ToString(app.GetUnitTime()))
+	fmt.Println("start use:" + cast.ToString(kernel.GetUnitTime()))
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)

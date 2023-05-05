@@ -2,14 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
-	"sync"
-	"thh/bundles/logging"
-	"thh/bundles/restyopt"
-
 	"github.com/leancodebox/goose/array"
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/jsonopt"
+	"strings"
+	"sync"
+	"thh/app/service/ropt"
+	"thh/bundles/logging"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/go-resty/resty/v2"
@@ -97,7 +96,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 		r, _ := client.getSpecialCategory()
 		for _, speciality := range specialityList {
 			r, _ = client.specialityDetail(speciality.Name, speciality.Code, speciality.Cckey)
-			wr := restyopt.GetCurlByR(*r)
+			wr := ropt.GetCurlByR(*r)
 			fmt.Println(wr)
 			doc, _ := htmlquery.Parse(strings.NewReader(r.String()))
 			list := htmlquery.Find(doc, "//div[@class=\"tab-container zyk-zyfb-tab\"]/div/div[@class=\"item-content active\"]/ul/li")
@@ -127,7 +126,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 			isDoctor := ""
 
 			r, _ := client.querySchAction(item.Name, sItem.Code[:4], sItem.Name)
-			wr := restyopt.GetCurlByR(*r)
+			wr := ropt.GetCurlByR(*r)
 			logging.Info(wr)
 			doc, _ := htmlquery.Parse(strings.NewReader(r.String()))
 			list := htmlquery.Find(doc, "//tbody/*")
@@ -139,7 +138,7 @@ func runYzwSpider(_ *cobra.Command, _ []string) {
 				fmt.Println(vUrl)
 
 				r, _ := client.kskm(vUrl)
-				wr := restyopt.GetCurlByR(*r)
+				wr := ropt.GetCurlByR(*r)
 				logging.Info(wr)
 
 				mItem, _ := htmlquery.Parse(strings.NewReader(r.String()))

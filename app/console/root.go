@@ -8,8 +8,8 @@ import (
 	"thh/app/console/codemake"
 	"thh/app/console/shadow"
 	"thh/app/migration"
-	"thh/bundles/app"
 	"thh/bundles/bootstrap"
+	"thh/bundles/kernel"
 
 	"github.com/leancodebox/goose/fileopt"
 
@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 	Long:  `thh`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if !fileopt.IsExist("config.toml") {
-			err := fileopt.Put([]byte(app.GetOConfig()), "./config.toml")
+			err := fileopt.Put([]byte(kernel.GetOConfig()), "./config.toml")
 			if err != nil {
 				panic(err)
 			}

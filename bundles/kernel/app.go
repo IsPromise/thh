@@ -1,5 +1,5 @@
 // Package app 应用信息
-package app
+package kernel
 
 import (
 	"github.com/leancodebox/goose/preferences"

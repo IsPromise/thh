@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"thh/bundles/app"
+	"thh/bundles/kernel"
 
 	"github.com/leancodebox/goose/filequeue"
 
@@ -28,7 +28,7 @@ func fileQueue(_ *cobra.Command, _ []string) {
 			fmt.Println(err)
 		}
 		if i%100000 == 0 {
-			fmt.Println(app.GetRunTime())
+			fmt.Println(kernel.GetRunTime())
 		}
 	}
 	n := 0
@@ -41,7 +41,7 @@ func fileQueue(_ *cobra.Command, _ []string) {
 		n += 1
 		if n%10 == 0 {
 			fmt.Println(data)
-			fmt.Println(app.GetRunTime())
+			fmt.Println(kernel.GetRunTime())
 			break
 		}
 	}
@@ -62,7 +62,7 @@ func fileQueue(_ *cobra.Command, _ []string) {
 		//fmt.Println(data)
 		if n%100000 == 0 {
 			fmt.Println(`n%100000`, data)
-			fmt.Println(app.GetRunTime())
+			fmt.Println(kernel.GetRunTime())
 		}
 	}
 	_ = f.Clean()
