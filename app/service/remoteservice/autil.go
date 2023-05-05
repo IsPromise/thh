@@ -11,14 +11,14 @@ type ClientResponse[T any] struct {
 	RestyResponse *resty.Response
 }
 
-func buildResponseEntity[R any](response *resty.Response, err error) (result ClientResponse[R], err2 error) {
+func buildResponseEntity[R any](response *resty.Response, err error) (ClientResponse[R], error) {
+	var result ClientResponse[R]
 	result.RestyResponse = response
-	err2 = err
-	if err2 != nil {
-		return
+	if err != nil {
+		return result, err
 	}
-	jsonopt.Decode[R](response.Body())
-	return result, err2
+	result.Response = jsonopt.Decode[R](response.Body())
+	return result, err
 }
 
 //func t[R any](client resty.Client,url string,data any) (result ClientResponse[R], err2 error) {
