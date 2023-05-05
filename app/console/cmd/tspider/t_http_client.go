@@ -2,6 +2,7 @@ package tspider
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/leancodebox/goose/jsonopt"
@@ -14,6 +15,22 @@ type tClient struct {
 
 // https://wejson.cn/header2json/
 var headersMap = map[string]string{}
+
+func parseHeaders(headers string) map[string]string {
+	headerMap := make(map[string]string)
+	splitHeaders := strings.Split(headers, "\n")
+
+	for _, headerLine := range splitHeaders {
+		headerLine = strings.TrimRight(headerLine, "\r")
+		keyVal := strings.SplitN(headerLine, ":", 2)
+
+		if len(keyVal) == 2 {
+			headerMap[strings.TrimSpace(keyVal[0])] = strings.TrimSpace(keyVal[1])
+		}
+	}
+
+	return headerMap
+}
 
 func newTClient() tClient {
 	client := resty.New()
