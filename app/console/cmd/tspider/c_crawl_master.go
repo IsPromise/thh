@@ -71,13 +71,13 @@ func tMasterSpider(_ *cobra.Command, _ []string) {
 
 func TMasterRun() {
 
-	rootPrefix = preferences.GetString("sprider.twitter.output", "./storage/tmp/")
+	rootPrefix = preferences.GetString("spider.twitter.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
 	queueKey = "twitter:screenName:list"
-	allUsePush := preferences.GetBool("sprider.twitter.allusepush", false)
-	downMedia := preferences.GetBool("sprider.twitter.downmedia", false)
-	screenNamesFromEnv := preferences.GetString("sprider.twitter.screename", "")
-	tDeep = preferences.GetInt("sprider.twitter.deep", 0)
+	allUsePush := preferences.GetBool("spider.twitter.allusepush", false)
+	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
+	screenNamesFromEnv := preferences.GetString("spider.twitter.screename", "")
+	tDeep = preferences.GetInt("spider.twitter.deep", 0)
 	proxyPath := preferences.GetString("t.proxy")
 
 	var screenNameMap map[string]bool
@@ -153,8 +153,8 @@ func TMasterRun() {
 }
 
 func superT(sConfig superTConfig) {
-	tScreenNameList := preferences.GetString("sprider.twitter.screename", "")
-	tMaxPage := preferences.GetInt("sprider.twitter.maxPage", "")
+	tScreenNameList := preferences.GetString("spider.twitter.screename", "")
+	tMaxPage := preferences.GetInt("spider.twitter.maxPage", "")
 	tScreenNameSlice := strings.Split(tScreenNameList, ",")
 	screenName := sConfig.screenName
 	usePush := sConfig.usePush

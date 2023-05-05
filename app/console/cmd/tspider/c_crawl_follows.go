@@ -29,11 +29,11 @@ func init() {
 // tFollow 抓取关注的列表
 func tFollow(_ *cobra.Command, _ []string) {
 	var maxRoutineNum = 3
-	rootPrefix = preferences.GetString("sprider.twitter.output", "./storage/tmp/")
+	rootPrefix = preferences.GetString("spider.twitter.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
 	queueKey = "twitter:screenName:list"
-	downMedia := preferences.GetBool("sprider.twitter.downmedia", false)
-	screenNamesFromEnv := preferences.GetString("sprider.twitter.screename", "")
+	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
+	screenNamesFromEnv := preferences.GetString("spider.twitter.screename", "")
 	ch := make(chan int, maxRoutineNum)
 	var wg4master sync.WaitGroup
 
