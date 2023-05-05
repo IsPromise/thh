@@ -1,7 +1,7 @@
 package remoteservice
 
 import (
-	"encoding/json"
+	"github.com/leancodebox/goose/jsonopt"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -17,7 +17,7 @@ func buildResponseEntity[R any](response *resty.Response, err error) (result Cli
 	if err2 != nil {
 		return
 	}
-	err2 = json.Unmarshal(response.Body(), &result.Response)
+	jsonopt.Decode[R](response.Body())
 	return result, err2
 }
 
