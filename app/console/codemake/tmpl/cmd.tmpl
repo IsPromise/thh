@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"errors"
-	"thh/arms/output"
-
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -19,10 +17,5 @@ func init(){
 
 func run{{.StructName}}(_ *cobra.Command, _ []string) {
 
-	output.Success("这是一条成功的提示")
-	output.Warning("这是一条提示")
-	output.Error("这是一条错误信息")
-	output.Warning("终端输出最好使用英文，这样兼容性会更好~")
-	output.Exit("exit 方法可以用来打印消息并中断程序！")
-	output.ExitIf(errors.New("在 err = nil 的时候打印并退出"))
+	fmt.Println("success")
 }

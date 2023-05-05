@@ -5,15 +5,13 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
-	"os"
-	"path/filepath"
-	"text/template"
-	"thh/arms/output"
-
 	"github.com/iancoleman/strcase"
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/stropt"
 	"github.com/spf13/cobra"
+	"os"
+	"path/filepath"
+	"text/template"
 )
 
 type Model struct {
@@ -58,10 +56,11 @@ func buildWithOutput(data map[string]any, filePath string, tmplPath string) {
 	}
 	err := fileopt.Put([]byte(outputData), filePath)
 	if err != nil {
-		output.Exit(err.Error())
+		fmt.Println(err.Error())
+		return
 	}
 	// 提示成功
-	output.Success(fmt.Sprintf("[%s] created.", filePath))
+	fmt.Println(fmt.Sprintf("[%s] created.", filePath))
 }
 
 func buildByTmpl(data map[string]any, tmplPath string) string {
