@@ -11,8 +11,8 @@ import (
 	"thh/app/models/FTwitter/FTwitterMedia"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/service/twservice"
-	"thh/arms/restytool"
 	"thh/bundles/logging"
+	"thh/bundles/restyopt"
 	"time"
 
 	"github.com/leancodebox/goose/array"
@@ -83,7 +83,8 @@ func TMasterRun() {
 	var screenNameMap map[string]bool
 	screenNameMap = make(map[string]bool, 2048)
 	var maxRoutineNum = 3
-	resp, err := restytool.StdLonelyClient().SetProxy(proxyPath).Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
+	restyopt.SetProxy(proxyPath)
+	resp, _, err := restyopt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
 		fmt.Println("获取queryId失败")
 		return
@@ -99,7 +100,7 @@ func TMasterRun() {
 		result = reg.FindAllStringSubmatch(matchStr, -1)
 		return
 	}
-	result := regUnit(`queryId:\"([a-zA-Z0-9\-]+)\",operationName:\"([a-zA-Z0-9]+)\"`, string(resp.Body()))
+	result := regUnit(`queryId:\"([a-zA-Z0-9\-]+)\",operationName:\"([a-zA-Z0-9]+)\"`, resp)
 	queryIdMap := map[string]string{}
 	for _, item := range result {
 		if len(item) == 3 {

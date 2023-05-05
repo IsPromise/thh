@@ -12,7 +12,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/iancoleman/strcase v0.2.0
-	github.com/leancodebox/goose v0.0.6
+	github.com/leancodebox/goose v0.0.7
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sirupsen/logrus v1.9.0
