@@ -88,7 +88,7 @@ export function getTwitterTweetList(page = 1, pageSize = 10, search = "") {
 
 
 export function runTSpiderMaster() {
-    return instanceAxios.get('run-tspider-master')
+    return instanceAxios.get('run-spider-twitter-master')
 }
 
 export function getQueueLenApi() {
@@ -96,7 +96,7 @@ export function getQueueLenApi() {
 }
 
 export function getTSpiderHis(page = 1, pageSize = 10) {
-    return instanceAxios.get('get-tspider-his', {
+    return instanceAxios.get('get-spider-twitter-his', {
         params: {
             page: page,
             pageSize: pageSize,
@@ -104,11 +104,10 @@ export function getTSpiderHis(page = 1, pageSize = 10) {
     })
 }
 
-
-
-export function writeArticlesDetail() {
-
+export function getGitStatus(){
+    return instanceAxios.get('git-status-list')
 }
+
 
 export function wsInfo() {
     return instanceAxios.get('ws-info')

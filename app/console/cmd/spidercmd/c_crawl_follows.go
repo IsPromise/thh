@@ -1,4 +1,4 @@
-package tspider
+package spidercmd
 
 import (
 	"fmt"
@@ -19,15 +19,15 @@ import (
 
 func init() {
 	appendCommand(&cobra.Command{
-		Use:   "t:spider:follow",
+		Use:   "spider:twitter:follow",
 		Short: "follow 抓取",
-		Run:   tFollow,
+		Run:   spiderTwitterFollow,
 		//Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})
 }
 
-// tFollow 抓取关注的列表
-func tFollow(_ *cobra.Command, _ []string) {
+// spiderTwitterFollow 抓取关注的列表
+func spiderTwitterFollow(_ *cobra.Command, _ []string) {
 	var maxRoutineNum = 3
 	rootPrefix = preferences.GetString("spider.twitter.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
@@ -51,7 +51,7 @@ func tFollow(_ *cobra.Command, _ []string) {
 		ch <- 1
 		go func(screenName string, ch chan int) {
 			defer wg4master.Done()
-			superFollow(superTConfig{
+			superFollow(spiderTwitterConfig{
 				screenName: screenName,
 				usePush:    true,
 				downMedia:  downMedia,
@@ -64,7 +64,7 @@ func tFollow(_ *cobra.Command, _ []string) {
 	fmt.Println("抓取关注人列表完毕")
 }
 
-func superFollow(sConfig superTConfig) {
+func superFollow(sConfig spiderTwitterConfig) {
 	//tScreenNameList := config.GetString("T_SCREENAME", "")
 	screenName := sConfig.screenName
 	// Create a Resty Client

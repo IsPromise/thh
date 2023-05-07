@@ -8,6 +8,7 @@ import twitterTool from "@/pages/manager/twitter/TwitterRoutes.js"
 let about = () => import("@/pages/home/AboutPage.vue")
 let gridPage = () => import("@/pages/manager/GridPageDemo.vue")
 let allTool = () => import("@/pages/manager/AllTool.vue")
+let mainTool = () => import("@/pages/manager/MainTool.vue")
 let traefikManager = () => import("@/pages/manager/TraefikRouterManager.vue")
 let imDemo = () => import("@/pages/manager/ImDemo.vue")
 let voiceChat = () => import("@/pages/manager/VoiceChat.vue")
@@ -35,7 +36,8 @@ export default [
     {
         belongMenu: true,
         path: '/manager', component: moon, children: [
-            {showName: '', path: '', component: allTool, belongMenu: false},
+            {showName: '', path: '', component: mainTool, belongMenu: false},
+            {showName: 'mainTool', path: 'mainTool', component: mainTool, belongMenu: true},
             {showName: 'all tool', path: 'allTool', component: allTool, belongMenu: true},
             {showName: 'Im', path: 'im', component: imDemo, belongMenu: true},
             {showName: 'voiceChat', path: 'voiceChat', component: voiceChat, belongMenu: true},

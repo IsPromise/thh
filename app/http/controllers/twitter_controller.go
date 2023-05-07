@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
-	"thh/app/console/cmd/tspider"
+	"thh/app/console/cmd/spidercmd"
 	"thh/app/http/controllers/component"
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
@@ -113,13 +113,13 @@ func GetTwitterUserList(param GetTwitterUserListParam) component.Response {
 	})
 }
 
-var tMasterRunningLock sync.Mutex
+var spiderTwitterLock sync.Mutex
 
-func RunTSpiderMaster() component.Response {
-	if tMasterRunningLock.TryLock() {
+func RunSpiderTwitterMaster() component.Response {
+	if spiderTwitterLock.TryLock() {
 		go func() {
-			defer tMasterRunningLock.Unlock()
-			tspider.TMasterRun()
+			defer spiderTwitterLock.Unlock()
+			spidercmd.SpiderTwitterMain()
 		}()
 		return component.SuccessResponse(component.DataMap{
 			"message": "success start",
@@ -162,7 +162,7 @@ func GetKeyItemList(data any) (result []string) {
 
 var THisItemKey = GetKeyItemList(&THisItem{})
 
-func GetTSpiderHis(req GetTSpiderReq) component.Response {
+func GetSpiderTwitterHis(req GetTSpiderReq) component.Response {
 	pageData := FTwitterSpiderHis.Page(FTwitterSpiderHis.PageQuery{
 		Page:     req.Page,
 		PageSize: req.PageSize,

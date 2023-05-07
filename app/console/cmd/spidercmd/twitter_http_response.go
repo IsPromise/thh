@@ -1,4 +1,4 @@
-package tspider
+package spidercmd
 
 type UserTweetsResponse struct {
 	Data struct {

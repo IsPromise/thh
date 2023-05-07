@@ -1,4 +1,4 @@
-package tspider
+package spidercmd
 
 import (
 	"bytes"

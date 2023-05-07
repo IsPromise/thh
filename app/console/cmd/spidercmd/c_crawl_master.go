@@ -1,4 +1,4 @@
-package tspider
+package spidercmd
 
 import (
 	"fmt"
@@ -33,9 +33,9 @@ const (
 
 func init() {
 	appendCommand(&cobra.Command{
-		Use:   "t:spider:start",
+		Use:   "spider:twitter:start",
 		Short: "主程",
-		Run:   tMasterSpider,
+		Run:   spiderTwitterMainAction,
 		//Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 	})
 }
@@ -48,7 +48,7 @@ func ifErr(err error) bool {
 	return false
 }
 
-type superTConfig struct {
+type spiderTwitterConfig struct {
 	screenName string
 	usePush    bool
 	downMedia  bool
@@ -63,13 +63,13 @@ type QueueUnit struct {
 var rootPrefix string
 var outputPrefix string
 var queueKey string
-var tDeep int
+var spiderDeep int
 
-func tMasterSpider(_ *cobra.Command, _ []string) {
-	TMasterRun()
+func spiderTwitterMainAction(_ *cobra.Command, _ []string) {
+	SpiderTwitterMain()
 }
 
-func TMasterRun() {
+func SpiderTwitterMain() {
 
 	rootPrefix = preferences.GetString("spider.twitter.output", "./storage/tmp/")
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
@@ -77,7 +77,7 @@ func TMasterRun() {
 	allUsePush := preferences.GetBool("spider.twitter.allusepush", false)
 	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
 	screenNamesFromEnv := preferences.GetString("spider.twitter.screename", "")
-	tDeep = preferences.GetInt("spider.twitter.deep", 0)
+	spiderDeep = preferences.GetInt("spider.twitter.deep", 0)
 	proxyPath := preferences.GetString("t.proxy")
 
 	var screenNameMap map[string]bool
@@ -141,7 +141,7 @@ func TMasterRun() {
 		wg.Add(1)
 		go func(screenName string, usePush bool, ch chan int) {
 			defer wg.Done()
-			superT(superTConfig{
+			spiderTwitterList(spiderTwitterConfig{
 				screenName: screenName,
 				usePush:    usePush,
 				downMedia:  downMedia,
@@ -152,7 +152,7 @@ func TMasterRun() {
 	wg.Wait()
 }
 
-func superT(sConfig superTConfig) {
+func spiderTwitterList(sConfig spiderTwitterConfig) {
 	tScreenNameList := preferences.GetString("spider.twitter.screename", "")
 	tMaxPage := preferences.GetInt("spider.twitter.maxPage", "")
 	tScreenNameSlice := strings.Split(tScreenNameList, ",")
@@ -230,7 +230,7 @@ func superT(sConfig superTConfig) {
 							isForwarded = false
 						}
 						// 允许后续扩散查询 非原创 且深度
-						if usePush && isForwarded && sConfig.spiderDeep < tDeep {
+						if usePush && isForwarded && sConfig.spiderDeep < spiderDeep {
 							memqueue.QueueRPushObj(queueKey, QueueUnit{orgUserResult.Legacy.ScreenName, sConfig.spiderDeep + 1})
 							fmt.Println(orgUserResult.Legacy.ScreenName, "进入后续查询队列")
 						}

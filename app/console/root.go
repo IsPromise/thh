@@ -4,7 +4,7 @@ import (
 	"thh/app/console/cmd"
 	"thh/app/console/cmd/demo"
 	"thh/app/console/cmd/p2p"
-	"thh/app/console/cmd/tspider"
+	"thh/app/console/cmd/spidercmd"
 	"thh/app/console/codemake"
 	"thh/app/console/shadow"
 	"thh/app/migration"
@@ -41,7 +41,7 @@ func init() {
 	rootCmd.AddCommand(demo.GetCommands()...)
 	rootCmd.AddCommand(cmd.GetCommands()...)
 	rootCmd.AddCommand(shadow.GetCommands()...)
-	rootCmd.AddCommand(tspider.GetCommands()...)
+	rootCmd.AddCommand(spidercmd.GetCommands()...)
 	rootCmd.AddCommand(p2p.GetCommands()...)
 }
 
