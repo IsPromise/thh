@@ -1,8 +1,8 @@
 package Users
 
 import (
-	"github.com/leancodebox/goose/luckrand"
 	"github.com/leancodebox/goose/querymaker"
+	"thh/bundles/algorithm"
 )
 
 func Get(id any) (entity Users, err error) {
@@ -16,7 +16,7 @@ func Verify(username string, password string) (*Users, error) {
 	if err != nil {
 		return &user, err
 	}
-	err = luckrand.VerifyPassword(user.Password, password)
+	err = algorithm.VerifyEncryptPassword(user.Password, password)
 	if err != nil {
 		return &Users{}, err
 	}
@@ -33,6 +33,10 @@ func Create(entity *Users) error {
 	return builder().Create(&entity).Error
 }
 
+func Save(entity *Users) error {
+	return builder().Save(entity).Error
+}
+
 func All() (entities []*Users) {
 	builder().Find(&entities)
 	return
@@ -40,5 +44,17 @@ func All() (entities []*Users) {
 
 func GetByUsername(username string) (entities *Users) {
 	builder().Where(querymaker.Eq(fieldUsername, username)).First(entities)
+	return
+}
+
+func Delete(user *Users) {
+	builder().Delete(user)
+}
+func UnscopedDelete(user *Users) {
+	builder().Unscoped().Delete(user)
+}
+
+func UnscopedGet(id any) (entity Users, err error) {
+	err = builder().Unscoped().Where(pid, id).First(&entity).Error
 	return
 }

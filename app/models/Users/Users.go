@@ -1,9 +1,9 @@
 package Users
 
 import (
+	"gorm.io/gorm"
+	"thh/bundles/algorithm"
 	"time"
-
-	"github.com/leancodebox/goose/luckrand"
 )
 
 const tableName = "users"
@@ -16,13 +16,14 @@ const fieldEmail = "email"
 const fieldPassword = "password"
 
 type Users struct {
-	Id        uint64     `gorm:"primaryKey;column:id;autoIncrement;not null;" json:"id"`                             //
-	CreatedAt time.Time  `gorm:"column:created_at;autoCreateTime;type:datetime;" json:"createdAt"`                   //
-	UpdatedAt time.Time  `gorm:"column:updated_at;autoUpdateTime;type:datetime;" json:"updatedAt"`                   //
-	DeletedAt *time.Time `gorm:"column:deleted_at;type:datetime;" json:"-"`                                          //
-	Username  string     `gorm:"column:username;type:varchar(255);uniqueIndex;not null;default:'';" json:"username"` //
-	Email     string     `gorm:"column:email;type:varchar(255);uniqueIndex;not null;default:'';" json:"email"`       //
-	Password  string     `gorm:"column:password;type:varchar(255);not null;default:'';" json:"-"`                    //
+	Id        uint64    `gorm:"primaryKey;column:id;autoIncrement;not null;" json:"id"`                             //
+	Username  string    `gorm:"column:username;type:varchar(255);uniqueIndex;not null;default:'';" json:"username"` //
+	Email     string    `gorm:"column:email;type:varchar(255);uniqueIndex;not null;default:'';" json:"email"`       //
+	Password  string    `gorm:"column:password;type:varchar(255);not null;default:'';" json:"-"`                    //
+	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime;type:datetime;" json:"createdAt"`                   //
+	UpdatedAt time.Time `gorm:"column:updated_at;autoUpdateTime;type:datetime;" json:"updatedAt"`                   //
+	DeletedAt gorm.DeletedAt
+	// *time.Time `gorm:"column:deleted_at;type:datetime;" json:"-"`                                          //
 }
 
 // func (itself *Users) BeforeSave(tx *gorm.DB) (err error) {}
@@ -40,6 +41,6 @@ func (Users) TableName() string {
 }
 
 func (itself *Users) SetPassword(password string) *Users {
-	itself.Password = luckrand.MakePassword(password)
+	itself.Password, _ = algorithm.MakePassword(password)
 	return itself
 }

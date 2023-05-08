@@ -13,14 +13,14 @@ export const useUserStore = defineStore('user', () => {
     function login(username, password) {
         loginApi(username, password).then(r => {
             token.value = r.data.result.token
-            router.push({name: 'bbs', replace: true})
+            router.push({name: 'index', replace: true})
         })
     }
 
     function reg(username, password, email) {
         regApi(email, username, password).then(r => {
             token.value = r.data.result.token
-            router.push({name: 'bbs', replace: true})
+            router.push({name: 'index', replace: true})
         })
     }
 

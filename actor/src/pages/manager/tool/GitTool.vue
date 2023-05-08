@@ -15,7 +15,6 @@ const message = useMessage();
 
 async function getGitInfo() {
     let data = await getGitStatus()
-    console.log(data.data)
     commentList.value = data.data.result
     message.success("刷新成功")
 }

@@ -10,9 +10,18 @@ import (
 
 func GitStatusList() component.Response {
 	workspace := preferences.Get("path.workspace")
-	sL, _ := service.CountGitReposWithUnpushedCommits(workspace)
-	sort.Slice(sL, func(i, j int) bool {
-		return cast.ToInt(sL[i].HasCommits)*10+cast.ToInt(sL[i].HasChanges) > cast.ToInt(sL[j].HasCommits)*10+cast.ToInt(sL[j].HasChanges)
+	repoList, _ := service.CountGitReposWithUnpushedCommits(workspace)
+	sort.Slice(repoList, func(i, j int) bool {
+		if repoList[i].HasCommits != repoList[j].HasCommits {
+			// 如果有未推送的提交，则优先级高于没有未推送的提交
+			return cast.ToInt(repoList[i].HasCommits) > cast.ToInt(repoList[j].HasCommits)
+		} else if repoList[i].HasChanges != repoList[j].HasChanges {
+			// 如果有变更但没有未推送的提交，则优先级高于没有变更
+			return cast.ToInt(repoList[i].HasChanges) > cast.ToInt(repoList[j].HasChanges)
+		} else {
+			// 如果都没有未推送的提交，也没有变更，则按路径名降序排序
+			return repoList[i].Path < repoList[j].Path
+		}
 	})
-	return component.SuccessResponse(sL)
+	return component.SuccessResponse(repoList)
 }

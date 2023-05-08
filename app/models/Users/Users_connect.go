@@ -18,7 +18,11 @@ func first(db *gorm.DB) (el Users) {
 	return
 }
 
-func List(db *gorm.DB) (el []*Users) {
+func list(db *gorm.DB) (el []*Users) {
 	db.Find(&el)
 	return
+}
+
+func builderWithOutTable() *gorm.DB {
+	return db.Std()
 }
