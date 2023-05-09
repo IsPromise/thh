@@ -31,6 +31,12 @@ var CmdServe = &cobra.Command{
 	Args:  cobra.NoArgs,
 }
 
+const (
+	ENV      = "env"
+	EnvProd  = "production"
+	EnvLocal = "local"
+)
+
 func runWeb(_ *cobra.Command, _ []string) {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
@@ -38,9 +44,13 @@ func runWeb(_ *cobra.Command, _ []string) {
 	info(fmt.Sprintf("Thousand-hand:useMem %d KB", m.Alloc/1024/8))
 
 	go RunJob()
-
 	// 初始化应用程序
-	if preferences.GetBool("app.debug", true) {
+	debug4pprof()
+	ginServe()
+}
+
+func debug4pprof() {
+	if preferences.GetBool("app.debug", false) {
 		go func() {
 			// go tool pprof http://localhost:6060/debug/pprof/profile
 			//http://127.0.0.1:7070/debug/pprof/
@@ -50,34 +60,21 @@ func runWeb(_ *cobra.Command, _ []string) {
 			}
 		}()
 	}
-
-	//fiberServe()
-	ginServe()
 }
 
-const (
-	ENV      = "env"
-	EnvProd  = "production"
-	EnvLocal = "local"
-)
-
 func ginServe() {
-
 	var (
 		port   = preferences.GetString("app.port", 8080)
 		isProd = preferences.Get("app.env") == EnvProd
 	)
 	var engine *gin.Engine
-	switch isProd {
-	case true:
+	if isProd {
 		gin.DisableConsoleColor()
 		gin.SetMode(gin.ReleaseMode)
 		engine = gin.New()
 		engine.Use(gin.Recovery())
-		break
-	default:
+	} else {
 		engine = gin.Default()
-		break
 	}
 
 	routes.RegisterByGin(engine)
@@ -104,7 +101,7 @@ func ginServe() {
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
-	_ = <-quit
+	<-quit
 
 	logging.Println("Shutdown Server ...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

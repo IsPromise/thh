@@ -24,6 +24,10 @@ func RunJob() {
 	c.Run()
 }
 
+func StopJob() {
+	c.Stop()
+}
+
 func upCmd(cmd func()) func() {
 	return func() {
 		luckrand.MyTraceInit()
@@ -32,7 +36,7 @@ func upCmd(cmd func()) func() {
 	}
 }
 
-// 之后如果需要平滑关闭可以参考如下代码
+////之后如果需要平滑关闭可以参考如下代码
 //var needStop = false
 //var needStopL = &sync.Mutex{}
 //
