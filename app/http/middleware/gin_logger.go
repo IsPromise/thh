@@ -2,10 +2,9 @@ package middleware
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"thh/bundles/logging"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 func GinLogger(c *gin.Context) {

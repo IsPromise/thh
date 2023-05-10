@@ -110,4 +110,5 @@ func ginServe() {
 		logging.Println("Server Shutdown:", err)
 	}
 	logging.Println("Server exiting")
+	logging.Shutdown()
 }

@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
+	"sync"
 
 	"github.com/leancodebox/goose/fileopt"
-	"github.com/leancodebox/goose/luckrand"
 	"github.com/leancodebox/goose/preferences"
 	"github.com/sirupsen/logrus"
 )
@@ -17,46 +18,83 @@ const (
 	LogTypeFile   = "file"
 )
 
-var log = logrus.StandardLogger()
+type Entry struct {
+	level   logrus.Level
+	message string
+}
 
-// 防止外部调用，本包的目的是为了做一个隔离。目的是为了以后logger替换无感知。不可以直接暴露std。否则后续替换将无法进行
+var (
+	log        = logrus.StandardLogger()
+	logChannel = make(chan *Entry, 1024*1024)
+	wg         sync.WaitGroup
+)
+
 func std() *logrus.Logger {
 	return log
 }
 
-func Info(args ...any) {
-	std().Info(args...)
+func Info(args ...interface{}) {
+	sendLog(logrus.InfoLevel, fmt.Sprint(args...))
 }
 
 func Printf(format string, args ...interface{}) {
-	std().Printf(format, args...)
+	sendLog(logrus.InfoLevel, fmt.Sprintf(format, args...))
 }
 
 func Println(args ...interface{}) {
-	std().Println(args...)
+	sendLog(logrus.InfoLevel, fmt.Sprintln(args...))
 }
 
 func Error(args ...interface{}) {
-	std().Error(args...)
+	sendLog(logrus.ErrorLevel, fmt.Sprint(args...))
 }
 
 func ErrIf(err error) bool {
 	if err != nil {
-		std().Error(err)
+		sendLog(logrus.ErrorLevel, err.Error())
 		return true
 	}
 	return false
 }
 
+// Send log entry to the channel
+func sendLog(level logrus.Level, msg string) {
+
+	if caller, success := getCaller(3); success {
+		msg = caller + ":" + msg
+	}
+
+	entry := &Entry{
+		level:   level,
+		message: msg,
+	}
+	logChannel <- entry
+}
+
+func getCaller(depth int) (string, bool) {
+	pc, file, line, ok := runtime.Caller(depth) // 1 表示跳过当前函数的调用帧
+	if ok {
+		f := runtime.FuncForPC(pc)
+		if f != nil {
+			funcName := f.Name()
+			return fmt.Sprintf("[%s:%s:%d] message", funcName, filepath.Base(file), line), true
+		}
+	}
+	return "", false
+}
+
+func processLogEntries() {
+	defer wg.Done()
+	for entry := range logChannel {
+		std().Log(entry.level, entry.message)
+	}
+}
+
 var (
 	logType = preferences.Get("log.type")
-	logPath = preferences.Get("log.path", "./storage/log/app.log")
+	logPath = preferences.Get("log.path", "./storage/logs/thh.log")
 	debug   = preferences.GetBool("app.debug", true)
 )
-
-//func init() {
-//	bootstrap.AddDInit(Init)
-//}
 
 func init() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
@@ -73,7 +111,6 @@ func init() {
 		log.Info("Unknown Log Output Type")
 	case LogTypeStdout:
 	case LogTypeFile:
-		// You could set this to any `io.Writer` such as a file
 		if err := fileopt.FilePutContents(logPath, []byte(""), true); err != nil {
 			log.Info(err)
 			return
@@ -86,6 +123,9 @@ func init() {
 		}
 		log.Out = file
 	}
+
+	wg.Add(1)
+	go processLogEntries()
 }
 
 type LogFormatter struct{}
@@ -100,15 +140,14 @@ func (m *LogFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 	timestamp := entry.Time.Format("2006-01-02 15:04:05.000")
 	var msg string
-	trace := luckrand.MyTrace()
-	if entry.HasCaller() {
-		fName := filepath.Base(entry.Caller.File)
-		msg = fmt.Sprintf("[%-7s] %v [%s] [%s:%d %s] %s\n",
-			timestamp, entry.Level.String(), trace.GetNextTrace(), fName, entry.Caller.Line, entry.Caller.Function, entry.Message)
-	} else {
-		msg = fmt.Sprintf("[%v] [%s] [%s] %s\n", trace.GetNextTrace(), timestamp, entry.Level, entry.Message)
-	}
-
+	msg = fmt.Sprintf("[%-7s] %v %s\n",
+		timestamp, entry.Level.String(), entry.Message)
 	b.WriteString(msg)
 	return b.Bytes(), nil
+}
+
+func Shutdown() {
+	close(logChannel)
+	wg.Wait()
+	fmt.Println("logging 👋")
 }

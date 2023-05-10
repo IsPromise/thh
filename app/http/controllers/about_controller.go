@@ -1,17 +1,14 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/leancodebox/goose/serverinfo"
+	"github.com/spf13/cast"
 	"net/http"
 	"runtime"
 	"strings"
 	"thh/app/http/controllers/component"
 	"thh/bundles/logging"
-
-	"github.com/leancodebox/goose/serverinfo"
-
-	"github.com/gin-gonic/gin"
-
-	"github.com/spf13/cast"
 )
 
 func Api(c *gin.Context) {
