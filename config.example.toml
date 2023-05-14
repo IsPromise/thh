@@ -38,6 +38,8 @@ allusepush = false
 onlymaster = true
 useProxy = true
 proxy = "http://localhost:11000"
+header = """
+"""
 
 [dbTool]
 targetUrl = "root:root_password@tcp(127.0.0.1:3306)/thh_database?charset=utf8mb4&parseTime=True&loc=Local"

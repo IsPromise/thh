@@ -13,6 +13,7 @@ import (
 	"thh/app/service/ropt"
 	"thh/app/service/twservice"
 	"thh/bundles/logging"
+	"thh/bundles/myfmt"
 	"time"
 
 	"github.com/leancodebox/goose/array"
@@ -40,7 +41,7 @@ func init() {
 
 func ifErr(err error) bool {
 	if err != nil {
-		fmt.Println(err)
+		myfmt.PrintlnWithCaller(err)
 		return true
 	}
 	return false
@@ -72,7 +73,7 @@ func SpiderTwitterMain() {
 	}
 	resp, _, err := ropt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
-		fmt.Println("获取queryId失败", err)
+		myfmt.PrintlnWithCaller("获取queryId失败", err)
 		return
 	}
 	regUnit := func(regStr string, matchStr string) (result [][]string) {
@@ -93,14 +94,14 @@ func SpiderTwitterMain() {
 			queryIdMap[item[2]] = item[1]
 		}
 	}
-	//fmt.Println(jsonopt.Encode(queryIdMap))
+	//myfmt.PrintlnWithCaller(jsonopt.Encode(queryIdMap))
 
 	ch := make(chan int, maxRoutineNum)
 
 	stdToolClient = newToolClient()
 
 	if len(getScreenNameSlice()) == 0 {
-		fmt.Println("当前无配置")
+		myfmt.PrintlnWithCaller("当前无配置")
 		return
 	}
 
@@ -200,7 +201,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						//原文时间不适合用来判断
 						//createTime := str2time(entry.Content.ItemContent.TweetResults.Result.Legacy.CreatedAt)
 						//if createTime.Unix() < time.Now().Add(-86400*time.Second).Unix() {
-						//	fmt.Println("创建时间", createTime.Format("2006-01-02 15:04:05"))
+						//	myfmt.PrintlnWithCaller("创建时间", createTime.Format("2006-01-02 15:04:05"))
 						//	break
 						//}
 
@@ -212,7 +213,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						// 允许后续扩散查询 非原创 且深度
 						if usePush && isForwarded && sConfig.spiderDeep < spiderDeep {
 							memqueue.QueueRPushObj(queueKey, QueueUnit{orgUserResult.Legacy.ScreenName, sConfig.spiderDeep + 1})
-							fmt.Println(orgUserResult.Legacy.ScreenName, "进入后续查询队列")
+							myfmt.PrintlnWithCaller(orgUserResult.Legacy.ScreenName, "进入后续查询队列")
 						}
 
 						userTweetEntity := FTwitterTweet.GetUserTweet(screenName, conversationIdStr)
@@ -241,12 +242,13 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						medias := entry.Content.ItemContent.TweetResults.Result.Legacy.ExtendedEntities.Media
 						for _, media := range medias {
 							switch media.Type {
+							case "animated_gif":
+								// todo
 							case "photo":
 								//u, _ := url.Parse(media.MediaUrlHttps)
 								basename := path.Base(media.MediaUrlHttps)
 								stdToolClient.downMedia(media.MediaUrlHttps, twitterMediaDir+conversationIdStr+basename)
 								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "photo", TweetId: conversationIdStr, Path: twitterMediaDir + conversationIdStr + basename, Url: media.MediaUrlHttps})
-								break
 							case "video":
 								// 下载封面
 								basename := path.Base(media.MediaUrlHttps)
@@ -260,7 +262,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 									if variant.Bitrate > tmpBitrate {
 										u, pErr := url.Parse(variant.Url)
 										if pErr != nil {
-											fmt.Println("url解析失败")
+											myfmt.PrintlnWithCaller("url解析失败")
 											continue
 										}
 										basename = path.Base(u.Path)
@@ -268,15 +270,13 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 									}
 								}
 								if len(tmpUrl) == 0 {
-									fmt.Println("视频下载失败")
+									myfmt.PrintlnWithCaller("视频下载失败")
 									break
 								}
 								stdToolClient.downMedia(tmpUrl, twitterMediaDir+conversationIdStr+basename)
 								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "video_photo", TweetId: conversationIdStr, Path: twitterMediaDir + conversationIdStr + basename, Url: tmpUrl})
-
-								break
 							default:
-								fmt.Println(media.Type)
+								myfmt.PrintlnWithCaller(media.Type)
 							}
 						}
 					}
@@ -289,7 +289,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 			case "TimelinePinEntry":
 				for _, entry := range value.Entries {
 					userId := entry.Content.ItemContent.TweetResults.Result.RestId
-					fmt.Println(userId)
+					myfmt.PrintlnWithCaller(userId)
 				}
 				break
 			case "TimelineClearCache":
@@ -297,15 +297,15 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 			case "animated_gif":
 				break
 			default:
-				fmt.Println(value.Type)
+				myfmt.PrintlnWithCaller(value.Type)
 			}
 		}
 
 		if activeCount == 0 {
-			fmt.Println(screenName + "完成··································")
+			myfmt.PrintlnWithCaller(screenName + "完成··································")
 			break
 		}
-		//fmt.Println(screenName, "下一轮", i*40, "-", (i+1)*40)
+		//myfmt.PrintlnWithCaller(screenName, "下一轮", i*40, "-", (i+1)*40)
 
 		time.Sleep(time.Duration(rand.Intn(3)+1) * time.Second)
 

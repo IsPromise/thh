@@ -38,8 +38,7 @@ func newTClient() tClient {
 		client.SetProxy(proxy)
 	}
 	client.SetBaseURL("https://twitter.com/")
-	client.SetHeaders(headersMap)
-	//client.SetAuthToken("")
+	client.SetHeaders(getHeader())
 	return tClient{client}
 }
 

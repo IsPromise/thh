@@ -1,11 +1,11 @@
 package spidercmd
 
 import (
-	"fmt"
 	"math/rand"
 	"sync"
 	"thh/app/service/twservice"
 	"thh/bundles/logging"
+	"thh/bundles/myfmt"
 	"time"
 
 	"github.com/leancodebox/goose/jsonopt"
@@ -32,7 +32,7 @@ func spiderTwitterFollow(_ *cobra.Command, _ []string) {
 	stdToolClient = newToolClient()
 
 	if len(getScreenNameSlice()) == 0 {
-		fmt.Println("当前无配置")
+		myfmt.PrintlnWithCaller("当前无配置")
 		return
 	}
 
@@ -51,7 +51,7 @@ func spiderTwitterFollow(_ *cobra.Command, _ []string) {
 	}
 	wg4master.Wait()
 
-	fmt.Println("抓取关注人列表完毕")
+	myfmt.PrintlnWithCaller("抓取关注人列表完毕")
 }
 
 func superFollow(sConfig spiderTwitterConfig) {
@@ -71,7 +71,7 @@ func superFollow(sConfig spiderTwitterConfig) {
 	name := userInfo.Data.User.Result.Legacy.Name
 
 	if restId == "" {
-		fmt.Println("信息获取失败")
+		myfmt.PrintlnWithCaller("信息获取失败")
 	} else {
 		twservice.SaveUserEntity(restId, screenName, desc, name)
 	}
@@ -132,7 +132,7 @@ func superFollow(sConfig spiderTwitterConfig) {
 				}
 				break
 			default:
-				fmt.Println(value.Type)
+				myfmt.PrintlnWithCaller(value.Type)
 			}
 		}
 

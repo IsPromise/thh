@@ -24,3 +24,7 @@ func getScreenNameSlice() []string {
 func needDownMedia() bool {
 	return preferences.GetBool("spider.twitter.downmedia", false)
 }
+
+func getHeader() map[string]string {
+	return parseHeaders(preferences.Get("spider.twitter.header"))
+}
