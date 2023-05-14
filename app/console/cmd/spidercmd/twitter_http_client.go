@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/leancodebox/goose/jsonopt"
-	"github.com/leancodebox/goose/preferences"
 )
 
 type tClient struct {
@@ -172,13 +171,11 @@ func newToolClient() toolClient {
 	if useProxy {
 		client.SetProxy(proxy)
 	}
-	//client.SetOutputDirectory("")
 	return toolClient{client: client}
 }
 
 func (itself toolClient) downMedia(url string, filename string) {
-	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
-	if !downMedia {
+	if !needDownMedia() {
 		return
 	}
 
