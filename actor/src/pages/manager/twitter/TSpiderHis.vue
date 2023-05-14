@@ -51,6 +51,7 @@ const showModal = ref(false)
       inline
       :label-width="80"
       :model="pagination"
+      style="padding: 10px"
   >
 
     <n-form-item>

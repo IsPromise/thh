@@ -47,7 +47,7 @@ const columnsList = ({action}) => {
             key: 'info',
             width: "100px",
             render(row) {
-                return h(
+                return [h(
                     NButton,
                     {
                         size: 'small',
@@ -56,7 +56,18 @@ const columnsList = ({action}) => {
                         }
                     },
                     {default: () => '详情展示'}
-                )
+                ),
+                //     h(
+                //         NButton,
+                //         {
+                //             size: 'small',
+                //             onClick: () => {
+                //                 action(row)
+                //             }
+                //         },
+                //         {default: () => '标记为过滤'}
+                //     )
+                ]
             }
         }
     ]
