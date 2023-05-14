@@ -77,7 +77,7 @@ func SpiderTwitterMain() {
 	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
 	dataList := preferences.GetStringSlice("spider.twitter.screenNameList")
 	spiderDeep = preferences.GetInt("spider.twitter.deep", 0)
-	proxyPath := preferences.GetString("t.proxy")
+	proxyPath := preferences.GetString("spider.twitter.proxy")
 
 	var screenNameMap map[string]bool
 	screenNameMap = make(map[string]bool, 2048)
