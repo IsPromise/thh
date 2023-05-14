@@ -36,7 +36,7 @@ func newTClient() tClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
 	client.SetProxy(preferences.GetString("spider.twitter.proxy"))
-	client.SetBaseURL("https://api.twitter.com/")
+	client.SetBaseURL("https://twitter.com/")
 	client.SetHeaders(headersMap)
 	//client.SetAuthToken("")
 	return tClient{client}
@@ -58,20 +58,17 @@ func (itself tClient) getFollowList(userId string, count int, cursor string) (*r
 
 	return itself.httpClient.R().SetQueryParams(map[string]string{
 		"variables": jsonopt.Encode(variables{
-			UserId:                      userId,
-			Count:                       count,
-			Cursor:                      cursor,
-			IncludePromotedContent:      false,
-			WithSuperFollowsUserFields:  true,
-			WithDownvotePerspective:     true,
-			WithReactionsMetadata:       false,
-			WithReactionsPerspective:    false,
-			WithSuperFollowsTweetFields: true,
+			UserId:                 userId,
+			Count:                  count,
+			Cursor:                 cursor,
+			IncludePromotedContent: false,
 		}),
 		"features": jsonopt.Encode(map[string]any{
-			"responsive_web_twitter_blue_verified_badge_is_enabled":             true,
-			"responsive_web_graphql_exclude_directive_enabled":                  false,
+			"rweb_lists_timeline_redesign_enabled":                              false,
+			"blue_business_profile_image_shape_enabled":                         true,
+			"responsive_web_graphql_exclude_directive_enabled":                  true,
 			"verified_phone_label_enabled":                                      false,
+			"creator_subscriptions_tweet_preview_api_enabled":                   false,
 			"responsive_web_graphql_timeline_navigation_enabled":                true,
 			"responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
 			"tweetypie_unmention_optimization_enabled":                          true,
@@ -81,51 +78,46 @@ func (itself tClient) getFollowList(userId string, count int, cursor string) (*r
 			"view_counts_everywhere_api_enabled":                                      true,
 			"longform_notetweets_consumption_enabled":                                 true,
 			"tweet_awards_web_tipping_enabled":                                        false,
-			"freedom_of_speech_not_reach_fetch_enabled":                               false,
+			"freedom_of_speech_not_reach_fetch_enabled":                               true,
 			"standardized_nudges_misinfo":                                             true,
 			"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": false,
 			"interactive_text_enabled":                                                true,
 			"responsive_web_text_conversations_enabled":                               false,
+			"longform_notetweets_rich_text_read_enabled":                              true,
+			"longform_notetweets_inline_media_enabled":                                false,
 			"responsive_web_enhance_cards_enabled":                                    false,
 		}),
-	}).Get("/graphql/fzE3zNMTkr-CJufrDwjC4A/Following")
+	}).Get("i/api/graphql/q4cKckK0lNxWkHfAXXXzJQ/Following")
 }
 
 // getTList 远程方法
 func (itself tClient) getTList(userId string, count int, cursor string) (*resty.Response, error) {
 	type variables struct {
-		UserID                                 string `json:"userId"`
+		UserId                                 string `json:"userId"`
 		Count                                  int    `json:"count"`
-		Cursor                                 string `json:"cursor,omitempty"`
+		Cursor                                 string `json:"cursor"`
 		IncludePromotedContent                 bool   `json:"includePromotedContent"`
 		WithQuickPromoteEligibilityTweetFields bool   `json:"withQuickPromoteEligibilityTweetFields"`
-		WithSuperFollowsUserFields             bool   `json:"withSuperFollowsUserFields"`
-		WithDownvotePerspective                bool   `json:"withDownvotePerspective"`
-		WithReactionsMetadata                  bool   `json:"withReactionsMetadata"`
-		WithReactionsPerspective               bool   `json:"withReactionsPerspective"`
-		WithSuperFollowsTweetFields            bool   `json:"withSuperFollowsTweetFields"`
 		WithVoice                              bool   `json:"withVoice"`
 		WithV2Timeline                         bool   `json:"withV2Timeline"`
 	}
+
 	return itself.httpClient.R().SetQueryParams(map[string]string{
 		"variables": jsonopt.Encode(variables{
-			UserID:                                 userId,
+			UserId:                                 userId,
 			Count:                                  count,
 			Cursor:                                 cursor,
 			IncludePromotedContent:                 true,
 			WithQuickPromoteEligibilityTweetFields: true,
-			WithSuperFollowsUserFields:             true,
-			WithDownvotePerspective:                true,
-			WithReactionsMetadata:                  false,
-			WithReactionsPerspective:               false,
-			WithSuperFollowsTweetFields:            true,
 			WithVoice:                              true,
 			WithV2Timeline:                         true,
 		}),
 		"features": jsonopt.Encode(map[string]any{
-			"responsive_web_twitter_blue_verified_badge_is_enabled":             true,
-			"responsive_web_graphql_exclude_directive_enabled":                  false,
+			"rweb_lists_timeline_redesign_enabled":                              false,
+			"blue_business_profile_image_shape_enabled":                         true,
+			"responsive_web_graphql_exclude_directive_enabled":                  true,
 			"verified_phone_label_enabled":                                      false,
+			"creator_subscriptions_tweet_preview_api_enabled":                   false,
 			"responsive_web_graphql_timeline_navigation_enabled":                true,
 			"responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
 			"tweetypie_unmention_optimization_enabled":                          true,
@@ -135,43 +127,35 @@ func (itself tClient) getTList(userId string, count int, cursor string) (*resty.
 			"view_counts_everywhere_api_enabled":                                      true,
 			"longform_notetweets_consumption_enabled":                                 true,
 			"tweet_awards_web_tipping_enabled":                                        false,
-			"freedom_of_speech_not_reach_fetch_enabled":                               false,
+			"freedom_of_speech_not_reach_fetch_enabled":                               true,
 			"standardized_nudges_misinfo":                                             true,
 			"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": false,
 			"interactive_text_enabled":                                                true,
 			"responsive_web_text_conversations_enabled":                               false,
+			"longform_notetweets_rich_text_read_enabled":                              true,
+			"longform_notetweets_inline_media_enabled":                                false,
 			"responsive_web_enhance_cards_enabled":                                    false,
 		}),
-	}).Get("/graphql/OXXUyHfKYZ-xLx4NcL9-_Q/UserTweets")
+	}).Get("i/api/graphql/WzJjibAcDa-oCjCcLOotcg/UserTweets")
 }
 
 // getUserInfo 远程方法
 func (itself tClient) getUserInfo(ScreenName string) (*resty.Response, error) {
-	type variables struct {
-		ScreenName                 string `json:"screen_name"`
-		WithSafetyModeUserFields   bool   `json:"withSafetyModeUserFields"`
-		WithSuperFollowsUserFields bool   `json:"withSuperFollowsUserFields"`
-	}
-	type features struct {
-		ResponsiveWebTwitterBlueVerifiedBadgeIsEnabled            bool `json:"responsive_web_twitter_blue_verified_badge_is_enabled"`
-		ResponsiveWebGraphqlExcludeDirectiveEnabled               bool `json:"responsive_web_graphql_exclude_directive_enabled"`
-		VerifiedPhoneLabelEnabled                                 bool `json:"verified_phone_label_enabled"`
-		ResponsiveWebGraphqlSkipUserProfileImageExtensionsEnabled bool `json:"responsive_web_graphql_skip_user_profile_image_extensions_enabled"`
-		ResponsiveWebGraphqlTimelineNavigationEnabled             bool `json:"responsive_web_graphql_timeline_navigation_enabled"`
-	}
-
 	return itself.httpClient.R().SetQueryParams(map[string]string{
-		"variables": jsonopt.Encode(variables{
-			ScreenName:                 ScreenName,
-			WithSafetyModeUserFields:   true,
-			WithSuperFollowsUserFields: true,
+		"variables": jsonopt.Encode(map[string]any{
+			"screen_name":              ScreenName,
+			"withSafetyModeUserFields": true,
 		}),
-		"features": jsonopt.Encode(features{
-			ResponsiveWebTwitterBlueVerifiedBadgeIsEnabled: true,
-			VerifiedPhoneLabelEnabled:                      false,
-			ResponsiveWebGraphqlTimelineNavigationEnabled:  true,
+		"features": jsonopt.Encode(map[string]any{
+			"blue_business_profile_image_shape_enabled":                         true,
+			"responsive_web_graphql_exclude_directive_enabled":                  true,
+			"verified_phone_label_enabled":                                      false,
+			"highlights_tweets_tab_ui_enabled":                                  true,
+			"creator_subscriptions_tweet_preview_api_enabled":                   false,
+			"responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
+			"responsive_web_graphql_timeline_navigation_enabled":                true,
 		}),
-	}).Get("/graphql/rePnxwe9LZ51nQ7Sn_xN_A/UserByScreenName")
+	}).Get("i/api/graphql/pVrmNaXcxPjisIvKtLDMEA/UserByScreenName")
 }
 
 type toolClient struct {
