@@ -3,7 +3,6 @@ package spidercmd
 import (
 	"fmt"
 	"math/rand"
-	"strings"
 	"sync"
 	"thh/app/service/twservice"
 	"thh/bundles/logging"
@@ -33,13 +32,11 @@ func spiderTwitterFollow(_ *cobra.Command, _ []string) {
 	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
 	queueKey = "twitter:screenName:list"
 	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
-	screenNamesFromEnv := preferences.GetString("spider.twitter.screename", "")
+	dataList := preferences.GetStringSlice("spider.twitter.screenNameList")
 	ch := make(chan int, maxRoutineNum)
 	var wg4master sync.WaitGroup
 
 	stdToolClient = newToolClient()
-
-	dataList := strings.Split(screenNamesFromEnv, ",")
 
 	if len(dataList) == 0 {
 		fmt.Println("当前无配置")

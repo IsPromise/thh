@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"path"
 	"regexp"
-	"strings"
 	"sync"
 	"thh/app/models/FTwitter/FTwitterMedia"
 	"thh/app/models/FTwitter/FTwitterTweet"
@@ -76,7 +75,7 @@ func SpiderTwitterMain() {
 	queueKey = "twitter:screenName:list"
 	allUsePush := preferences.GetBool("spider.twitter.allusepush", false)
 	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
-	screenNamesFromEnv := preferences.GetString("spider.twitter.screename", "")
+	dataList := preferences.GetStringSlice("spider.twitter.screenNameList")
 	spiderDeep = preferences.GetInt("spider.twitter.deep", 0)
 	proxyPath := preferences.GetString("t.proxy")
 
@@ -113,7 +112,6 @@ func SpiderTwitterMain() {
 
 	stdToolClient = newToolClient()
 
-	dataList := strings.Split(screenNamesFromEnv, ",")
 
 	if len(dataList) == 0 {
 		fmt.Println("当前无配置")
@@ -153,9 +151,8 @@ func SpiderTwitterMain() {
 }
 
 func spiderTwitterList(sConfig spiderTwitterConfig) {
-	tScreenNameList := preferences.GetString("spider.twitter.screename", "")
+	tScreenNameSlice := preferences.GetStringSlice("spider.twitter.screenNameList")
 	tMaxPage := preferences.GetInt("spider.twitter.maxPage", "")
-	tScreenNameSlice := strings.Split(tScreenNameList, ",")
 	screenName := sConfig.screenName
 	usePush := sConfig.usePush
 	client := newTClient()

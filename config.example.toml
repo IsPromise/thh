@@ -31,8 +31,7 @@ maxLifeSeconds = 300
 
 [spider.twitter]
 output = "./storage/tmp/"
-screename = "laravelphp"
-screenameList = ["laravelphp"]
+screenNameList = ["laravelphp"]
 maxPage = 4
 downmedia = false
 allusepush = false
