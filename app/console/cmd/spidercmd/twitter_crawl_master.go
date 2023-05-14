@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"net/url"
 	"path"
+	"path/filepath"
 	"regexp"
 	"sync"
 	"thh/app/models/FTwitter/FTwitterMedia"
@@ -17,8 +18,6 @@ import (
 	"github.com/leancodebox/goose/array"
 	"github.com/leancodebox/goose/jsonopt"
 	"github.com/leancodebox/goose/memqueue"
-
-	"github.com/leancodebox/goose/preferences"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -59,30 +58,18 @@ type QueueUnit struct {
 	Deep       int
 }
 
-var rootPrefix string
-var outputPrefix string
-var queueKey string
-var spiderDeep int
-
 func spiderTwitterMainAction(_ *cobra.Command, _ []string) {
 	SpiderTwitterMain()
 }
 
 func SpiderTwitterMain() {
 
-	rootPrefix = preferences.GetString("spider.twitter.output", "./storage/tmp/")
-	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
-	queueKey = "twitter:screenName:list"
-	allUsePush := preferences.GetBool("spider.twitter.allusepush", false)
-	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
-	dataList := preferences.GetStringSlice("spider.twitter.screenNameList")
-	spiderDeep = preferences.GetInt("spider.twitter.deep", 0)
-	proxyPath := preferences.GetString("spider.twitter.proxy")
-
 	var screenNameMap map[string]bool
 	screenNameMap = make(map[string]bool, 2048)
 	var maxRoutineNum = 3
-	ropt.SetProxy(proxyPath)
+	if useProxy {
+		ropt.SetProxy(proxy)
+	}
 	resp, _, err := ropt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
 		fmt.Println("获取queryId失败", err)
@@ -112,12 +99,12 @@ func SpiderTwitterMain() {
 
 	stdToolClient = newToolClient()
 
-	if len(dataList) == 0 {
+	if len(getScreenNameSlice()) == 0 {
 		fmt.Println("当前无配置")
 		return
 	}
 
-	for _, jobScreenName := range dataList {
+	for _, jobScreenName := range getScreenNameSlice() {
 		memqueue.QueueRPushObj(queueKey, QueueUnit{jobScreenName, 0})
 	}
 
@@ -141,7 +128,7 @@ func SpiderTwitterMain() {
 			spiderTwitterList(spiderTwitterConfig{
 				screenName: screenName,
 				usePush:    usePush,
-				downMedia:  downMedia,
+				downMedia:  needDownMedia(),
 			})
 			<-ch
 		}(screenName, allUsePush, ch)
@@ -150,14 +137,11 @@ func SpiderTwitterMain() {
 }
 
 func spiderTwitterList(sConfig spiderTwitterConfig) {
-	tScreenNameSlice := preferences.GetStringSlice("spider.twitter.screenNameList")
-	tMaxPage := preferences.GetInt("spider.twitter.maxPage", "")
+
 	screenName := sConfig.screenName
 	usePush := sConfig.usePush
 	client := newTClient()
-
-	tMediaDir := outputPrefix + "/response_" + screenName + "media_source/"
-
+	twitterMediaDir := filepath.Join(outputPrefix, "/response_"+screenName+"media_source/")
 	r, err := client.getUserInfo(screenName)
 	twservice.SaveTSpiderHis(userinfoType, screenName+"_userinfo_"+cast.ToString(time.Now().UnixMilli()), r, err)
 	if ifErr(err) {
@@ -186,7 +170,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 		twservice.SaveTSpiderHis(tweetListType, screenName+"_tweetList_"+cast.ToString(i), r, err)
 		tweetResponse := jsonopt.Decode[UserTweetsResponse](r.String())
 		i++
-		if len(tweetResponse.Data.User.Result.TimelineV2.Timeline.Instructions) == 0 || i >= tMaxPage {
+		if len(tweetResponse.Data.User.Result.TimelineV2.Timeline.Instructions) == 0 || i >= spiderTwitterMaxPage {
 			logging.Info(screenName + "完成··································")
 			break
 		}
@@ -232,7 +216,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						}
 
 						userTweetEntity := FTwitterTweet.GetUserTweet(screenName, conversationIdStr)
-						if userTweetEntity.Id != 0 && !array.InArray(screenName, tScreenNameSlice) {
+						if userTweetEntity.Id != 0 && !array.InArray(screenName, getScreenNameSlice()) {
 							continue
 						}
 						userTweetEntity.ScreenName = screenName
@@ -247,7 +231,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						FTwitterTweet.Save(&userTweetEntity)
 
 						// 当为转发，且属于目标转发，进行木匾转发统计，和原用户信息录入
-						if isForwarded && array.InArray(screenName, tScreenNameSlice) {
+						if isForwarded && array.InArray(screenName, getScreenNameSlice()) {
 							userInLegacy := orgUserResult.Legacy
 							twservice.SaveUserEntity(orgUserResult.RestId, userInLegacy.ScreenName, userInLegacy.Description, userInLegacy.Name)
 						}
@@ -260,14 +244,14 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 							case "photo":
 								//u, _ := url.Parse(media.MediaUrlHttps)
 								basename := path.Base(media.MediaUrlHttps)
-								stdToolClient.downMedia(media.MediaUrlHttps, tMediaDir+conversationIdStr+basename)
-								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "photo", TweetId: conversationIdStr, Path: tMediaDir + conversationIdStr + basename, Url: media.MediaUrlHttps})
+								stdToolClient.downMedia(media.MediaUrlHttps, twitterMediaDir+conversationIdStr+basename)
+								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "photo", TweetId: conversationIdStr, Path: twitterMediaDir + conversationIdStr + basename, Url: media.MediaUrlHttps})
 								break
 							case "video":
 								// 下载封面
 								basename := path.Base(media.MediaUrlHttps)
-								stdToolClient.downMedia(media.MediaUrlHttps, tMediaDir+conversationIdStr+basename)
-								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "video_photo", TweetId: conversationIdStr, Path: tMediaDir + conversationIdStr + basename, Url: media.MediaUrlHttps})
+								stdToolClient.downMedia(media.MediaUrlHttps, twitterMediaDir+conversationIdStr+basename)
+								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "video_photo", TweetId: conversationIdStr, Path: twitterMediaDir + conversationIdStr + basename, Url: media.MediaUrlHttps})
 								// 下载视频
 								variants := media.VideoInfo.Variants
 								tmpBitrate := 0
@@ -287,8 +271,8 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 									fmt.Println("视频下载失败")
 									break
 								}
-								stdToolClient.downMedia(tmpUrl, tMediaDir+conversationIdStr+basename)
-								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "video_photo", TweetId: conversationIdStr, Path: tMediaDir + conversationIdStr + basename, Url: tmpUrl})
+								stdToolClient.downMedia(tmpUrl, twitterMediaDir+conversationIdStr+basename)
+								FTwitterMedia.Save(&FTwitterMedia.FTwitterMedia{Type: "video_photo", TweetId: conversationIdStr, Path: twitterMediaDir + conversationIdStr + basename, Url: tmpUrl})
 
 								break
 							default:

@@ -10,8 +10,6 @@ import (
 
 	"github.com/leancodebox/goose/jsonopt"
 
-	"github.com/leancodebox/goose/preferences"
-
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
@@ -28,22 +26,17 @@ func init() {
 // spiderTwitterFollow 抓取关注的列表
 func spiderTwitterFollow(_ *cobra.Command, _ []string) {
 	var maxRoutineNum = 3
-	rootPrefix = preferences.GetString("spider.twitter.output", "./storage/tmp/")
-	outputPrefix = rootPrefix + time.Now().Format("20060102_150405")
-	queueKey = "twitter:screenName:list"
-	downMedia := preferences.GetBool("spider.twitter.downmedia", false)
-	dataList := preferences.GetStringSlice("spider.twitter.screenNameList")
 	ch := make(chan int, maxRoutineNum)
 	var wg4master sync.WaitGroup
 
 	stdToolClient = newToolClient()
 
-	if len(dataList) == 0 {
+	if len(getScreenNameSlice()) == 0 {
 		fmt.Println("当前无配置")
 		return
 	}
 
-	for _, jobScreenName := range dataList {
+	for _, jobScreenName := range getScreenNameSlice() {
 		wg4master.Add(1)
 		ch <- 1
 		go func(screenName string, ch chan int) {
@@ -51,7 +44,7 @@ func spiderTwitterFollow(_ *cobra.Command, _ []string) {
 			superFollow(spiderTwitterConfig{
 				screenName: screenName,
 				usePush:    true,
-				downMedia:  downMedia,
+				downMedia:  needDownMedia(),
 			})
 			<-ch
 		}(jobScreenName, ch)

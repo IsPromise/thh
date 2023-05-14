@@ -35,7 +35,9 @@ func parseHeaders(headers string) map[string]string {
 func newTClient() tClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
-	client.SetProxy(preferences.GetString("spider.twitter.proxy"))
+	if useProxy {
+		client.SetProxy(proxy)
+	}
 	client.SetBaseURL("https://twitter.com/")
 	client.SetHeaders(headersMap)
 	//client.SetAuthToken("")
@@ -167,8 +169,9 @@ var stdToolClient toolClient
 func newToolClient() toolClient {
 	client := resty.New()
 	// Setting a Proxy URL and Port
-	proxyPath := preferences.GetString("spider.twitter.proxy")
-	client.SetProxy(proxyPath)
+	if useProxy {
+		client.SetProxy(proxy)
+	}
 	//client.SetOutputDirectory("")
 	return toolClient{client: client}
 }

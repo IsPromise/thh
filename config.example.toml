@@ -36,6 +36,7 @@ maxPage = 4
 downmedia = false
 allusepush = false
 onlymaster = true
+useProxy = true
 proxy = "http://localhost:11000"
 
 [dbTool]
