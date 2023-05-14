@@ -85,7 +85,7 @@ func SpiderTwitterMain() {
 	ropt.SetProxy(proxyPath)
 	resp, _, err := ropt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
-		fmt.Println("获取queryId失败")
+		fmt.Println("获取queryId失败", err)
 		return
 	}
 	regUnit := func(regStr string, matchStr string) (result [][]string) {
@@ -111,7 +111,6 @@ func SpiderTwitterMain() {
 	ch := make(chan int, maxRoutineNum)
 
 	stdToolClient = newToolClient()
-
 
 	if len(dataList) == 0 {
 		fmt.Println("当前无配置")
