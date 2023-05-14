@@ -36,7 +36,7 @@ export default [
     {
         belongMenu: true,
         path: '/manager', component: moon, children: [
-            {showName: '', path: '', component: mainTool, belongMenu: false},
+            {showName: '', path: '', component: allTool, belongMenu: false},
             {showName: 'mainTool', path: 'mainTool', component: mainTool, belongMenu: true},
             {showName: 'all tool', path: 'allTool', component: allTool, belongMenu: true},
             {showName: 'Im', path: 'im', component: imDemo, belongMenu: true},
