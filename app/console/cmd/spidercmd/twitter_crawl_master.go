@@ -65,9 +65,54 @@ func spiderTwitterMainAction(_ *cobra.Command, _ []string) {
 
 func SpiderTwitterMain() {
 
-	var screenNameMap map[string]bool
-	screenNameMap = make(map[string]bool, 2048)
 	var maxRoutineNum = 3
+	ch := make(chan struct{}, maxRoutineNum)
+	var wg sync.WaitGroup
+	screenNameMap := make(map[string]bool, 2048)
+	stdToolClient = newToolClient()
+
+	getConfigMap()
+
+	if len(getScreenNameSlice()) == 0 {
+		myfmt.PrintlnWithCaller("当前无配置")
+		return
+	}
+
+	for _, jobScreenName := range getScreenNameSlice() {
+		memqueue.QueueRPushObj(queueKey, QueueUnit{jobScreenName, 0})
+	}
+
+	time.Sleep(10 * time.Second)
+
+	for {
+		qu, err := memqueue.QueueLPopObj[QueueUnit](queueKey)
+		screenName := qu.ScreenName
+		if err != nil {
+			break
+		}
+		if screenNameMap[screenName] {
+			logging.Info(screenName + "当前已经查询过，跳过")
+			continue
+		}
+		screenNameMap[screenName] = true
+		ch <- struct{}{}
+		wg.Add(1)
+		go func(screenName string, usePush bool, ch chan struct{}) {
+			defer func() {
+				wg.Done()
+				<-ch
+			}()
+			spiderTwitterList(spiderTwitterConfig{
+				screenName: screenName,
+				usePush:    usePush,
+				downMedia:  needDownMedia(),
+			})
+		}(screenName, allUsePush, ch)
+	}
+	wg.Wait()
+}
+
+func getConfigMap() (queryIdMap map[string]string) {
 	if useProxy {
 		ropt.SetProxy(proxy)
 	}
@@ -88,53 +133,13 @@ func SpiderTwitterMain() {
 		return
 	}
 	result := regUnit(`queryId:\"([a-zA-Z0-9\-]+)\",operationName:\"([a-zA-Z0-9]+)\"`, resp)
-	queryIdMap := map[string]string{}
+
 	for _, item := range result {
 		if len(item) == 3 {
 			queryIdMap[item[2]] = item[1]
 		}
 	}
-	//myfmt.PrintlnWithCaller(jsonopt.Encode(queryIdMap))
-
-	ch := make(chan int, maxRoutineNum)
-
-	stdToolClient = newToolClient()
-
-	if len(getScreenNameSlice()) == 0 {
-		myfmt.PrintlnWithCaller("当前无配置")
-		return
-	}
-
-	for _, jobScreenName := range getScreenNameSlice() {
-		memqueue.QueueRPushObj(queueKey, QueueUnit{jobScreenName, 0})
-	}
-
-	time.Sleep(15 * time.Second)
-	var wg sync.WaitGroup
-	for {
-		qu, err := memqueue.QueueLPopObj[QueueUnit](queueKey)
-		screenName := qu.ScreenName
-		if err != nil {
-			break
-		}
-		if screenNameMap[screenName] {
-			logging.Info(screenName + "当前已经查询过，跳过")
-			continue
-		}
-		screenNameMap[screenName] = true
-		ch <- 1
-		wg.Add(1)
-		go func(screenName string, usePush bool, ch chan int) {
-			defer wg.Done()
-			spiderTwitterList(spiderTwitterConfig{
-				screenName: screenName,
-				usePush:    usePush,
-				downMedia:  needDownMedia(),
-			})
-			<-ch
-		}(screenName, allUsePush, ch)
-	}
-	wg.Wait()
+	return queryIdMap
 }
 
 func spiderTwitterList(sConfig spiderTwitterConfig) {
@@ -171,12 +176,11 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 		twservice.SaveTSpiderHis(tweetListType, screenName+"_tweetList_"+cast.ToString(i), r, err)
 		tweetResponse := jsonopt.Decode[UserTweetsResponse](r.String())
 		i++
+		activeCount := 0
 		if len(tweetResponse.Data.User.Result.TimelineV2.Timeline.Instructions) == 0 || i >= spiderTwitterMaxPage {
-			logging.Info(screenName + "完成··································")
+			logging.Info(screenName + " end activeCount:" + cast.ToString(activeCount))
 			break
 		}
-
-		activeCount := 0
 		for _, value := range tweetResponse.Data.User.Result.TimelineV2.Timeline.Instructions {
 			switch value.Type {
 			case "TimelineAddEntries":
@@ -302,24 +306,14 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 		}
 
 		if activeCount == 0 {
-			myfmt.PrintlnWithCaller(screenName + "完成··································")
+			myfmt.PrintlnWithCaller(screenName + ":activeCount=0")
 			break
 		}
 		//myfmt.PrintlnWithCaller(screenName, "下一轮", i*40, "-", (i+1)*40)
 
 		time.Sleep(time.Duration(rand.Intn(3)+1) * time.Second)
-
 	}
 
 	// Want to remove proxy setting
 	//client.RemoveProxy()
-}
-
-func str2time(s string) time.Time {
-	// Sat Aug 13 03:37:20 +0000 2022
-	// Mon Jan 03 15:04:05 -0700 2001
-	var LOC, _ = time.LoadLocation("Asia/Shanghai")
-	//timeTemplate := "2006-01-02 15:04:05"
-	tim, _ := time.ParseInLocation(time.RubyDate, s, LOC)
-	return tim
 }

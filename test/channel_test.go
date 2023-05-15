@@ -5,11 +5,74 @@ import (
 	"fmt"
 	"math/rand"
 	"runtime"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/spf13/cast"
 )
+
+func TestD(_ *testing.T) {
+	lock := &sync.Mutex{}
+	maxNumConfig := 3
+	maxNum := maxNumConfig
+
+	manager := make(chan struct{})
+
+	use := func() bool {
+		lock.Lock()
+		defer lock.Unlock()
+		if maxNum > 0 {
+			maxNum--
+			return true
+		} else {
+			return false
+		}
+	}
+	done := func() {
+		lock.Lock()
+		defer lock.Unlock()
+		maxNum++
+	}
+
+	updateMaxNumConfig := func(newMaxNumber int) {
+		lock.Lock()
+		defer lock.Unlock()
+		if newMaxNumber < 1 || newMaxNumber == maxNumConfig {
+			return
+		}
+		maxNum += newMaxNumber - maxNumConfig
+	}
+
+	go func(manager chan struct{}) {
+		for {
+			if use() {
+				manager <- struct{}{}
+			} else {
+				time.Sleep(time.Duration(rand.Intn(300)) * time.Millisecond)
+			}
+		}
+	}(manager)
+
+	go func() {
+		time.Sleep(5 * time.Second)
+		updateMaxNumConfig(5)
+	}()
+
+	var counter int
+	for {
+		<-manager
+		go func() {
+			defer done()
+			counter += 1
+			fmt.Println(time.Now())
+			time.Sleep(time.Second)
+		}()
+		if counter > 30 {
+			break
+		}
+	}
+}
 
 func TestChannelSpider(_ *testing.T) {
 	cInt := make(chan int, 10)
