@@ -39,7 +39,7 @@ func TListV2(request TListRequest) component.Response {
 				Name:       item.Name,
 				Desc:       item.Desc,
 				Url:        fmt.Sprintf("https://twitter.com/%v/with_replies", item.ScreenName),
-				CreateTime: item.CreateTime.Format("2006-01-02 15:05:05"),
+				CreateTime: item.CreateTime.Format("2006-01-02 15:04:05"),
 			}
 		}, FTwitterUser.GetByDesc(desc))
 		list = append(list, list1...)
@@ -49,7 +49,7 @@ func TListV2(request TListRequest) component.Response {
 				Name:       "tweet",
 				Desc:       item.Context,
 				Url:        fmt.Sprintf("https://twitter.com/%v/status/%v", item.ScreenName, item.ConversationId),
-				CreateTime: item.CreateTime.Format("2006-01-02 15:05:05"),
+				CreateTime: item.CreateTime.Format("2006-01-02 15:04:05"),
 			}
 		}, FTwitterTweet.GetByContent(desc))
 
