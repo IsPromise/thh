@@ -77,7 +77,7 @@ func GetTwitterTweetList(param GetTwitterTweetListParam) component.Response {
 				Name:             "tweet",
 				Desc:             item.Context,
 				Url:              fmt.Sprintf("https://twitter.com/%v/status/%v", item.ScreenName, item.ConversationId),
-				CreateTime:       item.CreateTime.Format("2006-01-02 15:05:05"),
+				CreateTime:       item.CreateTime.Format("2006-01-02 15:04:05"),
 			}
 		}, pageData.Data),
 		"size":    pageData.PageSize,
