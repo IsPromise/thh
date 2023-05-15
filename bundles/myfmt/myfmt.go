@@ -51,6 +51,5 @@ func getRootDir() string {
 	for i := 0; i < 3; i++ {
 		file = filepath.Dir(file)
 	}
-
-	return file
+	return strings.ReplaceAll(file, "\\", "/")
 }
