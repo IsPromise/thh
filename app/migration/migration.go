@@ -3,6 +3,7 @@ package migration
 import (
 	"fmt"
 	"thh/app/models/DataReps"
+	"thh/app/models/FTwitter/FTwitterFilterUser"
 	"thh/app/models/FTwitter/FTwitterMedia"
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
@@ -22,7 +23,6 @@ import (
 )
 
 func M() {
-	fmt.Println("init migration")
 	// 数据库迁移
 	migration(kernel.UseMigration(), dbconnect.Std())
 }
@@ -31,6 +31,7 @@ func migration(migration bool, db *gorm.DB) {
 	if migration == false {
 		return
 	}
+	fmt.Println("init migration")
 	// 自动迁移
 	var err error
 
@@ -47,6 +48,7 @@ func migration(migration bool, db *gorm.DB) {
 		&FTwitterTweet.FTwitterTweet{},
 		&FTwitterUser.FTwitterUser{},
 		&FTwitterUserHis.FTwitterUserHis{},
+		&FTwitterFilterUser.FTwitterFilterUser{},
 	); err != nil {
 		logging.Error(err)
 	} else {

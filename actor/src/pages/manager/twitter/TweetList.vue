@@ -1,6 +1,6 @@
 <script setup>
 import {h, onMounted, reactive, ref} from 'vue'
-import {getQueueLenApi, getTwitterTweetList, runTSpiderMaster} from "@/service/remote";
+import {getQueueLenApi, getTwitterTweetList, runTSpiderMaster, setFilterUser} from "@/service/remote";
 import {
     NButton,
     NCard,
@@ -15,6 +15,7 @@ import {
     NSpace,
     NTag,
     NTime,
+    NSwitch,
     useMessage
 } from "naive-ui"
 
@@ -29,6 +30,14 @@ const columnsRefNew = ref([
             let showList = [];
             let times = new Date(Date.parse(row.CreateTime));
             showList.push(h(NTime, {time: times, type: "relative"}))
+            showList.push(h(NButton, {
+                size: 'small',
+                onClick: () => {
+                    setFilterUser(row.originScreenName).then(r => {
+                        message.success("过滤成功")
+                    })
+                }
+            }, "过滤origin"))
             return h(NSpace, {
                 vertical: true,
                 align: "center"
@@ -96,7 +105,7 @@ const columnsRefNew = ref([
                     }
                 },
                 {default: () => 'open'}
-            )])
+            ),])
 
         }
     }
@@ -114,7 +123,7 @@ const paginationReactive = reactive({
 const dataRef = ref([])
 const formRef = ref(null);
 const searchPage = function (current) {
-    getTwitterTweetList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
+    getTwitterTweetList(current, paginationReactive.pageSize, paginationReactive.search, active.value).then(r => {
         dataRef.value = r.data.result.itemList
         paginationReactive.page = current
         paginationReactive.pageCount = parseInt(String(r.data.result.total / r.data.result.size))
@@ -154,24 +163,25 @@ function handleValidateClick(e) {
     });
 }
 
-function newSpider(e) {
-    runTSpiderMaster().then(r => {
-        message.success(r.data.result.message);
-    }).catch(e => {
-        console.log(e)
-        message.success("error");
-    })
-}
-
-function getQueueLen(e) {
-    getQueueLenApi().then(r => {
-        message.success(r.data.result.message);
-    }).catch(e => {
-        console.log(e)
-        message.success("error");
-    })
-}
-
+let active = ref(false)
+const railStyle = ({
+                       focused,
+                       checked
+                   }) => {
+    const style = {};
+    if (checked) {
+        style.background = "#d03050";
+        if (focused) {
+            style.boxShadow = "0 0 0 2px #d0305040";
+        }
+    } else {
+        style.background = "#2080f0";
+        if (focused) {
+            style.boxShadow = "0 0 0 2px #2080f040";
+        }
+    }
+    return style;
+};
 </script>
 <template>
     <n-form
@@ -187,15 +197,19 @@ function getQueueLen(e) {
             <n-input v-model:value="paginationReactive.search" placeholder="搜索内容"/>
         </n-form-item>
         <n-form-item>
+
+            <n-switch v-model:value="active" :rail-style="railStyle">
+                <template #checked>
+                    开启过滤
+                </template>
+                <template #unchecked>
+                    关闭过滤
+                </template>
+            </n-switch>
+        </n-form-item>
+        <n-form-item>
             <n-button attr-type="button" @click="handleValidateClick">
                 搜索
-            </n-button>
-            <n-button attr-type="button" @click="newSpider">
-                新的抓取
-            </n-button>
-
-            <n-button attr-type="button" @click="getQueueLen">
-                当前队列长度
             </n-button>
         </n-form-item>
     </n-form>

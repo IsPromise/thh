@@ -6,6 +6,7 @@ import (
 	"sync"
 	"thh/app/console/cmd/spidercmd"
 	"thh/app/http/controllers/component"
+	"thh/app/models/FTwitter/FTwitterFilterUser"
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/models/FTwitter/FTwitterUser"
@@ -61,15 +62,27 @@ func GetMixList(request TListRequest) component.Response {
 }
 
 type GetTwitterTweetListParam struct {
-	Page     int    `form:"page"`
-	PageSize int    `form:"pageSize"`
-	Search   string `form:"search"`
+	Page          int    `form:"page"`
+	PageSize      int    `form:"pageSize"`
+	Search        string `form:"search"`
+	UseUserFilter bool   `form:"useUserFilter"`
 }
 
 func GetTwitterTweetList(param GetTwitterTweetListParam) component.Response {
+
+	var filterUserList []string
+	if param.UseUserFilter {
+		userList := FTwitterFilterUser.All()
+		filterUserList = array.ArrayMap(func(t *FTwitterFilterUser.FTwitterFilterUser) string {
+			return t.ScreenName
+		}, userList)
+	}
+
 	pageData := FTwitterTweet.Page(FTwitterTweet.PageQuery{
 		Page: param.Page, PageSize: param.PageSize, Search: param.Search,
+		UserFilter: filterUserList,
 	})
+
 	return component.SuccessResponse(component.DataMap{
 		"itemList": array.ArrayMap(func(item FTwitterTweet.FTwitterTweet) TLink {
 			return TLink{
@@ -112,6 +125,46 @@ func GetTwitterUserList(param GetTwitterUserListParam) component.Response {
 		"total":   pageData.Total,
 		"current": param.Page,
 	})
+}
+
+type FilterUserItem struct {
+	ScreenName string `json:"screenName"`
+}
+
+func GetFilterUserList() component.Response {
+	userList := FTwitterFilterUser.All()
+	result := array.ArrayMap(func(t *FTwitterFilterUser.FTwitterFilterUser) FilterUserItem {
+		return FilterUserItem{ScreenName: t.ScreenName}
+	}, userList)
+	return component.SuccessResponse(result)
+}
+
+type SetFilterUserRequest struct {
+	ScreenName string `json:"screenName"`
+}
+
+func SetFilterUser(request SetFilterUserRequest) component.Response {
+	if len(request.ScreenName) == 0 {
+		return component.FailResponse("传递有效过滤名")
+	}
+	entity := FTwitterFilterUser.GetWithDeleted(request.ScreenName)
+	if entity.Id == 0 {
+		entity = FTwitterFilterUser.FTwitterFilterUser{
+			ScreenName: request.ScreenName,
+		}
+		FTwitterFilterUser.Create(&entity)
+	} else {
+		FTwitterFilterUser.Restore(&entity)
+	}
+	return component.SuccessResponse(true)
+}
+
+func DeleteFilterUser(request SetFilterUserRequest) component.Response {
+	entity := FTwitterFilterUser.GetByScreenName(request.ScreenName)
+	if len(entity) != 0 {
+		FTwitterFilterUser.DeleteEntity(entity)
+	}
+	return component.SuccessResponse(true)
 }
 
 var spiderTwitterLock sync.Mutex

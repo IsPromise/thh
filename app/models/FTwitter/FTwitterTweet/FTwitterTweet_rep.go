@@ -75,6 +75,7 @@ func DefaultPage(page int) struct {
 type PageQuery struct {
 	Page, PageSize int
 	Search         string
+	UserFilter     []string
 }
 
 func Page(q PageQuery) struct {
@@ -96,14 +97,13 @@ func Page(q PageQuery) struct {
 	if q.Search != "" {
 		b.Where(querymaker.Like(fieldContext, q.Search))
 	}
+	if len(q.UserFilter) > 0 {
+		b.Where(querymaker.NotIn(fieldOriginScreenName, q.UserFilter))
+	}
+	var total int64
+	b.Count(&total)
 	b.Limit(q.PageSize).Offset(q.PageSize * q.Page).Order("id desc").Find(&list)
 
-	var total int64
-	if q.Search != "" {
-		builder().Where(querymaker.Like(fieldContext, q.Search)).Count(&total)
-	} else {
-		builder().Count(&total)
-	}
 	return struct {
 		Page     int
 		PageSize int

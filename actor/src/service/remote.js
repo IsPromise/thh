@@ -75,13 +75,12 @@ export function getTwitterUserList(page = 1, pageSize = 10, search = "") {
     })
 }
 
-export function getTwitterTweetList(page = 1, pageSize = 10, search = "") {
-    return instanceAxios.get('get-twitter-tweet-list', {
-        params: {
-            page: page,
-            pageSize: pageSize,
-            search: search
-        }
+export function getTwitterTweetList(page = 1, pageSize = 10, search = "", useUserFilter = false) {
+    return instanceAxios.post('twitter/get-twitter-tweet-list', {
+        page: page,
+        pageSize: pageSize,
+        search: search,
+        useUserFilter: useUserFilter
     })
 }
 
@@ -102,6 +101,23 @@ export function getTSpiderHis(page = 1, pageSize = 10) {
         }
     })
 }
+
+export function setFilterUser(screenName = "") {
+    return instanceAxios.post('twitter/set-filter-user', {
+        screenName: screenName
+    })
+}
+
+export function deleteFilterUser(screenName = "") {
+    return instanceAxios.post('twitter/delete-filter-user', {
+        screenName: screenName
+    })
+}
+
+export function getFilterUser() {
+    return instanceAxios.get('twitter/get-filter-user', {})
+}
+
 
 export function getGitStatus() {
     return instanceAxios.get('git-status-list')

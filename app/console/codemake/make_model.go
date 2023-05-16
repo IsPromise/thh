@@ -99,31 +99,37 @@ func makeModel(_ *cobra.Command, _ []string) {
 	//	{Field: "area_code", Type: "varchar(255)", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
 	//})
 
-	outPutModel("Articles", []genColumns{
+	//outPutModel("Articles", []genColumns{
+	//	{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
+	//	{Field: "content", Type: "text", Key: "", Desc: "", Null: "", Default: GetStringP("")},
+	//	{Field: "user_id", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+	//	{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//	{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//})
+	//
+	//outPutModel("Comment", []genColumns{
+	//	{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
+	//	{Field: "article_id", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+	//	{Field: "content", Type: "text", Key: "", Desc: "", Null: "", Default: GetStringP("")},
+	//	{Field: "user_id", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+	//	{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//	{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//})
+	//
+	//outPutModel("Post", []genColumns{
+	//	{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
+	//	{Field: "title", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+	//	{Field: "slug", Type: "text", Key: "", Desc: "", Null: "", Default: GetStringP("")},
+	//	{Field: "summary", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+	//	{Field: "content", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+	//	{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//	{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//})
+	outPutModel("FTwitterFilterUser", []genColumns{
 		{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
-		{Field: "content", Type: "text", Key: "", Desc: "", Null: "", Default: GetStringP("")},
-		{Field: "user_id", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
+		{Field: "screen_name", Type: "varchar(255)", Key: "MUL", Desc: "", Null: "NO", Default: nil},
 		{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
-		{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
-	})
-
-	outPutModel("Comment", []genColumns{
-		{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
-		{Field: "article_id", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
-		{Field: "content", Type: "text", Key: "", Desc: "", Null: "", Default: GetStringP("")},
-		{Field: "user_id", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
-		{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
-		{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
-	})
-
-	outPutModel("Post", []genColumns{
-		{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
-		{Field: "title", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
-		{Field: "slug", Type: "text", Key: "", Desc: "", Null: "", Default: GetStringP("")},
-		{Field: "summary", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
-		{Field: "content", Type: "bigint", Key: "", Desc: "", Null: "NO", Default: GetStringP("0")},
-		{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
-		{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+		{Field: "deleted_at", Type: "datetime", Key: "", Desc: "", Null: "", Default: nil},
 	})
 }
 
