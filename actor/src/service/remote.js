@@ -14,7 +14,6 @@ const instanceAxios = axios.create({
 })
 
 const userStore = useUserStore()
-const remoteService = {}
 instanceAxios.interceptors.request.use(config => {
     config.headers = {
         'Content-Type': 'application/json',

@@ -28,15 +28,18 @@ const Search = (searchList) => {
 const columns = [
     {
         title: 'ScreenName',
-        key: 'ScreenName'
+        key: 'ScreenName',
+        width: "120px"
     },
     {
         title: 'Name',
-        key: 'Name'
+        key: 'Name',
+        width: "120px"
     },
     {
         title: 'CreateTime',
-        key: 'CreateTime'
+        key: 'CreateTime',
+        width: "120px"
     },
     {
         title: 'Desc',
@@ -47,6 +50,7 @@ const columns = [
         title: 'Url',
         key: 'Url',
         fixed: "right",
+        width: "120px",
         render(row) {
             return h(
                 NButton,

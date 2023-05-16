@@ -71,7 +71,7 @@ func SpiderTwitterMain() {
 	screenNameMap := make(map[string]bool, 2048)
 	stdToolClient = newToolClient()
 
-	getConfigMap()
+	//getConfigMap()
 
 	if len(getScreenNameSlice()) == 0 {
 		myfmt.PrintlnWithCaller("当前无配置")

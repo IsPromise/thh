@@ -39,9 +39,7 @@ const searchPage = function (current) {
   })
 }
 
-// onMounted(() => {
-//   searchPage(1)
-// })
+
 const showModal = ref(false)
 
 </script>

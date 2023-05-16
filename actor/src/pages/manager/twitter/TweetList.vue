@@ -55,7 +55,7 @@ const columnsRefNew = ref([
             ),])
         },
     },
-    {title: 'Name', key: 'Name', width: "120px"},
+    // {title: 'Name', key: 'Name', width: "120px"},
     {title: 'Desc', key: 'Desc', width: "360px"},
     {
         title: 'info',
