@@ -112,14 +112,15 @@ func SpiderTwitterMain() {
 	wg.Wait()
 }
 
-func getConfigMap() (queryIdMap map[string]string) {
+func getConfigMap() map[string]string {
+	queryIdMap := map[string]string{}
 	if useProxy {
 		ropt.SetProxy(proxy)
 	}
 	resp, _, err := ropt.Get("https://abs.twimg.com/responsive-web/client-web/main.b5030eda.js")
 	if err != nil {
 		myfmt.PrintlnWithCaller("获取queryId失败", err)
-		return
+		return queryIdMap
 	}
 	regUnit := func(regStr string, matchStr string) (result [][]string) {
 		defer func() {
