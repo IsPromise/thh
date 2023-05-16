@@ -2,7 +2,7 @@ import {h, resolveComponent} from "vue";
 import {LogoTwitter, LogoWebComponent} from '@vicons/ionicons5'
 
 import sun from "@/pages/HomePage.vue";
-import moon from "@/pages/AllManager.vue";
+import moon from "@/pages/Manager.vue";
 import twitterTool from "@/pages/manager/twitter/TwitterRoutes.js"
 
 let about = () => import("@/pages/home/AboutPage.vue")

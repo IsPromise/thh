@@ -1,7 +1,7 @@
-let twitterTable = () => import("@/pages/manager/twitter/TwAllList.vue")
-let twitterUser = () => import("@/pages/manager/twitter/TwUserList.vue")
-let twitterTweet = () => import("@/pages/manager/twitter/TwTweetList.vue")
-let twitterHis = () => import('@/pages/manager/twitter/TSpiderHis.vue')
+let twitterTable = () => import("@/pages/manager/twitter/MixAllList.vue")
+let twitterUser = () => import("@/pages/manager/twitter/UserList.vue")
+let twitterTweet = () => import("@/pages/manager/twitter/TweetList.vue")
+let twitterHis = () => import('@/pages/manager/twitter/SpiderHis.vue')
 
 export default [
     {showName: '', path: '', component: twitterTable, belongMenu: false},

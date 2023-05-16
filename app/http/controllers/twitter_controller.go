@@ -28,7 +28,7 @@ type TListRequest struct {
 	SearchList []string
 }
 
-func TListV2(request TListRequest) component.Response {
+func GetMixList(request TListRequest) component.Response {
 	var list []TLink
 	for _, desc := range request.SearchList {
 		if desc == "" {

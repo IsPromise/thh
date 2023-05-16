@@ -1,6 +1,6 @@
 <script setup>
 import {h, onMounted, reactive, ref} from 'vue'
-import {getTwitterUserList, remoteService} from "@/service/remote";
+import {getQueueLenApi, getTwitterTweetList, runTSpiderMaster} from "@/service/remote";
 import {
     NButton,
     NCard,
@@ -11,15 +11,16 @@ import {
     NList,
     NListItem,
     NModal,
+    NThing,
     NSpace,
-    NThing, NTime,
+    NTag,
+    NTime,
     useMessage
 } from "naive-ui"
 
-
 const showModal = ref(false)
 const testInfoList = ref([{key: "", value: ""}])
-const columnsRefNew = [
+const columnsRefNew = ref([
     {
         title: '时间', key: 'CreateTime', width: "80px",
         align: "center",
@@ -34,9 +35,28 @@ const columnsRefNew = [
             }, () => showList)
         }
     },
-    {title: 'ScreenName', key: 'ScreenName', width: "120px", ellipsis: true},
+    {
+        title: 'screenName/origin',
+        key: 'ScreenName',
+        width: "120px",
+        align: "center",
+        titleAlign: "center", render(row) {
+            return h(NSpace, {
+                vertical: true,
+                align: "center"
+            }, () => [h(
+                'span',
+                {},
+                {default: () => row.ScreenName}
+            ), h(
+                'span',
+                {},
+                {default: () => row.originScreenName}
+            ),])
+        },
+    },
     {title: 'Name', key: 'Name', width: "120px"},
-    {title: 'Desc', key: 'Desc',},
+    {title: 'Desc', key: 'Desc', width: "360px"},
     {
         title: 'info',
         key: 'info',
@@ -70,7 +90,6 @@ const columnsRefNew = [
             ), h(
                 NButton,
                 {
-                    type: "primary",
                     size: 'small',
                     onClick: () => {
                         window.open(row.Url)
@@ -81,8 +100,7 @@ const columnsRefNew = [
 
         }
     }
-]
-
+])
 const paginationReactive = reactive({
     page: 1,
     pageCount: 1,
@@ -96,7 +114,7 @@ const paginationReactive = reactive({
 const dataRef = ref([])
 const formRef = ref(null);
 const searchPage = function (current) {
-    getTwitterUserList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
+    getTwitterTweetList(current, paginationReactive.pageSize, paginationReactive.search).then(r => {
         dataRef.value = r.data.result.itemList
         paginationReactive.page = current
         paginationReactive.pageCount = parseInt(String(r.data.result.total / r.data.result.size))
@@ -104,7 +122,7 @@ const searchPage = function (current) {
         message.success("success");
     }).catch(e => {
         console.log(e)
-        message.error("error");
+        message.success("error");
     })
 }
 
@@ -114,6 +132,8 @@ onMounted(() => {
 
 const message = useMessage()
 
+
+const size = ref("medium")
 const rules = {
     search: {
         required: false,
@@ -134,6 +154,24 @@ function handleValidateClick(e) {
     });
 }
 
+function newSpider(e) {
+    runTSpiderMaster().then(r => {
+        message.success(r.data.result.message);
+    }).catch(e => {
+        console.log(e)
+        message.success("error");
+    })
+}
+
+function getQueueLen(e) {
+    getQueueLenApi().then(r => {
+        message.success(r.data.result.message);
+    }).catch(e => {
+        console.log(e)
+        message.success("error");
+    })
+}
+
 </script>
 <template>
     <n-form
@@ -142,16 +180,23 @@ function handleValidateClick(e) {
             :label-width="80"
             :model="paginationReactive"
             :rules="rules"
-            size="medium"
+            :size="size"
             style="padding: 0 20px "
     >
         <n-form-item>
-            <n-space>
-                <n-input v-model:value="paginationReactive.search" placeholder="搜索内容"/>
-                <n-button attr-type="button" @click="handleValidateClick">
-                    搜索
-                </n-button>
-            </n-space>
+            <n-input v-model:value="paginationReactive.search" placeholder="搜索内容"/>
+        </n-form-item>
+        <n-form-item>
+            <n-button attr-type="button" @click="handleValidateClick">
+                搜索
+            </n-button>
+            <n-button attr-type="button" @click="newSpider">
+                新的抓取
+            </n-button>
+
+            <n-button attr-type="button" @click="getQueueLen">
+                当前队列长度
+            </n-button>
         </n-form-item>
     </n-form>
     <n-data-table

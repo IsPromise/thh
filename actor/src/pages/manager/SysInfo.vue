@@ -1,5 +1,5 @@
 <script setup>
-import {getSysInfo, remoteService} from "@/service/remote";
+import {getSysInfo} from "@/service/remote";
 import {NGrid, NGridItem, NCard, NProgress} from "naive-ui"
 import {ref, onUnmounted} from "vue"
 

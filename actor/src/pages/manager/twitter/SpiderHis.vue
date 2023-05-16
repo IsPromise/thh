@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
-import {getTSpiderHis, remoteService} from "@/service/remote";
+import {getTSpiderHis} from "@/service/remote";
 import {NButton, NDataTable, NForm, NFormItem, useMessage} from "naive-ui";
 
 const columns = ref([{title: 'CreateTime', key: 'CreateTime', width: "120px"}])

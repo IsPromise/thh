@@ -61,7 +61,7 @@ export function reg(email, username, password) {
 }
 
 export function getTList(searchList) {
-    return instanceAxios.post('t-list', {
+    return instanceAxios.post('get-mix-list', {
         SearchList: searchList
     })
 }
@@ -104,7 +104,7 @@ export function getTSpiderHis(page = 1, pageSize = 10) {
     })
 }
 
-export function getGitStatus(){
+export function getGitStatus() {
     return instanceAxios.get('git-status-list')
 }
 
@@ -116,5 +116,3 @@ export function wsInfo() {
 export function getSysInfo() {
     return instanceAxios.get("/sys-info")
 }
-
-export {remoteService}
