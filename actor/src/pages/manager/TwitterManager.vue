@@ -10,7 +10,7 @@ const menuOptions = TwitterRoutes.filter(item => {
   return item.showName !== ""
 }).map(item => {
   return {
-    label: () => h(RouterLink, {to: {path: '/manager/twitterManager/' + item.path,}},
+    label: () => h(RouterLink, {to: {path: '/manager/twitter/' + item.path,}},
         {default: () => item.showName}
     ),
     key: item.path,

@@ -9,6 +9,7 @@ import (
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/models/FTwitter/FTwitterUser"
+	"thh/bundles/safety"
 
 	"github.com/leancodebox/goose/array"
 	"github.com/leancodebox/goose/memqueue"
@@ -28,7 +29,7 @@ type TListRequest struct {
 }
 
 func TListV2(request TListRequest) component.Response {
-	list := []TLink{}
+	var list []TLink
 	for _, desc := range request.SearchList {
 		if desc == "" {
 			continue
@@ -117,10 +118,12 @@ var spiderTwitterLock sync.Mutex
 
 func RunSpiderTwitterMaster() component.Response {
 	if spiderTwitterLock.TryLock() {
-		go func() {
+		safety.Guard(func() {
 			defer spiderTwitterLock.Unlock()
 			spidercmd.SpiderTwitterMain()
-		}()
+		}, func(a any) {
+			fmt.Println(a)
+		})
 		return component.SuccessResponse(component.DataMap{
 			"message": "success start",
 		})
