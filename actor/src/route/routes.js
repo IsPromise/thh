@@ -11,12 +11,12 @@ let allTool = () => import("@/pages/manager/AllTool.vue")
 let mainTool = () => import("@/pages/manager/MainTool.vue")
 let traefikManager = () => import("@/pages/manager/TraefikRouterManager.vue")
 let imDemo = () => import("@/pages/manager/ImDemo.vue")
-let voiceChat = () => import("@/pages/manager/VoiceChat.vue")
-// let markdown = ()=>  import("@/pages/manager/MarkdownDemo.vue")
 let index = () => import("@/pages/home/IndexPage.vue")
 let twitterManager = () => import("@/pages/manager/TwitterManager.vue")
 let sysInfo = () => import("@/pages/manager/SysInfo.vue")
 let login = () => import("@/pages/Login.vue")
+let managerAbout = () => import("@/pages/manager/about/about.vue")
+let info = () => import("@/pages/manager/about/info.vue")
 
 export default [
     {
@@ -40,10 +40,7 @@ export default [
             {showName: 'mainTool', path: 'mainTool', component: mainTool, belongMenu: true},
             {showName: 'all tool', path: 'allTool', component: allTool, belongMenu: true},
             {showName: 'Im', path: 'im', component: imDemo, belongMenu: true},
-            {showName: 'voiceChat', path: 'voiceChat', component: voiceChat, belongMenu: true},
-            // {showName: 'markdown', path: 'markdown', component: markdown, belongMenu: true},
             {showName: 'grid demo', path: 'gridPage', component: gridPage, belongMenu: true},
-            {showName: 'sysInfo', path: 'sysInfo', component: sysInfo, belongMenu: true},
             {
                 showName: '网关管理',
                 path: 'traefikManager',
@@ -52,8 +49,9 @@ export default [
                 belongMenu: true
             },
             {
-                showName: 'twitterManager',
-                path: 'twitterManager',
+                showName: 'twitter',
+                path: 'twitter',
+                icon: LogoTwitter,
                 component: twitterManager,
                 belongMenu: true,
                 children: twitterTool.map(item => {
@@ -61,13 +59,16 @@ export default [
                 })
             },
             {
-                name: 'twitter',
-                path: 'twitter',
-                icon: LogoTwitter,
+                name: 'about',
+                path: 'about',
                 belongMenu: true,
                 component: {render: () => h(resolveComponent("router-view"))},
-                children: twitterTool
-            }
+                children: [
+                    {showName: 'about', path: 'about', component: managerAbout, belongMenu: true},
+                    {showName: 'info', path: 'info', component: info, belongMenu: true},
+                ]
+            },
+            {showName: 'sysInfo', path: 'sysInfo', icon: LogoWebComponent, component: sysInfo, belongMenu: true},
         ]
     },
 ]
