@@ -12,86 +12,95 @@ import {
     NListItem,
     NModal,
     NThing,
+    NSpace,
+    NTag,
+    NTime,
     useMessage
 } from "naive-ui"
 
-
-const columnsList = ({action}) => {
-    return [
-        {title: 'CreateTime', key: 'CreateTime', width: "120px",},
-        {title: 'ScreenName', key: 'ScreenName', width: "120px", ellipsis: true},
-        {title: 'originScreenName', key: 'originScreenName', width: "120px", ellipsis: true},
-        {title: 'Name', key: 'Name', width: "120px"},
-        {title: 'Desc', key: 'Desc',},
-
-        {
-            title: 'Url',
-            key: 'Url',
-            width: "60px",
-            render(row) {
-                return h(
-                    NButton,
-                    {
-                        size: 'small',
-                        onClick: () => {
-                            // console.log(row.Url)
-                            window.open(row.Url)
-                        }
-                    },
-                    {default: () => 'open'}
-                )
-            }
-        },
-        {
-            title: 'info',
-            key: 'info',
-            width: "100px",
-            render(row) {
-                return [h(
-                    NButton,
-                    {
-                        size: 'small',
-                        onClick: () => {
-                            action(row)
-                        }
-                    },
-                    {default: () => '详情展示'}
-                ),
-                //     h(
-                //         NButton,
-                //         {
-                //             size: 'small',
-                //             onClick: () => {
-                //                 action(row)
-                //             }
-                //         },
-                //         {default: () => '标记为过滤'}
-                //     )
-                ]
-            }
-        }
-    ]
-}
-
-
 const showModal = ref(false)
 const testInfoList = ref([{key: "", value: ""}])
-const columnsRef = ref(columnsList({
-    action(row) {
-        showModal.value = true
-        let tmpTestInfoList = []
-        let notShowKey = ['conclusion', 'groupId']
+const columnsRefNew = ref([
+    {
+        title: '时间', key: 'CreateTime', width: "80px",
+        align: "center",
+        titleAlign: "center",
+        render(row) {
+            let showList = [];
+            let times = new Date(Date.parse(row.CreateTime));
+            showList.push(h(NTime, {time: times, type: "relative"}))
+            return h(NSpace, {
+                vertical: true,
+                align: "center"
+            }, () => showList)
+        }
+    },
+    {
+        title: 'screenName/origin',
+        key: 'ScreenName',
+        width: "120px",
+        align: "center",
+        titleAlign: "center", render(row) {
+            return h(NSpace, {
+                vertical: true,
+                align: "center"
+            }, () => [h(
+                'span',
+                {},
+                {default: () => row.ScreenName}
+            ), h(
+                'span',
+                {},
+                {default: () => row.originScreenName}
+            ),])
+        },
+    },
+    {title: 'Name', key: 'Name', width: "120px"},
+    {title: 'Desc', key: 'Desc', width: "360px"},
+    {
+        title: 'info',
+        key: 'info',
+        width: "100px",
+        fixed: "right",
+        align: "center",
+        titleAlign: "center",
+        render(row) {
+            return h(NSpace, {
+                vertical: true,
+                align: "center"
+            }, () => [h(
+                NButton,
+                {
+                    size: 'small',
+                    onClick: () => {
+                        showModal.value = true
+                        let tmpTestInfoList = []
+                        let notShowKey = ['conclusion', 'groupId']
 
-        Object.keys(row).forEach(function (key) {
-            if (notShowKey.indexOf(key) !== -1) {
-                return
-            }
-            tmpTestInfoList.push({key: key, value: row[key].toString()});
-        });
+                        Object.keys(row).forEach(function (key) {
+                            if (notShowKey.indexOf(key) !== -1) {
+                                return
+                            }
+                            tmpTestInfoList.push({key: key, value: row[key].toString()});
+                        });
+                        testInfoList.value = tmpTestInfoList
+                    }
+                },
+                {default: () => '详情展示'}
+            ), h(
+                NButton,
+                {
+                    size: 'small',
+                    onClick: () => {
+                        window.open(row.Url)
+                    }
+                },
+                {default: () => 'open'}
+            )])
 
-        testInfoList.value = tmpTestInfoList
+        }
     }
-}))
+])
 const paginationReactive = reactive({
     page: 1,
     pageCount: 1,
@@ -163,29 +172,19 @@ function getQueueLen(e) {
     })
 }
 
-const itemList = testInfoList
-
-const data = dataRef
-const pagination = paginationReactive
-const columns = columnsRef
-const handlePageChange = searchPage
-
-function showInfo() {
-    this.showModal = true
-}
 </script>
 <template>
     <n-form
             ref="formRef"
             inline
             :label-width="80"
-            :model="pagination"
+            :model="paginationReactive"
             :rules="rules"
             :size="size"
-            style="padding: 10px"
+            style="padding: 0 20px "
     >
         <n-form-item>
-            <n-input v-model:value="pagination.search" placeholder="搜索内容"/>
+            <n-input v-model:value="paginationReactive.search" placeholder="搜索内容"/>
         </n-form-item>
         <n-form-item>
             <n-button attr-type="button" @click="handleValidateClick">
@@ -202,12 +201,12 @@ function showInfo() {
     </n-form>
     <n-data-table
             remote
-            :columns="columns" :data="data" :pagination="pagination"
-            @update:page="handlePageChange" flex-height :style="{ height: `600px` }" striped/>
+            :columns="columnsRefNew" :data="dataRef" :pagination="paginationReactive"
+            @update:page="searchPage" flex-height :style="{ height: `600px` }" striped/>
     <n-modal v-model:show="showModal">
         <n-card style="width: 1000px;" title="详情" :bordered="false" size="huge">
             <n-list bordered>
-                <n-list-item v-for="item in itemList">
+                <n-list-item v-for="item in testInfoList">
                     <n-thing :title="item.key" :description="item.value"
                              :style="{'word-wrap': 'break-word','word-break': 'break-all'}"/>
                 </n-list-item>

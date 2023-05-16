@@ -67,7 +67,7 @@ function handleSelect(key) {
                 style="right: 60px;bottom: 100px;position:absolute;z-index:1501"
             >
                 <n-dropdown trigger="hover" :options="options" @select="handleSelect" :size="'huge'">
-                    <n-button circle size="large">
+                    <n-button circle size="large" type="primary">
                         <template #icon>
                             <n-icon>
                                 <sparkles-outline/>
