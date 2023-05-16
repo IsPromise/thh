@@ -3,7 +3,7 @@ package spidercmd
 import (
 	"math/rand"
 	"sync"
-	"thh/app/service/twservice"
+	"thh/app/service/twittermanager"
 	"thh/bundles/logging"
 	"thh/bundles/myfmt"
 	"time"
@@ -61,7 +61,7 @@ func superFollow(sConfig spiderTwitterConfig) {
 	client := newTClient()
 
 	r, err := client.getUserInfo(screenName)
-	twservice.SaveTSpiderHis(userinfoType, screenName+"_userinfo_"+cast.ToString(time.Now().UnixMilli()), r, err)
+	twittermanager.SaveTSpiderHis(userinfoType, screenName+"_userinfo_"+cast.ToString(time.Now().UnixMilli()), r, err)
 	if ifErr(err) {
 		return
 	}
@@ -73,7 +73,7 @@ func superFollow(sConfig spiderTwitterConfig) {
 	if restId == "" {
 		myfmt.PrintlnWithCaller("信息获取失败")
 	} else {
-		twservice.SaveUserEntity(restId, screenName, desc, name)
+		twittermanager.SaveUserEntity(restId, screenName, desc, name)
 	}
 
 	var linkList []string
@@ -90,7 +90,7 @@ func superFollow(sConfig spiderTwitterConfig) {
 	pageCount := 20
 	for {
 		r, err = client.getFollowList(restId, pageCount, cursor)
-		twservice.SaveTSpiderHis(followListType, screenName+"_follow_"+cast.ToString(i)+cast.ToString(time.Now().UnixMilli()), r, err)
+		twittermanager.SaveTSpiderHis(followListType, screenName+"_follow_"+cast.ToString(i)+cast.ToString(time.Now().UnixMilli()), r, err)
 
 		TList := jsonopt.Decode[TFollowList](r.String())
 
@@ -119,7 +119,7 @@ func superFollow(sConfig spiderTwitterConfig) {
 
 						if len(userResult.Legacy.ScreenName) > 0 {
 							userInLegacy := userResult.Legacy
-							twservice.SaveUserEntity(userResult.RestId, userInLegacy.ScreenName, userInLegacy.Description, userInLegacy.Name)
+							twittermanager.SaveUserEntity(userResult.RestId, userInLegacy.ScreenName, userInLegacy.Description, userInLegacy.Name)
 						}
 						// 推文
 						// entry.Content.ItemContent.TweetResults.Result.Legacy

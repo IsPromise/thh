@@ -1,4 +1,4 @@
-package twservice
+package twittermanager
 
 import (
 	"thh/app/models/FTwitter/FTwitterSpiderHis"

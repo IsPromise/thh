@@ -13,7 +13,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/iancoleman/strcase v0.2.0
-	github.com/leancodebox/goose v0.0.11
+	github.com/leancodebox/goose v0.0.12
 	github.com/petermattis/goid v0.0.0-20230317030725-371a4b8eda08
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sirupsen/logrus v1.9.0

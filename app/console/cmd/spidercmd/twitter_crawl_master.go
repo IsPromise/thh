@@ -11,7 +11,7 @@ import (
 	"thh/app/models/FTwitter/FTwitterMedia"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/service/ropt"
-	"thh/app/service/twservice"
+	"thh/app/service/twittermanager"
 	"thh/bundles/logging"
 	"thh/bundles/myfmt"
 	"time"
@@ -150,7 +150,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 	client := newTClient()
 	twitterMediaDir := filepath.Join(outputPrefix, "/response_"+screenName+"media_source/")
 	r, err := client.getUserInfo(screenName)
-	twservice.SaveTSpiderHis(userinfoType, screenName+"_userinfo_"+cast.ToString(time.Now().UnixMilli()), r, err)
+	twittermanager.SaveTSpiderHis(userinfoType, screenName+"_userinfo_"+cast.ToString(time.Now().UnixMilli()), r, err)
 	if ifErr(err) {
 		return
 	}
@@ -159,7 +159,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 	desc := userInfo.Data.User.Result.Legacy.Description
 	name := userInfo.Data.User.Result.Legacy.Name
 
-	twservice.SaveUserEntity(restId, screenName, desc, name)
+	twittermanager.SaveUserEntity(restId, screenName, desc, name)
 
 	var linkList []string
 	for _, value := range userInfo.Data.User.Result.Legacy.Entities.URL.Urls {
@@ -174,7 +174,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 	i := 0
 	for {
 		r, err = client.getTList(restId, 40, cursor)
-		twservice.SaveTSpiderHis(tweetListType, screenName+"_tweetList_"+cast.ToString(i), r, err)
+		twittermanager.SaveTSpiderHis(tweetListType, screenName+"_tweetList_"+cast.ToString(i), r, err)
 		tweetResponse := jsonopt.Decode[UserTweetsResponse](r.String())
 		i++
 		activeCount := 0
@@ -239,7 +239,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						// 当为转发，且属于目标转发，进行木匾转发统计，和原用户信息录入
 						if isForwarded && array.InArray(screenName, getScreenNameSlice()) {
 							userInLegacy := orgUserResult.Legacy
-							twservice.SaveUserEntity(orgUserResult.RestId, userInLegacy.ScreenName, userInLegacy.Description, userInLegacy.Name)
+							twittermanager.SaveUserEntity(orgUserResult.RestId, userInLegacy.ScreenName, userInLegacy.Description, userInLegacy.Name)
 						}
 						// 推文
 						// entry.Content.ItemContent.TweetResults.Result.Legacy
