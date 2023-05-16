@@ -131,8 +131,10 @@ func superFollow(sConfig spiderTwitterConfig) {
 					}
 				}
 				break
+			case "TimelineClearCache":
+			case "TimelineTerminateTimeline":
 			default:
-				myfmt.PrintlnWithCaller(value.Type)
+				myfmt.PrintlnWithCaller(screenName, value.Type)
 			}
 		}
 
