@@ -22,13 +22,8 @@ func DeleteEntity(entity []*FTwitterFilterUser) int64 {
 	return result.RowsAffected
 }
 
-func Get(id any) (entity *FTwitterFilterUser) {
-	builder().Where(pid, id).First(entity)
-	return
-}
-
-func getBy(field, value string) (entity *FTwitterFilterUser) {
-	builder().Where(field+" = ?", value).First(&entity)
+func Get(id any) (entity FTwitterFilterUser) {
+	builder().Where(pid, id).First(&entity)
 	return
 }
 

@@ -7,7 +7,7 @@ func create(entity *FTwitterMedia) int64 {
 	return result.RowsAffected
 }
 
-func save(entity *FTwitterMedia) int64 {
+func Save(entity *FTwitterMedia) int64 {
 	result := builder().Save(entity)
 	return result.RowsAffected
 }

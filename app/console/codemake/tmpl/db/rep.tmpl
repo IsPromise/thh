@@ -27,7 +27,6 @@ func Get(id any) (entity {{.ModelName}}) {
 }
 
 {{ end}}
-
 func all() (entities []*{{.ModelName}}) {
 	builder().Find(&entities)
 	return
