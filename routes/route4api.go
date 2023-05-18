@@ -27,8 +27,8 @@ func ginApi(ginApp *gin.Engine) {
 	twitterApi.POST("delete-filter-user", ginUpP(controllers.DeleteFilterUser))
 	twitterApi.POST("get-twitter-tweet-list", ginUpP(controllers.GetTwitterTweetList))
 	twitterApi.POST("get-mix-list", ginUpP(controllers.GetMixList))
-	twitterApi.GET("get-twitter-user-list", ginUpP(controllers.GetTwitterUserList))
-	twitterApi.GET("get-spider-twitter-his", ginUpP(controllers.GetSpiderTwitterHis))
+	twitterApi.POST("get-twitter-user-list", ginUpP(controllers.GetTwitterUserList))
+	twitterApi.POST("get-spider-twitter-his", ginUpP(controllers.GetSpiderTwitterHis))
 	twitterApi.GET("run-spider-twitter-master", ginUpNP(controllers.RunSpiderTwitterMaster))
 	twitterApi.GET("get-queue-len", ginUpNP(controllers.GetQueueLen))
 }

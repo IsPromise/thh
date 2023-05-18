@@ -62,10 +62,10 @@ func GetMixList(request TListRequest) component.Response {
 }
 
 type GetTwitterTweetListParam struct {
-	Page          int    `form:"page"`
-	PageSize      int    `form:"pageSize"`
-	Search        string `form:"search"`
-	UseUserFilter bool   `form:"useUserFilter"`
+	Page          int    `json:"page"`
+	PageSize      int    `json:"pageSize"`
+	Search        string `json:"search"`
+	UseUserFilter bool   `json:"useUserFilter"`
 }
 
 func GetTwitterTweetList(param GetTwitterTweetListParam) component.Response {
@@ -194,8 +194,8 @@ func GetQueueLen() component.Response {
 }
 
 type GetTSpiderReq struct {
-	Page     int `form:"page"`
-	PageSize int `form:"pageSize"`
+	Page     int `json:"page"`
+	PageSize int `json:"pageSize"`
 }
 
 type THisItem struct {

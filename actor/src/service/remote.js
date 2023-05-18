@@ -66,12 +66,10 @@ export function getTList(searchList) {
 }
 
 export function getTwitterUserList(page = 1, pageSize = 10, search = "") {
-    return instanceAxios.get('twitter/get-twitter-user-list', {
-        params: {
-            page: page,
-            pageSize: pageSize,
-            search: search
-        }
+    return instanceAxios.post('twitter/get-twitter-user-list', {
+        page: page,
+        pageSize: pageSize,
+        search: search
     })
 }
 
@@ -94,11 +92,9 @@ export function getQueueLenApi() {
 }
 
 export function getTSpiderHis(page = 1, pageSize = 10) {
-    return instanceAxios.get('twitter/get-spider-twitter-his', {
-        params: {
-            page: page,
-            pageSize: pageSize,
-        }
+    return instanceAxios.post('twitter/get-spider-twitter-his', {
+        page: page,
+        pageSize: pageSize,
     })
 }
 
