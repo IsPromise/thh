@@ -15,24 +15,20 @@ func ginApi(ginApp *gin.Engine) {
 	apiGroup.GET("gin-upload", ginLowerControllers.GinUpload)
 	apiGroup.GET("show-pic", ginLowerControllers.GinShowPic)
 
-	apiGroup.POST("get-mix-list", ginUpP(controllers.GetMixList))
-	apiGroup.GET("get-twitter-user-list", ginUpP(controllers.GetTwitterUserList))
-
-	apiGroup.GET("get-spider-twitter-his", ginUpP(controllers.GetSpiderTwitterHis))
-	apiGroup.GET("run-spider-twitter-master", ginUpNP(controllers.RunSpiderTwitterMaster))
-	apiGroup.GET("get-queue-len", ginUpNP(controllers.GetQueueLen))
-
 	apiGroup.GET("traefik-provider", ginLowerControllers.TraefikProvider)
 	apiGroup.GET("memUse", ginUpNP(controllers.GetUseMem))
 	apiGroup.GET("about", ginUpNP(controllers.About))
 	apiGroup.GET("sys-info", ginUpNP(controllers.SysInfo))
 	apiGroup.Use(middleware.IpLimit).GET("git-status-list", ginUpNP(controllers.GitStatusList))
 
-
-
 	twitterApi := apiGroup.Group("twitter")
 	twitterApi.GET("get-filter-user", ginUpNP(controllers.GetFilterUserList))
 	twitterApi.POST("set-filter-user", ginUpP(controllers.SetFilterUser))
 	twitterApi.POST("delete-filter-user", ginUpP(controllers.DeleteFilterUser))
 	twitterApi.POST("get-twitter-tweet-list", ginUpP(controllers.GetTwitterTweetList))
+	twitterApi.POST("get-mix-list", ginUpP(controllers.GetMixList))
+	twitterApi.GET("get-twitter-user-list", ginUpP(controllers.GetTwitterUserList))
+	twitterApi.GET("get-spider-twitter-his", ginUpP(controllers.GetSpiderTwitterHis))
+	twitterApi.GET("run-spider-twitter-master", ginUpNP(controllers.RunSpiderTwitterMaster))
+	twitterApi.GET("get-queue-len", ginUpNP(controllers.GetQueueLen))
 }
