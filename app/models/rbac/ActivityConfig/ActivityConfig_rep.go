@@ -5,7 +5,7 @@ func Get(id any) (entity ActivityConfig) {
 	return
 }
 
-func Delete(entity *ActivityConfig) {
+func DeleteEntity(entity *ActivityConfig) {
 	builder().Delete(entity)
 }
 
@@ -18,5 +18,4 @@ func SaveAll(entities *[]ActivityConfig) {
 
 func Create(entity *ActivityConfig) {
 	builder().Create(entity)
-
 }

@@ -2,41 +2,28 @@ package FTwitterMedia
 
 import "github.com/leancodebox/goose/querymaker"
 
-func Create(entity *FTwitterMedia) int64 {
+func create(entity *FTwitterMedia) int64 {
 	result := builder().Create(entity)
 	return result.RowsAffected
 }
 
-func Save(entity *FTwitterMedia) int64 {
+func save(entity *FTwitterMedia) int64 {
 	result := builder().Save(entity)
 	return result.RowsAffected
 }
 
-func SaveAll(entities *[]FTwitterMedia) int64 {
+func saveAll(entities *[]FTwitterMedia) int64 {
 	result := builder().Save(entities)
 	return result.RowsAffected
 }
 
-func Update(entity *FTwitterMedia) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]FTwitterMedia) {
-	builder().Save(entities)
-}
-
-func Delete(entity *FTwitterMedia) int64 {
+func deleteEntity(entity *FTwitterMedia) int64 {
 	result := builder().Delete(&entity)
 	return result.RowsAffected
 }
 
-func Get(id any) (entity FTwitterMedia) {
+func get(id any) (entity FTwitterMedia) {
 	builder().Where(pid, id).First(&entity)
-	return
-}
-
-func GetBy(field, value string) (entity FTwitterMedia) {
-	builder().Where(field+" = ?", value).First(&entity)
 	return
 }
 
@@ -48,10 +35,4 @@ func GetByUrl(url string) (entity FTwitterMedia) {
 func All() (entities []FTwitterMedia) {
 	builder().Find(&entities)
 	return
-}
-
-func IsExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
 }

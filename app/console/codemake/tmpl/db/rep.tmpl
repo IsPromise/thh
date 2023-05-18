@@ -27,10 +27,6 @@ func Get(id any) (entity {{.ModelName}}) {
 }
 
 {{ end}}
-func getBy(field, value string) (entity *{{.ModelName}}) {
-	builder().Where(field + " = ?", value).First(&entity)
-	return
-}
 
 func all() (entities []*{{.ModelName}}) {
 	builder().Find(&entities)

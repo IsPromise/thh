@@ -79,13 +79,13 @@ func SpiderTwitterMain() {
 	}
 
 	for _, jobScreenName := range getScreenNameSlice() {
-		memqueue.QueueRPushObj(queueKey, QueueUnit{jobScreenName, 0})
+		memqueue.QueueRPushObj(QueueKey, QueueUnit{jobScreenName, 0})
 	}
 
 	time.Sleep(10 * time.Second)
 
 	for {
-		qu, err := memqueue.QueueLPopObj[QueueUnit](queueKey)
+		qu, err := memqueue.QueueLPopObj[QueueUnit](QueueKey)
 		screenName := qu.ScreenName
 		if err != nil {
 			break
@@ -217,7 +217,7 @@ func spiderTwitterList(sConfig spiderTwitterConfig) {
 						}
 						// 允许后续扩散查询 非原创 且深度
 						if usePush && isForwarded && sConfig.spiderDeep < spiderDeep {
-							memqueue.QueueRPushObj(queueKey, QueueUnit{orgUserResult.Legacy.ScreenName, sConfig.spiderDeep + 1})
+							memqueue.QueueRPushObj(QueueKey, QueueUnit{orgUserResult.Legacy.ScreenName, sConfig.spiderDeep + 1})
 							myfmt.PrintlnWithCaller(orgUserResult.Legacy.ScreenName, "进入后续查询队列")
 						}
 

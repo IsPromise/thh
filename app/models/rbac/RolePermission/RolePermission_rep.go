@@ -5,7 +5,7 @@ func Get(id any) (entity RolePermission) {
 	return
 }
 
-func Delete(entity *RolePermission) {
+func DeleteEntity(entity *RolePermission) {
 	builder().Delete(entity)
 }
 

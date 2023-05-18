@@ -5,7 +5,7 @@ func Get(id any) (entity ActivityLimitConfig) {
 	return
 }
 
-func Delete(entity *ActivityLimitConfig) {
+func DeleteEntity(entity *ActivityLimitConfig) {
 	builder().Delete(&entity)
 }
 

@@ -12,43 +12,24 @@ func Save(entity *FTwitterSpiderHis) int64 {
 	return result.RowsAffected
 }
 
-func SaveAll(entities *[]FTwitterSpiderHis) int64 {
+func saveAll(entities *[]FTwitterSpiderHis) int64 {
 	result := builder().Save(entities)
 	return result.RowsAffected
 }
 
-func Update(entity *FTwitterSpiderHis) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]FTwitterSpiderHis) {
-	builder().Save(entities)
-}
-
-func Delete(entity *FTwitterSpiderHis) int64 {
+func deleteEntity(entity *FTwitterSpiderHis) int64 {
 	result := builder().Delete(&entity)
 	return result.RowsAffected
 }
 
-func Get(id any) (entity FTwitterSpiderHis) {
+func get(id any) (entity FTwitterSpiderHis) {
 	builder().Where(pid, id).First(&entity)
 	return
 }
 
-func GetBy(field, value string) (entity FTwitterSpiderHis) {
-	builder().Where(field+" = ?", value).First(&entity)
-	return
-}
-
-func All() (entities []FTwitterSpiderHis) {
+func all() (entities []FTwitterSpiderHis) {
 	builder().Find(&entities)
 	return
-}
-
-func IsExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
 }
 
 type PageQuery struct {

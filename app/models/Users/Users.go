@@ -36,7 +36,7 @@ type Users struct {
 // func (itself *Users) AfterDelete(tx *gorm.DB) (err error) {}
 // func (itself *Users) AfterFind(tx *gorm.DB) (err error) {}
 
-func (Users) TableName() string {
+func (itself *Users) TableName() string {
 	return tableName
 }
 

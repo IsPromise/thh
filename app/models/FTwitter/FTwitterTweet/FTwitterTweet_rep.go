@@ -17,15 +17,7 @@ func SaveAll(entities *[]FTwitterTweet) int64 {
 	return result.RowsAffected
 }
 
-func Update(entity *FTwitterTweet) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]FTwitterTweet) {
-	builder().Save(entities)
-}
-
-func Delete(entity *FTwitterTweet) int64 {
+func DeleteEntity(entity *FTwitterTweet) int64 {
 	result := builder().Delete(&entity)
 	return result.RowsAffected
 }
@@ -37,11 +29,6 @@ func Get(id any) (entity FTwitterTweet) {
 func GetUserTweet(screenName, conversationIdStr string) (entity FTwitterTweet) {
 	builder().Where(querymaker.Eq(fieldScreenName, screenName)).
 		Where(querymaker.Eq(fieldConversationId, conversationIdStr)).First(&entity)
-	return
-}
-
-func GetBy(field, value string) (entity FTwitterTweet) {
-	builder().Where(field+" = ?", value).First(&entity)
 	return
 }
 
@@ -60,12 +47,7 @@ func IsExist(field, value string) bool {
 	return count > 0
 }
 
-func DefaultPage(page int) struct {
-	Page     int
-	PageSize int
-	Total    int64
-	Data     []FTwitterTweet
-} {
+func DefaultPage(page int) PageResult[*FTwitterTweet] {
 	return Page(PageQuery{
 		Page:     page,
 		PageSize: 10,
@@ -78,13 +60,15 @@ type PageQuery struct {
 	UserFilter     []string
 }
 
-func Page(q PageQuery) struct {
+type PageResult[T any] struct {
 	Page     int
 	PageSize int
 	Total    int64
-	Data     []FTwitterTweet
-} {
-	var list []FTwitterTweet
+	Data     []T
+}
+
+func Page(q PageQuery) PageResult[*FTwitterTweet] {
+	var list []*FTwitterTweet
 	if q.Page > 0 {
 		q.Page -= 1
 	} else {
@@ -108,6 +92,6 @@ func Page(q PageQuery) struct {
 		Page     int
 		PageSize int
 		Total    int64
-		Data     []FTwitterTweet
+		Data     []*FTwitterTweet
 	}{Page: q.Page, PageSize: q.PageSize, Data: list, Total: total}
 }

@@ -15,7 +15,7 @@ func SaveAll(entities *[]Role) int64 {
 	return result.RowsAffected
 }
 
-func Delete(entity *Role) int64 {
+func DeleteEntity(entity *Role) int64 {
 	result := builder().Delete(entity)
 	return result.RowsAffected
 }
@@ -23,10 +23,4 @@ func Delete(entity *Role) int64 {
 func Get(id any) (entity Role) {
 	builder().Where(pid, id).First(&entity)
 	return
-}
-
-func IsExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
 }

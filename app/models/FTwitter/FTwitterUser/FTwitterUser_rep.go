@@ -17,15 +17,7 @@ func SaveAll(entities *[]FTwitterUser) int64 {
 	return result.RowsAffected
 }
 
-func Update(entity *FTwitterUser) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]FTwitterUser) {
-	builder().Save(entities)
-}
-
-func Delete(entity *FTwitterUser) int64 {
+func DeleteEntity(entity *FTwitterUser) int64 {
 	result := builder().Delete(&entity)
 	return result.RowsAffected
 }
@@ -58,12 +50,6 @@ func All() (entities []FTwitterUser) {
 func GetByDesc(desc string) (entities []FTwitterUser) {
 	builder().Where(querymaker.Like(fieldDesc, desc)).Order(querymaker.Desc(pid)).Limit(1000).Find(&entities)
 	return
-}
-
-func IsExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
 }
 
 func DefaultPage(page int) struct {

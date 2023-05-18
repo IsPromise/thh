@@ -5,14 +5,6 @@ func Get(id any) (entity Permission) {
 	return
 }
 
-func Update(entity *Permission) {
-	builder().Save(entity)
-}
-
-func UpdateAll(entities *[]Permission) {
-	builder().Save(entities)
-}
-
 func Delete(entity *Permission) {
 	builder().Delete(&entity)
 }

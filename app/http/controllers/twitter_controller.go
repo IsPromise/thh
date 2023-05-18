@@ -84,7 +84,7 @@ func GetTwitterTweetList(param GetTwitterTweetListParam) component.Response {
 	})
 
 	return component.SuccessResponse(component.DataMap{
-		"itemList": array.ArrayMap(func(item FTwitterTweet.FTwitterTweet) TLink {
+		"itemList": array.ArrayMap(func(item *FTwitterTweet.FTwitterTweet) TLink {
 			return TLink{
 				ScreenName:       item.ScreenName,
 				OriginScreenName: item.OriginScreenName,
@@ -189,7 +189,7 @@ func RunSpiderTwitterMaster() component.Response {
 
 func GetQueueLen() component.Response {
 	return component.SuccessResponse(component.DataMap{
-		"message": "当前队列长度:" + cast.ToString(memqueue.QueueLen("twitter:screenName:list")),
+		"message": "当前队列长度:" + cast.ToString(memqueue.QueueLen(spidercmd.QueueKey)),
 	})
 }
 
