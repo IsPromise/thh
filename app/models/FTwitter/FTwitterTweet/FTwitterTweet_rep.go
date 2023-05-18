@@ -41,12 +41,6 @@ func GetByContent(desc string) (entities []FTwitterTweet) {
 	return
 }
 
-func IsExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
-}
-
 func DefaultPage(page int) PageResult[*FTwitterTweet] {
 	return Page(PageQuery{
 		Page:     page,

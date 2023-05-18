@@ -32,11 +32,6 @@ func All() (entities []*FTwitterFilterUser) {
 	return
 }
 
-func isExist(field, value string) bool {
-	var count int64
-	builder().Where(field+" = ?", value).Count(&count)
-	return count > 0
-}
 
 func GetWithDeleted(screenName string) (entity FTwitterFilterUser) {
 	builder().Unscoped().Where(querymaker.Eq(fieldScreenName, screenName)).First(&entity)

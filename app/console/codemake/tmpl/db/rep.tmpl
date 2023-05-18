@@ -32,8 +32,3 @@ func all() (entities []*{{.ModelName}}) {
 	return
 }
 
-func isExist(field, value string) bool {
-	var count int64
-	builder().Where(field + " = ?", value).Count(&count)
-	return count > 0
-}
