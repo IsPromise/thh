@@ -60,13 +60,13 @@ export function reg(email, username, password) {
 }
 
 export function getTList(searchList) {
-    return instanceAxios.post('get-mix-list', {
+    return instanceAxios.post('twitter/get-mix-list', {
         SearchList: searchList
     })
 }
 
 export function getTwitterUserList(page = 1, pageSize = 10, search = "") {
-    return instanceAxios.get('get-twitter-user-list', {
+    return instanceAxios.get('twitter/get-twitter-user-list', {
         params: {
             page: page,
             pageSize: pageSize,
@@ -86,15 +86,15 @@ export function getTwitterTweetList(page = 1, pageSize = 10, search = "", useUse
 
 
 export function runTSpiderMaster() {
-    return instanceAxios.get('run-spider-twitter-master')
+    return instanceAxios.get('twitter/run-spider-twitter-master')
 }
 
 export function getQueueLenApi() {
-    return instanceAxios.get('get-queue-len')
+    return instanceAxios.get('twitter/get-queue-len')
 }
 
 export function getTSpiderHis(page = 1, pageSize = 10) {
-    return instanceAxios.get('get-spider-twitter-his', {
+    return instanceAxios.get('twitter/get-spider-twitter-his', {
         params: {
             page: page,
             pageSize: pageSize,
