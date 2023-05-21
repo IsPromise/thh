@@ -13,6 +13,7 @@ func ginApi(ginApp *gin.Engine) {
 	apiGroup := ginApp.Group("api")
 	// lowerControllers
 	apiGroup.GET("gin-upload", ginLowerControllers.GinUpload)
+	apiGroup.GET("/file/:filename", ginLowerControllers.GinUpload)
 	apiGroup.GET("show-pic", ginLowerControllers.GinShowPic)
 
 	apiGroup.GET("traefik-provider", ginLowerControllers.TraefikProvider)
