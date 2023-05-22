@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/spf13/cast"
-	"mime"
 	"net/http"
 	"os"
 	"path"
@@ -87,29 +86,10 @@ func GinUpload(ctx *gin.Context) {
 		msg = err.Error()
 	}
 	ctx.JSON(http.StatusOK, component.DataMap{
-		"code":    0,
+		"code": component.SUCCESS,
+		"result": component.DataMap{
+			"filePath": filePath,
+		},
 		"message": msg,
 	})
-}
-func GetFile(c *gin.Context) {
-	filename := c.Param("filename")
-	fileBytes, err := os.ReadFile(filename)
-	ext := filepath.Ext(filename)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": fmt.Sprintf("File %s not found", filename),
-		})
-		return
-	}
-
-	c.Data(http.StatusOK, mime.TypeByExtension(ext), fileBytes)
-}
-
-func getMimeType(filename string) string {
-	ext := filepath.Ext(filename)
-	mimeType := mime.TypeByExtension(ext)
-	if mimeType == "" {
-		mimeType = "application/octet-stream"
-	}
-	return mimeType
 }
