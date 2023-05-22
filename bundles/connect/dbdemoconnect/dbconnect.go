@@ -112,11 +112,11 @@ func connectSqlLiteDB(_logger gormlogger.Interface) (*gorm.DB, error) {
 
 func createFileIfNotExists(filePath string) error {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		if err := os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
+		if err = os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
 			return err
 		}
 
-		if err := os.WriteFile(filePath, []byte(""), 0644); err != nil {
+		if err = os.WriteFile(filePath, []byte(""), 0644); err != nil {
 			return err
 		}
 	}

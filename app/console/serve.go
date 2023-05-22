@@ -13,13 +13,10 @@ import (
 	"thh/routes"
 	"time"
 
-	"github.com/leancodebox/goose/serverinfo"
-
-	"github.com/leancodebox/goose/preferences"
-
-	"github.com/spf13/cast"
-
 	"github.com/gin-gonic/gin"
+	"github.com/leancodebox/goose/preferences"
+	"github.com/leancodebox/goose/serverinfo"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
 
