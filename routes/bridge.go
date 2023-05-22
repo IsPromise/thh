@@ -9,7 +9,6 @@ import (
 
 func RegisterByGin(ginApp *gin.Engine) {
 
-	ginApp.Use(middleware.TraceInit)
 	ginApp.Use(middleware.GinCors)
 	ginApp.Use(middleware.GinLogger)
 
