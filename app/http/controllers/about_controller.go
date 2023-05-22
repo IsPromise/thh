@@ -11,6 +11,7 @@ import (
 	"thh/bundles/logging"
 )
 
+// Api api
 func Api(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]any{
 		"msg": "OK",
@@ -23,6 +24,7 @@ const (
 	errorMessageNotFound = "路由未定义，请确认 url 和请求方法是否正确。"
 )
 
+// NotFound 404 接口
 func NotFound(c *gin.Context) {
 	acceptString := c.GetHeader("Accept")
 	if strings.Contains(acceptString, contentTypeHTML) {
@@ -35,18 +37,21 @@ func NotFound(c *gin.Context) {
 	})
 }
 
+// GetUseMem 内存使用数据接口
 func GetUseMem() component.Response {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
 	return component.SuccessResponse(cast.ToString(m.Alloc/1024) + "KB")
 }
 
+// About 关于接口
 func About() component.Response {
 	return component.SuccessResponse(component.DataMap{
 		"message": "Hello~ Now you see a json from gin",
 	})
 }
 
+// SysInfo 系统状态接口
 func SysInfo() component.Response {
 	var s serverinfo.Server
 	var err error
