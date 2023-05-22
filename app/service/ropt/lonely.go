@@ -2,9 +2,14 @@ package ropt
 
 import (
 	"github.com/go-resty/resty/v2"
+	"time"
 )
 
 var std = resty.New()
+
+func init() {
+	std.SetTimeout(time.Second * 10)
+}
 
 func SetProxy(proxyURL string) {
 	std.SetProxy(proxyURL)

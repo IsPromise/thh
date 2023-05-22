@@ -5,8 +5,6 @@ import (
 	"thh/bundles/logging"
 	"time"
 
-	"github.com/leancodebox/goose/luckrand"
-
 	"github.com/robfig/cron/v3"
 )
 
@@ -30,8 +28,6 @@ func StopJob() {
 
 func upCmd(cmd func()) func() {
 	return func() {
-		luckrand.MyTraceInit()
-		defer luckrand.MyTraceClean()
 		cmd()
 	}
 }
