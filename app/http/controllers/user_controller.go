@@ -30,7 +30,6 @@ type RegReq struct {
 }
 
 // Register
-// @todo user表增加验证字段
 // 创建后验证码存入redis，发认证送邮件。
 // 邮件 附有 url?code=xxx
 // 验证后更新验证字段
