@@ -17,6 +17,7 @@ const fieldPassword = "password"
 
 type Users struct {
 	Id        uint64    `gorm:"primaryKey;column:id;autoIncrement;not null;" json:"id"`                             //
+	Verify    int       `gorm:"column:verify;type:tinyint(4);not null;default:0" json:"verify"`                     // 验证
 	Username  string    `gorm:"column:username;type:varchar(255);uniqueIndex;not null;default:'';" json:"username"` //
 	Email     string    `gorm:"column:email;type:varchar(255);uniqueIndex;not null;default:'';" json:"email"`       //
 	Password  string    `gorm:"column:password;type:varchar(255);not null;default:'';" json:"-"`                    //
