@@ -53,6 +53,11 @@ go install github.com/cosmtrek/air@latest
 air 
 ```
 
+```shell
+go install github.com/goreleaser/goreleaser@latest
+goreleaser release --snapshot --clean  
+```
+
 ## 测试相关
 ```text
 go  test  ./...   
