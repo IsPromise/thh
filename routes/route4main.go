@@ -2,6 +2,7 @@ package routes
 
 import (
 	"thh/app/http/controllers/ginLowerControllers"
+	"thh/app/http/middleware"
 	"thh/bundles/kernel"
 
 	"github.com/gin-contrib/gzip"
@@ -11,9 +12,12 @@ import (
 
 func ginWeb(ginApp *gin.Engine) {
 	if kernel.IsProduction() {
-		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).StaticFS("/actor", PFilSystem("./actor/dist", kernel.GetActorFS()))
+		ginApp.Use(middleware.CacheMiddleware).
+			Use(gzip.Gzip(gzip.DefaultCompression)).
+			StaticFS("/actor", PFilSystem("./actor/dist", kernel.GetActorFS()))
 	} else {
-		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).Static("/actor", "./actor/dist")
+		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).
+			Static("/actor", "./actor/dist")
 	}
 	ginApp.GET("get-clash-config", ginLowerControllers.GinGetClashConfig)
 	ginApp.GET("get-clash-config-plus", ginLowerControllers.GinGetClashConfigPlus)
