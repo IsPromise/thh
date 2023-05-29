@@ -46,5 +46,3 @@ changelog:
 # Feel free to remove those if you don't want/use them.
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
-
-我有一个服务器，需要部署我写的go web程序，你认为我应该采用什么样的方式比较方便。是个人服务器和个人项目。不要使用docker。我主要是希望可以打包，上传，重启。这几步，同时希望可以支持回滚。同时希望可以有合适的软件直接简化上传和启动的流程，最好是go语言的
