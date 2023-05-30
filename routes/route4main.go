@@ -11,13 +11,16 @@ import (
 )
 
 func ginWeb(ginApp *gin.Engine) {
+	actGroup := ginApp.Group("/actor")
 	if kernel.IsProduction() {
-		ginApp.Use(middleware.CacheMiddleware).
+		actGroup.
+			Use(middleware.CacheMiddleware).
 			Use(gzip.Gzip(gzip.DefaultCompression)).
-			StaticFS("/actor", PFilSystem("./actor/dist", kernel.GetActorFS()))
+			StaticFS("", PFilSystem("./actor/dist", kernel.GetActorFS()))
 	} else {
-		ginApp.Use(gzip.Gzip(gzip.DefaultCompression)).
-			Static("/actor", "./actor/dist")
+		actGroup.
+			Use(gzip.Gzip(gzip.DefaultCompression)).
+			Static("", "./actor/dist")
 	}
 	ginApp.GET("get-clash-config", ginLowerControllers.GinGetClashConfig)
 	ginApp.GET("get-clash-config-plus", ginLowerControllers.GinGetClashConfigPlus)
