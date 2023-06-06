@@ -3,14 +3,13 @@ package logging
 import (
 	"bytes"
 	"fmt"
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/leancodebox/goose/preferences"
+	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 	"runtime"
 	"sync"
-
-	"github.com/leancodebox/goose/fileopt"
-	"github.com/leancodebox/goose/preferences"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -24,7 +23,7 @@ type Entry struct {
 }
 
 var (
-	log        = logrus.StandardLogger()
+	log        = logrus.New()
 	logChannel = make(chan *Entry, 1024*512)
 	wg         sync.WaitGroup
 )
@@ -97,15 +96,12 @@ var (
 )
 
 func init() {
-	logrus.SetFormatter(&logrus.JSONFormatter{})
-	logrus.SetReportCaller(true)
-	logrus.SetFormatter(&LogFormatter{})
-
-	log.Out = os.Stdout
+	log.SetReportCaller(true)
+	log.SetFormatter(&LogFormatter{})
+	log.SetOutput(os.Stdout)
 	if debug {
-		log.Level = logrus.TraceLevel
+		log.SetLevel(logrus.TraceLevel)
 	}
-
 	switch logType {
 	default:
 		log.Info("Unknown Log Output Type")
@@ -115,15 +111,13 @@ func init() {
 			log.Info(err)
 			return
 		}
-
 		file, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
 			log.Info("Failed to log to file, using default stderr")
 			return
 		}
-		log.Out = file
+		log.SetOutput(file)
 	}
-
 	wg.Add(1)
 	go processLogEntries()
 }
