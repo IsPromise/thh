@@ -38,6 +38,21 @@ instanceAxios.interceptors.response.use(response => {
         message.error(res.msg ? res.msg : "响应异常")
     }
     return response
+}, error => {
+    // 处理错误
+    if (error.response) {
+        console.log('请求失败，HTTP 状态码：', error.response.status);
+        console.log('错误信息：', error.response.data);
+        const res = error.response.data
+        if (res !== undefined && res.code === fail) {
+            message.error(res.msg ? res.msg : "响应异常")
+        }
+    } else if (error.request) {
+        console.log('请求发送失败：', error.request);
+    } else {
+        console.log('请求失败：', error.message);
+    }
+    return Promise.reject(error);
 })
 
 export function getUserInfo() {
@@ -126,4 +141,43 @@ export function wsInfo() {
 
 export function getSysInfo() {
     return instanceAxios.get("/sys-info")
+}
+
+
+export function createTodoTaskList(
+    taskName = "",
+    description = "",
+    deadline = "",
+    weight = ""
+) {
+    return instanceAxios.post("todo-task/create", {
+        taskName: taskName,
+        description: description,
+        deadline: deadline,
+        weight: weight,
+    })
+}
+
+export function updateTodoTaskList(
+    taskId = "",
+    taskName = "",
+    description = "",
+    status = "",
+    deadline = "",
+    weight = "",
+    paused = ""
+) {
+    return instanceAxios.post("todo-task/update", {
+        taskId: taskId,
+        taskName: taskName,
+        description: description,
+        status: status,
+        deadline: deadline,
+        weight: weight,
+        paused: paused,
+    })
+}
+
+export function getTodoTaskList() {
+    return instanceAxios.get("todo-task/list")
 }

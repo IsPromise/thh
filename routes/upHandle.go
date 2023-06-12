@@ -1,11 +1,16 @@
 package routes
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/go-playground/locales/zh"
+	ut "github.com/go-playground/universal-translator"
+	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 	"io/fs"
 	"net/http"
 	"path"
 	"thh/app/http/controllers/component"
+	"thh/bundles/logging"
 
 	"github.com/spf13/cast"
 
@@ -16,6 +21,18 @@ import (
 type resultMap map[string]any
 
 var validate = validator.New()
+var trans ut.Translator
+
+func init() {
+	// 注册中文翻译器
+	zhEntity := zh.New()
+	uni := ut.New(zhEntity, zhEntity)
+	trans, _ = uni.GetTranslator("zh")
+	err := zhTranslations.RegisterDefaultTranslations(validate, trans)
+	if err != nil {
+		logging.Error(err)
+	}
+}
 
 type fsFunc func(name string) (fs.File, error)
 
@@ -47,8 +64,10 @@ func ginUpP[T any](action func(request T) component.Response) func(c *gin.Contex
 		_ = c.ShouldBind(&params)
 		err := validate.Struct(params)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, component.DataMap{
-				"msg": err.Error(),
+			c.JSON(http.StatusBadRequest, map[string]any{
+				"msg":    formatError(err),
+				"result": nil,
+				"code":   component.FAIL,
 			})
 			return
 		}
@@ -64,8 +83,10 @@ func ginUpJP[T any](action func(request T) component.Response) func(c *gin.Conte
 		_ = c.BindJSON(&params)
 		err := validate.Struct(params)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, component.DataMap{
-				"msg": err.Error(),
+			c.JSON(http.StatusBadRequest, map[string]any{
+				"msg":    cast.ToString(err),
+				"result": nil,
+				"code":   component.FAIL,
 			})
 			return
 		}
@@ -90,8 +111,10 @@ func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Re
 		_ = c.ShouldBind(&params)
 		err := validate.Struct(params)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, resultMap{
-				"msg": err.Error(),
+			c.JSON(http.StatusBadRequest, map[string]any{
+				"msg":    cast.ToString(err),
+				"result": nil,
+				"code":   component.FAIL,
 			})
 		}
 		response := action(component.BetterRequest[T]{
@@ -100,4 +123,13 @@ func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Re
 		})
 		c.JSON(response.Code, response.Data)
 	}
+}
+
+func formatError(err error) string {
+	var msg bytes.Buffer
+	for _, errItem := range err.(validator.ValidationErrors) {
+		// 输出中文错误信息
+		msg.WriteString(errItem.Translate(trans))
+	}
+	return msg.String()
 }

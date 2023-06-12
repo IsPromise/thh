@@ -33,4 +33,9 @@ func ginApi(ginApp *gin.Engine) {
 	twitterApi.POST("get-spider-twitter-his", ginUpP(controllers.GetSpiderTwitterHis))
 	twitterApi.GET("run-spider-twitter-master", ginUpNP(controllers.RunSpiderTwitterMaster))
 	twitterApi.GET("get-queue-len", ginUpNP(controllers.GetQueueLen))
+
+	apiGroup.Group("todo-task").
+		POST("create", ginUpP(controllers.CreateTask)).
+		POST("update", ginUpP(controllers.UpdateTask)).
+		GET("list", ginUpNP(controllers.FindTodoList))
 }

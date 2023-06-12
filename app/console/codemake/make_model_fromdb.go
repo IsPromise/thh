@@ -183,7 +183,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	modelStr := buildByTmpl(
 		map[string]any{
 			"TableName":  tmpTableName,
-			"ModelName":  stropt.Camel(tmpTableName),
+			"ModelName":  "Entity", //str.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
 		},
@@ -192,7 +192,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	connectStr := buildByTmpl(
 		map[string]any{
 			"TableName":  tmpTableName,
-			"ModelName":  stropt.Camel(tmpTableName),
+			"ModelName":  "Entity", //str.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
 			"DBPkg":      dbStd,
@@ -202,7 +202,7 @@ func buildModelContent(tmpTableName string, list []genColumns) (string, string, 
 	repStr := buildByTmpl(
 		map[string]any{
 			"TableName":  tmpTableName,
-			"ModelName":  stropt.Camel(tmpTableName),
+			"ModelName":  "Entity", //str.Camel(tmpTableName),
 			"importList": importList,
 			"fieldList":  fieldList,
 			"hasPid":     hasPid,

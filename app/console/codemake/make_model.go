@@ -125,11 +125,21 @@ func makeModel(_ *cobra.Command, _ []string) {
 	//	{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
 	//	{Field: "update_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
 	//})
-	outPutModel("FTwitterFilterUser", []genColumns{
-		{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
-		{Field: "screen_name", Type: "varchar(255)", Key: "MUL", Desc: "", Null: "NO", Default: nil},
+	//outPutModel("FTwitterFilterUser", []genColumns{
+	//	{Field: "id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
+	//	{Field: "screen_name", Type: "varchar(255)", Key: "MUL", Desc: "", Null: "NO", Default: nil},
+	//	{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
+	//	{Field: "deleted_at", Type: "datetime", Key: "", Desc: "", Null: "", Default: nil},
+	//})
+	outPutModel("TodoTask", []genColumns{
+		{Field: "task_id", Type: "bigint unsigned", Key: "PRI", Desc: "主键", Null: "NO", Default: nil},
+		{Field: "task_name", Type: "varchar(50)", Key: "", Desc: "任务名", Null: "NO", Default: nil},
+		{Field: "task_description", Type: "varchar(1024)", Key: "任务描述", Desc: "", Null: "NO", Default: nil},
+		{Field: "status", Type: "int", Key: "", Desc: "任务状态（0：未完成，1：已完成）", Null: "NO", Default: nil},
 		{Field: "create_time", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: GetStringP("CURRENT_TIMESTAMP")},
-		{Field: "deleted_at", Type: "datetime", Key: "", Desc: "", Null: "", Default: nil},
+		{Field: "deadline", Type: "datetime", Key: "MUL", Desc: "", Null: "NO", Default: nil},
+		{Field: "weight", Type: "int", Key: "", Desc: "任务权重（用于优先级排序）", Null: "NO", Default: nil},
+		{Field: "paused", Type: "int", Key: "", Desc: "任务暂停状态（0：未暂停，1：已暂停）", Null: "NO", Default: nil},
 	})
 }
 

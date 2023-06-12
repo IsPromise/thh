@@ -9,6 +9,7 @@ import (
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/models/FTwitter/FTwitterUser"
 	"thh/app/models/FTwitter/FTwitterUserHis"
+	"thh/app/models/TodoTask"
 	"thh/app/models/Users"
 	"thh/app/models/rbac/ActivityConfig"
 	"thh/app/models/rbac/ActivityLimitConfig"
@@ -49,6 +50,7 @@ func migration(migration bool, db *gorm.DB) {
 		&FTwitterUser.FTwitterUser{},
 		&FTwitterUserHis.FTwitterUserHis{},
 		&FTwitterFilterUser.FTwitterFilterUser{},
+		&TodoTask.Entity{},
 	); err != nil {
 		logging.Error(err)
 	} else {
