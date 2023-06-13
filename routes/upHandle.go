@@ -2,7 +2,6 @@ package routes
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
@@ -46,7 +45,7 @@ func upFsHandle(pPath string, fSys fs.FS) fsFunc {
 		// If we can't find the asset, fs can handle the error
 		file, err := fSys.Open(assetPath)
 		if err != nil {
-			fmt.Println(err, "出错了")
+			logging.Error(err, "出错了")
 			return nil, err
 		}
 		return file, err
@@ -64,30 +63,7 @@ func ginUpP[T any](action func(request T) component.Response) func(c *gin.Contex
 		_ = c.ShouldBind(&params)
 		err := validate.Struct(params)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, map[string]any{
-				"msg":    formatError(err),
-				"result": nil,
-				"code":   component.FAIL,
-			})
-			return
-		}
-		response := action(params)
-		c.JSON(response.Code, response.Data)
-	}
-}
-
-// ginUpP  支持params 参数
-func ginUpJP[T any](action func(request T) component.Response) func(c *gin.Context) {
-	return func(c *gin.Context) {
-		var params T
-		_ = c.BindJSON(&params)
-		err := validate.Struct(params)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, map[string]any{
-				"msg":    cast.ToString(err),
-				"result": nil,
-				"code":   component.FAIL,
-			})
+			c.JSON(http.StatusBadRequest, component.FailData(formatError(err)))
 			return
 		}
 		response := action(params)
@@ -111,11 +87,7 @@ func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Re
 		_ = c.ShouldBind(&params)
 		err := validate.Struct(params)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, map[string]any{
-				"msg":    cast.ToString(err),
-				"result": nil,
-				"code":   component.FAIL,
-			})
+			c.JSON(http.StatusBadRequest, component.FailData(formatError(err)))
 		}
 		response := action(component.BetterRequest[T]{
 			Params: params,
