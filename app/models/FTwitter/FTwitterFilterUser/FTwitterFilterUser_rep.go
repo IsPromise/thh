@@ -1,6 +1,8 @@
 package FTwitterFilterUser
 
-import "github.com/leancodebox/goose/querymaker"
+import (
+	"github.com/leancodebox/goose/querymaker"
+)
 
 func Create(entity *FTwitterFilterUser) int64 {
 	result := builder().Create(entity)
@@ -23,7 +25,7 @@ func DeleteEntity(entity []*FTwitterFilterUser) int64 {
 }
 
 func Get(id any) (entity FTwitterFilterUser) {
-	builder().Where(pid, id).First(&entity)
+	builder().First(&entity, id)
 	return
 }
 
@@ -31,7 +33,6 @@ func All() (entities []*FTwitterFilterUser) {
 	builder().Find(&entities)
 	return
 }
-
 
 func GetWithDeleted(screenName string) (entity FTwitterFilterUser) {
 	builder().Unscoped().Where(querymaker.Eq(fieldScreenName, screenName)).First(&entity)

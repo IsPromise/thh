@@ -17,13 +17,13 @@ func GinLogger(c *gin.Context) {
 	reqMethod := c.Request.Method
 	reqUri := c.Request.RequestURI
 	statusCode := c.Writer.Status()
+	body, _ := c.GetRawData()
 	clientIP := c.ClientIP()
 
-	info := fmt.Sprintf("access http_status:%v total_time:%v ip:%v method:%v uri:%v", statusCode,
-		latencyTime,
-		clientIP,
-		reqMethod,
-		reqUri)
+	info := fmt.Sprintf("access http_status:%v total_time:%v ip:%v method:%v uri:%v body:%s",
+		statusCode, latencyTime, clientIP,
+		reqMethod, reqUri, string(body),
+	)
 	logging.Info(info)
 
 }

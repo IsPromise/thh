@@ -1,7 +1,7 @@
 package RolePermission
 
 func Get(id any) (entity RolePermission) {
-	builder().Where(pid, id).First(&entity)
+	builder().First(&entity, id)
 	return
 }
 

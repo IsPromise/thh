@@ -1,7 +1,7 @@
 package ActivityConfig
 
 func Get(id any) (entity ActivityConfig) {
-	builder().Where(pid, id).First(&entity)
+	builder().First(&entity,id)
 	return
 }
 

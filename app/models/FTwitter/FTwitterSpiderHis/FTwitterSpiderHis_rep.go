@@ -23,7 +23,7 @@ func deleteEntity(entity *FTwitterSpiderHis) int64 {
 }
 
 func get(id any) (entity FTwitterSpiderHis) {
-	builder().Where(pid, id).First(&entity)
+	builder().First(&entity, id)
 	return
 }
 

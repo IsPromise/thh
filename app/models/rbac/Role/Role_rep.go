@@ -21,6 +21,6 @@ func DeleteEntity(entity *Role) int64 {
 }
 
 func Get(id any) (entity Role) {
-	builder().Where(pid, id).First(&entity)
+	builder().First(&entity, id)
 	return
 }

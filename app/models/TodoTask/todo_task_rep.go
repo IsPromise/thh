@@ -25,7 +25,7 @@ func deleteEntity(entity *Entity) int64 {
 }
 
 func Get(id any) (entity Entity) {
-	builder().Where(pid, id).First(entity)
+	builder().First(&entity, id)
 	return
 }
 

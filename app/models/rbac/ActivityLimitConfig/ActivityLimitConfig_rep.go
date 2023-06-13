@@ -1,7 +1,7 @@
 package ActivityLimitConfig
 
 func Get(id any) (entity ActivityLimitConfig) {
-	builder().Where(pid, id).First(&entity)
+	builder().First(&entity, id)
 	return
 }
 

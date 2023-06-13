@@ -22,7 +22,7 @@ func deleteEntity(entity *{{.ModelName}}) int64 {
 
 {{ if .hasPid}}
 func Get(id any) (entity {{.ModelName}}) {
-	builder().Where(pid, id).First(entity)
+	builder().Where(fmt.Sprintf(`%v = ?`, pid),id).First(entity)
 	return
 }
 

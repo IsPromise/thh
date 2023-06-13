@@ -29,7 +29,7 @@ func CreateTask(request CreateTaskRequest) component.Response {
 }
 
 type UpdateTaskRequest struct {
-	TaskId      string   `json:"taskId"`
+	TaskId      int      `json:"taskId"`
 	TaskName    string   `json:"taskName"`
 	Description string   `json:"description"`
 	Status      int      `json:"status"`

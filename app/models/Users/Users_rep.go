@@ -6,7 +6,7 @@ import (
 )
 
 func Get(id any) (entity Users, err error) {
-	err = builder().Where(pid, id).First(&entity).Error
+	err = builder().First(&entity, id).Error
 	return
 }
 
@@ -55,6 +55,6 @@ func UnscopedDelete(user *Users) {
 }
 
 func UnscopedGet(id any) (entity Users, err error) {
-	err = builder().Unscoped().Where(pid, id).First(&entity).Error
+	err = builder().Unscoped().First(&entity, id).Error
 	return
 }

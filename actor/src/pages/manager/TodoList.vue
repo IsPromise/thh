@@ -1,5 +1,5 @@
 <script setup>
-import {h, defineComponent, ref, onMounted} from "vue";
+import {h, defineComponent, reactive, ref, onMounted} from "vue";
 import {
   NDataTable,
   NButton,
@@ -10,14 +10,29 @@ import {
   NSwitch,
   NFormItem,
   NInput,
-  NSpace
+  NSpace,
+  NText
 } from "naive-ui";
-import {createTodoTaskList, getTodoTaskList} from "@/service/remote";
+import {createTodoTaskList, getTodoTaskList, updateTodoTaskList} from "@/service/remote";
 
 let columns = [
   {align: "center", title: "id", key: "taskId"},
   {align: "center", title: "任务", key: "taskName"},
-  {align: "center", title: "详情", key: "taskDescription"},
+  {
+    align: "center", title: "详情", key: "taskDescription",
+    render(row) {
+      if (row.isEditing) {
+        return h(NInput, {
+          value: row.taskDescription,
+          onUpdateValue: val => {
+            row.taskDescription = val;
+          }
+        });
+      } else {
+        return h(NText, {}, {default: () => row.taskDescription});
+      }
+    }
+  },
   {align: "center", title: "状态", key: "status"},
   {
     align: "center", title: "创建～截止", key: "createTime", render(row) {
@@ -41,16 +56,15 @@ let columns = [
   },
   {align: "center", title: "权重", key: "weight"},
   {
-    align: "center", title: "暂停", key: "paused", render(row) {
-      console.log(row.paused)
-      let action = ref(row.paused)
+    align: "center", title: "暂停", key: "paused", slot: 'paused', render(row) {
       return h(
           NSwitch,
           {
-            modelValue: row.paused,
-            "onUpdate:value": item => {
-              console.log(item)
-              console.log(row)
+            checkedValue: 1,
+            uncheckedValue: 0,
+            value: row.paused,
+            onUpdateValue: item => {
+              row.paused = item
             }
           },
       );
@@ -58,19 +72,42 @@ let columns = [
   },
   {
     align: "center", title: "操作", key: "opt", render(row) {
-      return h(
+      return [h(
           NButton,
           {
             strong: true,
             tertiary: true,
             size: "small",
-            onClick: () => console.log(row)
+            onClick: () => updateTask(row)
           },
           {default: () => "更新"}
-      );
+      ),
+        h(
+            NButton,
+            {
+              strong: true,
+              tertiary: true,
+              size: "small",
+              onClick: () => row.isEditing = !row.isEditing
+            },
+            {default: () => "编辑"}
+        )
+      ];
     }
-  },
+  }
 ];
+
+async function updateTask(row) {
+  await updateTodoTaskList(
+      row.taskId,
+      row.taskName,
+      row.taskDescription,
+      row.status,
+      row.deadline,
+      row.weight,
+      row.paused,
+  )
+}
 
 
 const data = ref([]);
@@ -92,36 +129,37 @@ let rules = ref({
     }
 )
 const size = ref("medium")
-const submitData = ref({
+let submitData = reactive({
   taskName: "",
   description: "",
-  deadline: ref("2023-02-03 02:03:04"),
+  deadline: "2023-02-03 02:03:04",
   weight: 0,
-  paused: ""
-});
+  paused: 0
+})
 
-let submitInitData = {
-  taskName: "",
-  description: "",
-  deadline: ref("2023-02-03 02:03:04"),
-  weight: 0,
-  paused: ""
+function createTodoTask() {
+  let result = createTodoTaskList(
+      submitData.taskName,
+      submitData.description,
+      submitData.deadline,
+      submitData.weight,
+  ).then(r => {
+
+    submitData.taskName = ""
+    submitData.description = ""
+    submitData.deadline = "2023-02-03 02:03:04"
+    submitData.weight = 0
+    submitData.paused = 0
+    f5()
+  })
+
 }
 
-async function createTodoTask() {
-  let result = await createTodoTaskList(
-      submitData.value.taskName,
-      submitData.value.description,
-      submitData.value.deadline,
-      submitData.value.weight,
-  )
-  submitData.value = submitInitData
-  f5()
-}
+function f5() {
+  getTodoTaskList().then(result => {
+    data.value = result.data.result.map(item => ({...item, isEditing: false}));
+  });
 
-async function f5() {
-  let result = await getTodoTaskList();
-  data.value = result.data.result;
 }
 
 onMounted(() => {
