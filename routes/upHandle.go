@@ -61,6 +61,7 @@ func ginUpP[T any](action func(request T) component.Response) func(c *gin.Contex
 	return func(c *gin.Context) {
 		var params T
 		_ = c.ShouldBind(&params)
+		c.Set("requestData", params)
 		err := validate.Struct(params)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, component.FailData(formatError(err)))
@@ -85,6 +86,7 @@ func UpButterReq[T any](action func(ctx component.BetterRequest[T]) component.Re
 		userId := cast.ToUint64(userIdData)
 		var params T
 		_ = c.ShouldBind(&params)
+		c.Set("requestData", params)
 		err := validate.Struct(params)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, component.FailData(formatError(err)))

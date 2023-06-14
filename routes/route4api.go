@@ -21,9 +21,10 @@ func ginApi(ginApp *gin.Engine) {
 	apiGroup.GET("memUse", ginUpNP(controllers.GetUseMem))
 	apiGroup.GET("about", ginUpNP(controllers.About))
 	apiGroup.GET("sys-info", ginUpNP(controllers.SysInfo))
-	apiGroup.Use(middleware.IpLimit).GET("git-status-list", ginUpNP(controllers.GitStatusList))
+	apiGroup.GET("git-status-list", middleware.IpLimit, ginUpNP(controllers.GitStatusList))
 
 	twitterApi := apiGroup.Group("twitter")
+	twitterApi.Use(middleware.IpLimit)
 	twitterApi.GET("get-filter-user", ginUpNP(controllers.GetFilterUserList))
 	twitterApi.POST("set-filter-user", ginUpP(controllers.SetFilterUser))
 	twitterApi.POST("delete-filter-user", ginUpP(controllers.DeleteFilterUser))
