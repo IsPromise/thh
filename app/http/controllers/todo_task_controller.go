@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"github.com/leancodebox/goose/array"
 	"thh/app/http/controllers/component"
 	"thh/app/models/TodoTask"
@@ -66,7 +65,12 @@ const (
 	YyyyMmDdHhMmSs = "2006-01-02 15:04:05"
 )
 
-type WrapTime sql.NullTime
+type WrapTime NullTime
+
+type NullTime struct {
+	Time  time.Time
+	Valid bool // Valid is true if Time is not NULL
+}
 
 func (t *WrapTime) UnmarshalJSON(data []byte) (err error) {
 	if string(data) == "null" {
