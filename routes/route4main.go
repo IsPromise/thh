@@ -14,6 +14,7 @@ func ginWeb(ginApp *gin.Engine) {
 	actGroup := ginApp.Group("/actor")
 	if kernel.IsProduction() {
 		actGroup.
+			Use(middleware.BrowserCache).
 			Use(middleware.CacheMiddleware).
 			Use(gzip.Gzip(gzip.DefaultCompression)).
 			StaticFS("", PFilSystem("./actor/dist", kernel.GetActorFS()))

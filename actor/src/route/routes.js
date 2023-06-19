@@ -41,7 +41,7 @@ export default [
             {showName: '', path: '', component: allTool, belongMenu: false},
             {showName: 'mainTool', path: 'mainTool', component: mainTool, belongMenu: true},
             {showName: 'all tool', path: 'allTool', component: allTool, belongMenu: true},
-            {showName: 'todoList', path: 'todoList', component: todoList, belongMenu: true},
+            {showName: 'TodoList', path: 'todoList', component: todoList, belongMenu: true},
             {showName: 'Im', path: 'im', component: imDemo, belongMenu: true},
             {showName: 'grid demo', path: 'gridPage', component: gridPage, belongMenu: true},
             {
