@@ -54,3 +54,6 @@ output = "./storage/model/"
 [path]
 hexo = ""
 workspace = ""
+
+[cq]
+cqHttp="http://0.0.0.0:5700"

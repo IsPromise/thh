@@ -16,6 +16,7 @@ func RegisterByGin(ginApp *gin.Engine) {
 	ginApi(ginApp)
 	ginAuth(ginApp)
 	ginWs(ginApp)
+	gincq(ginApp)
 
 	ginApp.NoRoute(controllers.NotFound)
 }

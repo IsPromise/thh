@@ -74,3 +74,10 @@ func FailData(msg any) map[string]any {
 		"code":   FAIL,
 	}
 }
+
+
+func Data(data any) Response {
+	return BuildResponse(http.StatusOK,
+		data,
+	)
+}
