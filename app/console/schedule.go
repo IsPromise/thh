@@ -2,22 +2,59 @@ package console
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
+	"thh/app/service/cqclient"
+	"thh/app/service/forbiden"
 	"thh/bundles/logging"
 	"time"
 
 	"github.com/robfig/cron/v3"
 )
 
+var scheduleAction = &cobra.Command{
+	Use:   "schedule",
+	Short: "Start web server",
+	Run: func(_ *cobra.Command, _ []string) {
+		RunJob()
+	},
+	Args: cobra.NoArgs,
+}
+
 var c = cron.New()
 
 func RunJob() {
-	if entryID, err := c.AddFunc("* * * * *", upCmd(func() {
+	_, _ = c.AddFunc("* * * * *", upCmd(func() {
 		logging.Info("HEART_IN_RUN_JOB", time.Now().Format("2006-01-02 15:04:05"))
-	})); err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("schedule entryId:", entryID, " set success")
-	}
+	}))
+	c.AddFunc("* 7 * * *", func() {
+		if forbiden.Forbidden(time.Now().Format("20060102") + "am") {
+			return
+		}
+		currentTime := time.Now()
+
+		// 目标日期
+		targetDate := time.Date(2023, 12, 22, 0, 0, 0, 0, time.UTC)
+
+		// 计算天数差
+		days := targetDate.Sub(currentTime).Hours() / 24
+		cqclient.Send4group(622611442, fmt.Sprintf("同志们~冲起来，还有%v天了", days))
+
+	})
+
+	c.AddFunc("* 0 * * *", func() {
+		if forbiden.Forbidden(time.Now().Format("20060102") + "pm") {
+			return
+		}
+		currentTime := time.Now()
+
+		// 目标日期
+		targetDate := time.Date(2023, 12, 22, 0, 0, 0, 0, time.UTC)
+
+		// 计算天数差
+		days := targetDate.Sub(currentTime).Hours() / 24
+		cqclient.Send4group(622611442, fmt.Sprintf("同志们~早点休息，还有%v天了 冲冲冲", days))
+
+	})
 
 	c.Run()
 }

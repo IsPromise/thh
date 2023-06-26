@@ -36,7 +36,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(CmdServe)
+	rootCmd.AddCommand(CmdServe, scheduleAction)
 	rootCmd.AddCommand(codemake.GetCommands()...)
 	rootCmd.AddCommand(demo.GetCommands()...)
 	rootCmd.AddCommand(cmd.GetCommands()...)

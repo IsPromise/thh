@@ -34,13 +34,19 @@ const (
 	EnvLocal = "local"
 )
 
+var (
+	withSchedule = preferences.GetBool("app.withSchedule", false)
+)
+
 func runWeb(_ *cobra.Command, _ []string) {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
 	info("Thousand-hand:start")
 	info(fmt.Sprintf("Thousand-hand:useMem %d KB", m.Alloc/1024/8))
 
-	go RunJob()
+	if withSchedule {
+		go RunJob()
+	}
 	// 初始化应用程序
 	debug4pprof()
 	ginServe()
