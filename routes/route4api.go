@@ -36,7 +36,8 @@ func ginApi(ginApp *gin.Engine) {
 	twitterApi.GET("get-queue-len", ginUpNP(controllers.GetQueueLen))
 
 	apiGroup.Group("todo-task").
+		GET("status-list", ginUpNP(controllers.TodoStatusList)).
 		POST("create", ginUpP(controllers.CreateTask)).
 		POST("update", ginUpP(controllers.UpdateTask)).
-		GET("list", ginUpNP(controllers.FindTodoList))
+		GET("list", ginUpP(controllers.FindTodoList))
 }

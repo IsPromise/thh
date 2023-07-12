@@ -7,6 +7,20 @@ import (
 	"time"
 )
 
+type IdValue struct {
+	Id    int    `json:"id"`
+	Value string `json:"value"`
+}
+
+func TodoStatusList() component.Response {
+	return component.SuccessResponse([]IdValue{
+		{0, "创建"},
+		{1, "完成"},
+		{2, "暂停"},
+		{3, "作废"},
+	})
+}
+
 type CreateTaskRequest struct {
 	TaskName    string   `json:"taskName" validate:"required"`
 	Description string   `json:"description"`
@@ -53,8 +67,13 @@ func UpdateTask(request UpdateTaskRequest) component.Response {
 	return component.SuccessResponse(entity.ToDto())
 }
 
-func FindTodoList() component.Response {
-	tasks := TodoTask.All()
+type FindTodoListRequest struct {
+	Status  []int `json:"status"`
+	NeedAll bool  `json:"needAll"`
+}
+
+func FindTodoList(request FindTodoListRequest) component.Response {
+	tasks := TodoTask.QueryAll(request.NeedAll,request.Status)
 	return component.SuccessResponse(array.ArrayMap(func(t *TodoTask.Entity) TodoTask.EntityDto {
 		return t.ToDto()
 	}, tasks))

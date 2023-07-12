@@ -143,6 +143,10 @@ export function getSysInfo() {
     return instanceAxios.get("/sys-info")
 }
 
+export function getTodoStatusList(
+) {
+    return instanceAxios.get("todo-task/status-list",)
+}
 
 export function createTodoTaskList(
     taskName = "",

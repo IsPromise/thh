@@ -33,3 +33,15 @@ func All() (entities []*Entity) {
 	builder().Order(querymaker.Desc(fieldCreateTime)).Order(querymaker.Desc(fieldDeadline)).Find(&entities)
 	return
 }
+
+func QueryAll(needAll bool, status []int) (entities []*Entity) {
+	query := builder()
+	if len(status) != 0 {
+		query.Where(querymaker.In(fieldStatus, status))
+	}
+	if needAll == false {
+		query.Where(querymaker.Ne(fieldStatus, 3))
+	}
+	query.Order(querymaker.Desc(fieldCreateTime)).Order(querymaker.Desc(fieldDeadline)).Find(&entities)
+	return
+}
