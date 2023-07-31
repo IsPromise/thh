@@ -22,7 +22,7 @@ func runMakeRemoteService(_ *cobra.Command, args []string) {
 		map[string]any{
 			"clientName": model.ClientName,
 		},
-		fmt.Sprintf("app/service/remoteservice/%s_client.go", model.PackageName),
+		fmt.Sprintf("app/service/ropt/%s_client.go", model.PackageName),
 		"tmpl/client.tmpl",
 	)
 }
