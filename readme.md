@@ -215,3 +215,10 @@ bbs开发部分
 - 在线广播功能
 - 申请展示功能（侧边留下部分可以申请上墙）
 - 文档+后续维护
+
+#  工具
+```shell
+go install github.com/codesenberg/bombardier@latest
+go install github.com/cosmtrek/air@latest
+go install github.com/goreleaser/goreleaser@latest
+```
