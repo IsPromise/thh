@@ -2,7 +2,7 @@ package DataReps
 
 import (
 	"fmt"
-	"thh/bundles/connect/dbconnect"
+	"thh/app/bundles/connect/dbconnect"
 )
 
 func Set(key string, value string) error {

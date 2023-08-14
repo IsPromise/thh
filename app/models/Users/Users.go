@@ -2,7 +2,7 @@ package Users
 
 import (
 	"gorm.io/gorm"
-	"thh/bundles/algorithm"
+	"thh/app/bundles/algorithm"
 	"time"
 )
 

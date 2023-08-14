@@ -1,9 +1,8 @@
 package Role
 
 import (
-	db "thh/bundles/connect/dbconnect"
-
 	"gorm.io/gorm"
+	db "thh/app/bundles/connect/dbconnect"
 )
 
 // Prohibit manual changes

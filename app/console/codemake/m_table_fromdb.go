@@ -2,10 +2,9 @@ package codemake
 
 import (
 	"fmt"
-	"regexp"
-	"thh/bundles/eh"
-
 	"github.com/leancodebox/goose/preferences"
+	"regexp"
+	"thh/app/bundles/eh"
 
 	"github.com/spf13/cobra"
 	"gorm.io/driver/mysql"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/leancodebox/goose/jsonopt"
-	"thh/bundles/logging"
+	"thh/app/bundles/logging"
 	"time"
 )
 

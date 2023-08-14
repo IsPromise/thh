@@ -2,6 +2,10 @@ package migration
 
 import (
 	"fmt"
+	"gorm.io/gorm"
+	"thh/app/bundles/connect/dbconnect"
+	"thh/app/bundles/kernel"
+	"thh/app/bundles/logging"
 	"thh/app/models/DataReps"
 	"thh/app/models/FTwitter/FTwitterFilterUser"
 	"thh/app/models/FTwitter/FTwitterMedia"
@@ -16,11 +20,6 @@ import (
 	"thh/app/models/rbac/Permission"
 	"thh/app/models/rbac/Role"
 	"thh/app/models/rbac/RolePermission"
-	"thh/bundles/connect/dbconnect"
-	"thh/bundles/kernel"
-	"thh/bundles/logging"
-
-	"gorm.io/gorm"
 )
 
 func M() {

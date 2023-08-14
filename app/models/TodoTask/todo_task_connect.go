@@ -2,8 +2,7 @@ package TodoTask
 
 import (
 	"gorm.io/gorm"
-
-	db "thh/bundles/connect/dbconnect"
+	db "thh/app/bundles/connect/dbconnect"
 )
 
 // Prohibit manual changes

@@ -6,10 +6,10 @@ import (
 	"github.com/fogleman/gg"
 	"math/rand"
 	"strconv"
+	"thh/app/bundles/logging"
 	"thh/app/http/controllers/component"
 	"thh/app/models/DataReps"
 	"thh/app/models/Users"
-	"thh/bundles/logging"
 	"time"
 
 	"github.com/leancodebox/goose/jwt"

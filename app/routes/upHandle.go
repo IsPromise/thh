@@ -5,13 +5,12 @@ import (
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"github.com/spf13/cast"
 	"io/fs"
 	"net/http"
 	"path"
+	"thh/app/bundles/logging"
 	"thh/app/http/controllers/component"
-	"thh/bundles/logging"
-
-	"github.com/spf13/cast"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

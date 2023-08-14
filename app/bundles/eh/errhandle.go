@@ -1,7 +1,7 @@
 package eh
 
 import (
-	"thh/bundles/logging"
+	"thh/app/bundles/logging"
 )
 
 type Logger interface {

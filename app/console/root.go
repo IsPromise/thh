@@ -1,6 +1,10 @@
 package console
 
 import (
+	"github.com/leancodebox/goose/fileopt"
+	"github.com/spf13/cobra"
+	"thh/app/bundles/bootstrap"
+	"thh/app/bundles/kernel"
 	"thh/app/console/cmd"
 	"thh/app/console/cmd/demo"
 	"thh/app/console/cmd/p2p"
@@ -8,12 +12,6 @@ import (
 	"thh/app/console/codemake"
 	"thh/app/console/shadow"
 	"thh/app/migration"
-	"thh/bundles/bootstrap"
-	"thh/bundles/kernel"
-
-	"github.com/leancodebox/goose/fileopt"
-
-	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands

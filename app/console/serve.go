@@ -8,9 +8,9 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"thh/bundles/kernel"
-	"thh/bundles/logging"
-	"thh/routes"
+	"thh/app/bundles/kernel"
+	"thh/app/bundles/logging"
+	"thh/app/routes"
 	"time"
 
 	"github.com/gin-gonic/gin"

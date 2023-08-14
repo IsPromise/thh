@@ -8,8 +8,8 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"thh/app/bundles/logging"
 	"thh/app/http/controllers/component"
-	"thh/bundles/logging"
 	"time"
 
 	"github.com/fogleman/gg"

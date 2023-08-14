@@ -1,23 +1,22 @@
 package routes
 
 import (
+	"github.com/gin-contrib/gzip"
+	kernel2 "thh/app/bundles/kernel"
 	"thh/app/http/controllers/ginLowerControllers"
 	"thh/app/http/middleware"
-	"thh/bundles/kernel"
-
-	"github.com/gin-contrib/gzip"
 
 	"github.com/gin-gonic/gin"
 )
 
 func ginWeb(ginApp *gin.Engine) {
 	actGroup := ginApp.Group("/actor")
-	if kernel.IsProduction() {
+	if kernel2.IsProduction() {
 		actGroup.
 			Use(middleware.BrowserCache).
 			Use(middleware.CacheMiddleware).
 			Use(gzip.Gzip(gzip.DefaultCompression)).
-			StaticFS("", PFilSystem("./actor/dist", kernel.GetActorFS()))
+			StaticFS("", PFilSystem("./actor/dist", kernel2.GetActorFS()))
 	} else {
 		actGroup.
 			Use(gzip.Gzip(gzip.DefaultCompression)).

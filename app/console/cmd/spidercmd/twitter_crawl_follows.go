@@ -3,9 +3,9 @@ package spidercmd
 import (
 	"math/rand"
 	"sync"
+	"thh/app/bundles/logging"
+	"thh/app/bundles/myfmt"
 	"thh/app/service/twittermanager"
-	"thh/bundles/logging"
-	"thh/bundles/myfmt"
 	"time"
 
 	"github.com/leancodebox/goose/jsonopt"

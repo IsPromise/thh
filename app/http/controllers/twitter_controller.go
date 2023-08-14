@@ -2,19 +2,18 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/leancodebox/goose/array"
+	"github.com/leancodebox/goose/memqueue"
+	"github.com/spf13/cast"
 	"reflect"
 	"sync"
+	"thh/app/bundles/safety"
 	"thh/app/console/cmd/spidercmd"
 	"thh/app/http/controllers/component"
 	"thh/app/models/FTwitter/FTwitterFilterUser"
 	"thh/app/models/FTwitter/FTwitterSpiderHis"
 	"thh/app/models/FTwitter/FTwitterTweet"
 	"thh/app/models/FTwitter/FTwitterUser"
-	"thh/bundles/safety"
-
-	"github.com/leancodebox/goose/array"
-	"github.com/leancodebox/goose/memqueue"
-	"github.com/spf13/cast"
 )
 
 type TLink struct {

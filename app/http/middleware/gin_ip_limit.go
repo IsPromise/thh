@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/leancodebox/goose/serverinfo"
 	"net/http"
-	"thh/bundles/logging"
+	"thh/app/bundles/logging"
 )
 
 func IpLimit(c *gin.Context) {

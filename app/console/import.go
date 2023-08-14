@@ -1,7 +1,7 @@
 package console
 
 import (
-	"thh/bundles/logging"
+	"thh/app/bundles/logging"
 )
 
 var (

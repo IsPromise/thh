@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"runtime"
 	"strings"
+	"thh/app/bundles/logging"
 	"thh/app/http/controllers/component"
-	"thh/bundles/logging"
 )
 
 // Api api

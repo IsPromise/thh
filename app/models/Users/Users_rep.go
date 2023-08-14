@@ -2,7 +2,7 @@ package Users
 
 import (
 	"github.com/leancodebox/goose/querymaker"
-	"thh/bundles/algorithm"
+	"thh/app/bundles/algorithm"
 )
 
 func Get(id any) (entity Users, err error) {

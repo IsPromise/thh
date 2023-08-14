@@ -3,11 +3,10 @@ package messagechat
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/leancodebox/goose/luckrand"
 	"log"
 	"sync"
-	"thh/bundles/logging"
-
-	"github.com/leancodebox/goose/luckrand"
+	"thh/app/bundles/logging"
 
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cast"

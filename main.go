@@ -3,8 +3,8 @@ package main
 import (
 	"embed"
 	_ "net/http/pprof"
+	kernel2 "thh/app/bundles/kernel"
 	"thh/app/console"
-	"thh/bundles/kernel"
 )
 
 //go:embed  all:actor/dist/**
@@ -15,8 +15,8 @@ var oConfig string
 
 func main() {
 	// 注册静态资源
-	kernel.InitStart()
-	kernel.ActorSave(actorFS)
-	kernel.SetOConfig(oConfig)
+	kernel2.InitStart()
+	kernel2.ActorSave(actorFS)
+	kernel2.SetOConfig(oConfig)
 	console.Execute()
 }

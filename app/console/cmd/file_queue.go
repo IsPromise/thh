@@ -2,9 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"thh/bundles/kernel"
-
 	"github.com/leancodebox/goose/filequeue"
+	"thh/app/bundles/kernel"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"

@@ -2,18 +2,17 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/antchfx/htmlquery"
+	"github.com/go-resty/resty/v2"
 	"github.com/leancodebox/goose/array"
 	"github.com/leancodebox/goose/fileopt"
 	"github.com/leancodebox/goose/jsonopt"
-	"strings"
-	"sync"
-	"thh/app/service/ropt"
-	"thh/bundles/logging"
-
-	"github.com/antchfx/htmlquery"
-	"github.com/go-resty/resty/v2"
 	"github.com/spf13/cobra"
 	"golang.org/x/net/html"
+	"strings"
+	"sync"
+	"thh/app/bundles/logging"
+	"thh/app/service/ropt"
 )
 
 func init() {
