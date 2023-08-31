@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"sync"
+	"time"
 )
 
 const (
@@ -22,6 +23,7 @@ type Entry struct {
 	level   slog.Level
 	message string
 	args    []any
+	pcs     uintptr
 }
 
 var (
@@ -34,20 +36,16 @@ func std() *slog.Logger {
 	return log
 }
 
-func Info(args ...interface{}) {
-	sendLog(slog.LevelInfo, fmt.Sprint(args...))
+func Info(msg string, args ...interface{}) {
+	sendLog(slog.LevelInfo, msg, args...)
 }
 
-func Printf(format string, args ...interface{}) {
-	sendLog(slog.LevelInfo, fmt.Sprintf(format, args...))
+func Printf(msg string, args ...interface{}) {
+	sendLog(slog.LevelInfo, fmt.Sprintf(msg, args...))
 }
 
-func Println(args ...interface{}) {
-	sendLog(slog.LevelInfo, fmt.Sprintln(args...))
-}
-
-func Error(args ...interface{}) {
-	sendLog(slog.LevelError, fmt.Sprint(args...))
+func Error(msg string, args ...interface{}) {
+	sendLog(slog.LevelError, msg, args...)
 }
 
 func ErrIf(err error) bool {
@@ -60,34 +58,41 @@ func ErrIf(err error) bool {
 
 // Send log entry to the channel
 func sendLog(level slog.Level, msg string, args ...any) {
-
-	if caller, success := getCaller(3); success {
-		msg = caller + ":" + msg
-	}
-
+	//if caller, success := getCaller(3); success {
+	//	msg = caller + ":" + msg
+	//}
+	var pcs [1]uintptr
+	runtime.Callers(3, pcs[:])
 	entry := &Entry{
 		level:   level,
 		message: msg,
+		args:    args,
+		pcs:     pcs[0],
 	}
 	logChannel <- entry
 }
 
-func getCaller(depth int) (string, bool) {
-	pc, file, line, ok := runtime.Caller(depth) // 1 表示跳过当前函数的调用帧
-	if ok {
-		f := runtime.FuncForPC(pc)
-		if f != nil {
-			funcName := f.Name()
-			return fmt.Sprintf("[%s:%s:%d] message", funcName, filepath.Base(file), line), true
-		}
-	}
-	return "", false
-}
+//func getCaller(depth int) (string, bool) {
+//	pc, file, line, ok := runtime.Caller(depth) // 1 表示跳过当前函数的调用帧
+//	if ok {
+//		f := runtime.FuncForPC(pc)
+//		if f != nil {
+//			funcName := f.Name()
+//			return fmt.Sprintf("[%s:%s:%d] message", funcName, filepath.Base(file), line), true
+//		}
+//	}
+//	return "", false
+//}
 
 func processLogEntries() {
 	defer wg.Done()
 	for entry := range logChannel {
-		std().Log(context.Background(), entry.level, entry.message, entry.args...)
+		if !log.Enabled(context.Background(), slog.LevelInfo) {
+			return
+		}
+		r := slog.NewRecord(time.Now(), entry.level, entry.message, entry.pcs)
+		r.Add(entry.args...)
+		_ = log.Handler().Handle(context.Background(), r)
 	}
 }
 
@@ -142,5 +147,5 @@ func replace(groups []string, a slog.Attr) slog.Attr {
 func Shutdown() {
 	close(logChannel)
 	wg.Wait()
-	fmt.Println("logging 👋")
+	Info("logging 👋")
 }

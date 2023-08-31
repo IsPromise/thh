@@ -1,7 +1,6 @@
 package migration
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 	"thh/app/bundles/connect/dbconnect"
 	"thh/app/bundles/kernel"
@@ -31,7 +30,7 @@ func migration(migration bool, db *gorm.DB) {
 	if migration == false {
 		return
 	}
-	fmt.Println("init migration")
+	logging.Info("init migration")
 	// 自动迁移
 	var err error
 
@@ -51,7 +50,7 @@ func migration(migration bool, db *gorm.DB) {
 		&FTwitterFilterUser.FTwitterFilterUser{},
 		&TodoTask.Entity{},
 	); err != nil {
-		logging.Error(err)
+		logging.Error(err.Error())
 	} else {
 		logging.Info("migration end")
 	}

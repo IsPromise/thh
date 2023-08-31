@@ -89,10 +89,11 @@ func ginServe() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	info("Thousand-hand:listen " + port)
-	fmt.Printf("use http://localhost:%s\n", port)
 	ip, _ := serverinfo.GetLocalIp()
-	fmt.Printf("use %v://%v:%v\n", "http", ip, port)
+	info("Thousand-hand:listen " + port)
+	fmt.Println(fmt.Sprintf("%v %v", time.Now().Format("[2006-01-02 15:04:05] "), "http://localhost:"+port))
+	fmt.Println(fmt.Sprintf("%v %v://%v:%v",
+		time.Now().Format("[2006-01-02 15:04:05] "), "http", ip, port))
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -106,12 +107,12 @@ func ginServe() {
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 
-	logging.Println("Shutdown Server ...")
+	logging.Info("Shutdown Server ...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logging.Println("Server Shutdown:", err)
+		logging.Info("Server Shutdown:", err)
 	}
-	logging.Println("Server exiting")
+	logging.Info("Server exiting")
 	logging.Shutdown()
 }

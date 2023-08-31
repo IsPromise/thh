@@ -5,6 +5,7 @@ import (
 	"github.com/leancodebox/goose/preferences"
 	"regexp"
 	"thh/app/bundles/eh"
+	"thh/app/bundles/logging"
 
 	"github.com/spf13/cobra"
 	"gorm.io/driver/mysql"
@@ -30,19 +31,19 @@ func runMTableFromDb(_ *cobra.Command, _ []string) {
 	localDb, err := gorm.Open(mysql.Open(localSourceName), &gorm.Config{PrepareStmt: false,
 		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 全局禁用表名复数
 		Logger:         logger.Default})
-	if eh.PrIF(err) {
+	if logging.ErrIf(err) {
 		return
 	}
 	db, err := gorm.Open(mysql.Open(dataSourceName), &gorm.Config{PrepareStmt: false,
 		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 全局禁用表名复数
 		Logger:         logger.Default})
-	if eh.PrIF(err) {
+	if logging.ErrIf(err) {
 		return
 	}
 
 	rows, err := db.Raw("show tables").Rows()
 	tbDesc := make(map[string]string)
-	if eh.PrIF(err) {
+	if logging.ErrIf(err) {
 		return
 	}
 	for rows.Next() {

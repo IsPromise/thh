@@ -3,14 +3,12 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/leancodebox/goose/jsonopt"
 	"thh/app/bundles/logging"
 	"time"
 )
 
 func GinLogger(c *gin.Context) {
 	startTime := time.Now()
-
 	c.Next()
 	endTime := time.Now()
 	latencyTime := fmt.Sprintf("%6v", endTime.Sub(startTime))
@@ -19,11 +17,12 @@ func GinLogger(c *gin.Context) {
 	statusCode := c.Writer.Status()
 	clientIP := c.ClientIP()
 	requestData, _ := c.Get("requestData")
-
-	info := fmt.Sprintf("access http_status:%v total_time:%v ip:%v method:%v uri:%v body:%s",
-		statusCode, latencyTime, clientIP,
-		reqMethod, reqUri, jsonopt.Encode(requestData),
+	logging.Info("access",
+		"http_status", statusCode,
+		"total_time", latencyTime,
+		"ip", clientIP,
+		"ip", reqMethod,
+		"uri", reqUri,
+		"body", requestData,
 	)
-	logging.Info(info)
-
 }

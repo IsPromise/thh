@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
-	"thh/app/bundles/logging"
 )
 
 func init() {
@@ -44,7 +43,7 @@ func runNewlog(cmd *cobra.Command, args []string) {
 	logger.InfoContext(context.Background(), "dasds", "ok", data)
 	slog.Default().Info("sadasdas")
 
-	logging.Info()
+	//logging.Info()
 
 	//logPath := preferences.Get("log.path", "./storage/logs/thh222.log")
 	//if err := fileopt.FilePutContents(logPath, []byte(""), true); err != nil {

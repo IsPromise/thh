@@ -28,7 +28,7 @@ func init() {
 	trans, _ = uni.GetTranslator("zh")
 	err := zhTranslations.RegisterDefaultTranslations(validate, trans)
 	if err != nil {
-		logging.Error(err)
+		logging.Error(err.Error())
 	}
 }
 
@@ -44,7 +44,7 @@ func upFsHandle(pPath string, fSys fs.FS) fsFunc {
 		// If we can't find the asset, fs can handle the error
 		file, err := fSys.Open(assetPath)
 		if err != nil {
-			logging.Error(err, "出错了")
+			logging.Error(err.Error())
 			return nil, err
 		}
 		return file, err

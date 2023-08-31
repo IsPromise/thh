@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"thh/app/bundles/eh"
+	"thh/app/bundles/logging"
 
 	"github.com/leancodebox/goose/preferences"
 
@@ -55,13 +56,13 @@ func runGModel(_ *cobra.Command, _ []string) {
 	db, err := gorm.Open(mysql.Open(dataSourceName), &gorm.Config{PrepareStmt: false,
 		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 全局禁用表名复数
 		Logger:         logger.Default})
-	if eh.PrIF(err) {
+	if logging.ErrIf(err) {
 		return
 	}
 
 	rows, err := db.Raw("show tables").Rows()
 	tbDesc := make(map[string]string)
-	if eh.PrIF(err) {
+	if logging.ErrIf(err) {
 		return
 	}
 	for rows.Next() {
