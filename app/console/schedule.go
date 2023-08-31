@@ -2,7 +2,7 @@ package console
 
 import (
 	"github.com/spf13/cobra"
-	logging2 "thh/app/bundles/logging"
+	"thh/app/bundles/logging"
 	"time"
 
 	"github.com/robfig/cron/v3"
@@ -18,12 +18,12 @@ var scheduleAction = &cobra.Command{
 }
 
 var c = cron.New(
-	cron.WithLogger(cron.VerbosePrintfLogger(logging2.CronLogging{})),
+	cron.WithLogger(cron.VerbosePrintfLogger(logging.CronLogging{})),
 )
 
 func RunJob() {
 	_, _ = c.AddFunc("* * * * *", upCmd(func() {
-		logging2.Info("HEART_IN_RUN_JOB", time.Now().Format("2006-01-02 15:04:05"))
+		logging.Info("HEART_IN_RUN_JOB", time.Now().Format("2006-01-02 15:04:05"))
 	}))
 	//c.AddFunc("* 7 * * *", func() {
 	//	if forbiden.Forbidden(time.Now().Format("20060102") + "am") {

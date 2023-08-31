@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/glebarez/sqlite"
 	"github.com/leancodebox/goose/preferences"
-	logging2 "thh/app/bundles/logging"
+	"thh/app/bundles/logging"
 
 	"log"
 	"os"
@@ -53,16 +53,16 @@ func connectDB() {
 	var err error
 	switch connection {
 	case "sqlite":
-		logging2.Info("use sqlite")
-		dbIns, err = connectSqlLiteDB(logging2.NewGormLogger())
+		logging.Info("use sqlite")
+		dbIns, err = connectSqlLiteDB(logging.NewGormLogger())
 		break
 	case "mysql":
-		logging2.Info("use mysql")
-		dbIns, err = connectMysqlDB(logging2.NewGormLogger())
+		logging.Info("use mysql")
+		dbIns, err = connectMysqlDB(logging.NewGormLogger())
 		break
 	default:
-		logging2.Info("use sqlite because unselect db")
-		dbIns, err = connectSqlLiteDB(logging2.NewGormLogger())
+		logging.Info("use sqlite because unselect db")
+		dbIns, err = connectSqlLiteDB(logging.NewGormLogger())
 		break
 	}
 

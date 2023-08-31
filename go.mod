@@ -1,6 +1,6 @@
 module thh
 
-go 1.18
+go 1.21
 
 require (
 	github.com/antchfx/htmlquery v1.3.0
@@ -17,7 +17,6 @@ require (
 	github.com/iancoleman/strcase v0.3.0
 	github.com/leancodebox/goose v0.0.13
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cast v1.5.1
 	github.com/spf13/cobra v1.7.0
 	golang.org/x/crypto v0.11.0
