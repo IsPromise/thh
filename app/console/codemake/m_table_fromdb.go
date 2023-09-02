@@ -48,7 +48,7 @@ func runMTableFromDb(_ *cobra.Command, _ []string) {
 	}
 	for rows.Next() {
 		var table string
-		eh.PrIF(rows.Scan(&table))
+		logging.ErrIf(rows.Scan(&table))
 		tbDesc[table] = table
 	}
 	eh.PrIF(rows.Close())
