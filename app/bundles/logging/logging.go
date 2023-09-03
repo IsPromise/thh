@@ -147,5 +147,5 @@ func replace(groups []string, a slog.Attr) slog.Attr {
 func Shutdown() {
 	close(logChannel)
 	wg.Wait()
-	slog.Default().Info("logging 👋")
+	slog.Info("logging 👋")
 }
