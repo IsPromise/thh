@@ -1,12 +1,15 @@
 package cmd
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
 	"log/slog"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 )
 
 func init() {
@@ -43,6 +46,11 @@ func runNewlog(cmd *cobra.Command, args []string) {
 	logger.InfoContext(context.Background(), "dasds", "ok", data)
 	slog.Default().Info("sadasdas")
 
+	slices.Clone([]string{""})
+	//cmp.Less()
+	slog.Default()
+	cmp.Less(1, 2)
+	maps.Clone(map[string]string{"": ""})
 	//logging.Info()
 
 	//logPath := preferences.Get("log.path", "./storage/logs/thh222.log")

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -41,8 +42,8 @@ var (
 func runWeb(_ *cobra.Command, _ []string) {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
-	info("Thousand-hand:start")
-	info(fmt.Sprintf("Thousand-hand:useMem %d KB", m.Alloc/1024/8))
+	slog.Info("Thousand-hand:start")
+	slog.Info(fmt.Sprintf("Thousand-hand:useMem %d KB", m.Alloc/1024/8))
 
 	if withSchedule {
 		go RunJob()
@@ -90,10 +91,9 @@ func ginServe() {
 		MaxHeaderBytes: 1 << 20,
 	}
 	ip, _ := serverinfo.GetLocalIp()
-	info("Thousand-hand:listen " + port)
-	fmt.Println(fmt.Sprintf("%v %v", time.Now().Format("[2006-01-02 15:04:05] "), "http://localhost:"+port))
-	fmt.Println(fmt.Sprintf("%v %v://%v:%v",
-		time.Now().Format("[2006-01-02 15:04:05] "), "http", ip, port))
+	slog.Info("Thousand-hand:listen " + port)
+	slog.Info("http://localhost:" + port)
+	slog.Info(fmt.Sprintf("%v://%v:%v", "http", ip, port))
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -101,7 +101,7 @@ func ginServe() {
 		}
 	}()
 
-	fmt.Println("start use:" + cast.ToString(kernel.GetUnitTime()))
+	slog.Info("start use:" + cast.ToString(kernel.GetUnitTime()))
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
