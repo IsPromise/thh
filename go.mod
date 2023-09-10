@@ -10,20 +10,20 @@ require (
 	github.com/glebarez/sqlite v1.9.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/go-playground/validator/v10 v10.14.1
+	github.com/go-playground/validator/v10 v10.15.3
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.3.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/leancodebox/goose v0.0.13
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/cast v1.5.1
 	github.com/spf13/cobra v1.7.0
-	golang.org/x/crypto v0.11.0
-	golang.org/x/net v0.13.0
+	golang.org/x/crypto v0.13.0
+	golang.org/x/net v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.1
-	gorm.io/gorm v1.25.2
+	gorm.io/gorm v1.25.4
 )
 
 require (
@@ -72,8 +72,8 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/text v0.11.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	modernc.org/libc v1.22.5 // indirect
