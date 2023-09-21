@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestSyncMap(t *testing.T) {
@@ -89,4 +90,79 @@ func (itself *superPool) gp(dogUp func(dogEntity *dog)) {
 
 func (itself *superPool) dogRead(dogEntity *dog) {
 	fmt.Println("dog")
+}
+
+type useLockEntity struct {
+	lock sync.Mutex
+}
+
+func (itself *useLockEntity) sleep() {
+	itself.lock.Lock()
+	defer itself.lock.Unlock()
+	time.Sleep(time.Second * 3)
+	fmt.Println(time.Now())
+}
+
+func TestUseLock(t *testing.T) {
+	u := useLockEntity{}
+	wg := sync.WaitGroup{}
+	for i := 1; i <= 3; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			u.sleep()
+		}()
+	}
+	wg.Wait()
+}
+
+type nodeDeep2 struct {
+	age int
+}
+
+type nodeDeep1 struct {
+	age int
+	nd2 nodeDeep2
+}
+
+type nodeDeep0 struct {
+	age int
+	nd1 nodeDeep1
+}
+
+func updateND0(data nodeDeep0, newAge int) {
+	data.age = newAge
+}
+func updateND1(data nodeDeep1, newAge int) {
+	data.age = newAge
+}
+func updateND2(data nodeDeep2, newAge int) {
+	data.age = newAge
+}
+
+func updateND0p(data *nodeDeep0, newAge int) {
+	data.age = newAge
+}
+func updateND1p(data *nodeDeep1, newAge int) {
+	data.age = newAge
+}
+func updateND2p(data *nodeDeep2, newAge int) {
+	data.age = newAge
+}
+
+func updateND0pAll(data *nodeDeep0, newAge int) {
+	data.age = newAge
+	data.nd1.age = newAge
+	data.nd1.nd2.age = newAge
+}
+
+func TestUpP(t *testing.T) {
+	nd := nodeDeep0{}
+	updateND1p(&nd.nd1, 10)
+	updateND2(nd.nd1.nd2, 10)
+	fmt.Println(nd)
+	nd2 := nodeDeep0{}
+	updateND0pAll(&nd2, 100)
+	fmt.Println(nd2)
+
 }
