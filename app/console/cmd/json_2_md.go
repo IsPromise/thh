@@ -71,10 +71,10 @@ func runJson2Md(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	fmt.Println()
 
-	fmt.Println("|key \t| value \t|")
-	fmt.Println("|---| ---|")
+	fmt.Println("|key \t| value \t| desc\t|")
+	fmt.Println("|:---:|:---:|:---:|")
 	for _, valueType := range stats.Keys {
-		fmt.Printf("|%s|%s|\n", valueType, strings.Join(stats.Types[valueType], ","))
+		fmt.Printf("|`%s`|`%s`| |\n", valueType, strings.Join(stats.Types[valueType], ","))
 
 	}
 }
@@ -148,50 +148,44 @@ func parseJSONArray(prefix string, jsonArray []interface{}, stats *JSONStats) {
 // 测试-提前终止-tmp
 
 var d = `{
-    "applicantName": "霍思盾（huosidun）",
-    "applicantDept": "商业智能中心-交易研发部-企业系统部",
-    "cityContractNum": "12",
-    "bpmSn": "21",
-    "constractType": {
-        "id": "1",
-        "value": "流量对赌"
+  "config": {
+    "dashboard": {
+      "port": 9090
+    }
+  },
+  "residentTask": [
+    {
+      "jobName": "thh",
+      "binPath": "thh",
+      "params": [
+        "serve"
+      ],
+      "dir": "/Users/thh/workspace/thh",
+      "run": true
     },
-    "contractCity": {
-        "id": "2048",
-        "value": "三明"
-    },
-    "isDirect": {
-        "id": "1",
-        "value": "是"
-    },
-    "agentEntityName": "xx",
-    "ourEntityName": "xxx",
-    "terminatedDate": "2023-09-13",
-    "refundContractAmount": "0",
-    "refundSecurityAmount": "0",
-    "invoiceRefund": {
-        "id": "1",
-        "value": "是"
-    },
-    "reason": "12",
-    "attachment": [
-        {
-            "name": "out2023_02_27_15_38_1991.png",
-            "url": "http://testv3.58v5.cn/FHgHBazYxWFki/attachment/5f633b22171a4732bd2d9e57c09f21cc.png"
-        }
-    ],
-    "processNameKey": "jacBgCGbvZ",
-    "processNameValue": "代理终止协议",
-    "p_number": "20230913114251695869",
-    "processCurrentState": "1",
-    "submitUserName": "huosidun",
-    "submitUserDept": "201307121704152ae4f131",
-    "submitUserPost": "201101101655507f728cae",
-    "submitUserLocation": "LOCATION-3-129",
-    "submitUserCity": "1",
-    "submitUserCostCenterTopTwo": "50",
-    "submitUserBudgetOrg": "913663770788651008",
-    "submitUserEntryDate": "20220830",
-    "businessGroupId": "3",
-    "token": "xxx"
+    {
+      "jobName": "dt",
+      "binPath": "dt",
+      "params": [
+        "serve"
+      ],
+      "options": {
+        "outputType": 1,
+        "outputPath": "./tmp"
+      },
+      "dir": "/Users/thh/workspace/atool",
+      "run": true
+    }
+  ],
+  "scheduledTask": [
+    {
+      "jobName": "kuai",
+      "binPath": "kuai",
+      "params": [
+        "now"
+      ],
+      "spec": "* * * * *",
+      "run": true
+    }
+  ]
 }`
