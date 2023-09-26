@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"thh/app/bundles/kernel"
 	"thh/app/bundles/logging"
-	"thh/app/routes"
+	"thh/app/http/routes"
 	"time"
 
 	"github.com/gin-gonic/gin"
