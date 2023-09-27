@@ -32,14 +32,15 @@ func CountGitReposWithUnpushedCommits(dirPath string) ([]GitStatus, error) {
 			continue
 		}
 
-		repoPath := filepath.Join(dirPath, f.Name())
-		gitPath := filepath.Join(repoPath, ".git")
-		if _, err := os.Stat(gitPath); err != nil {
-			continue // not a git repo
-		}
 		wg.Add(1)
+		repoPath := filepath.Join(dirPath, f.Name())
+
 		go func(projectName string) {
 			defer wg.Done()
+			gitPath := filepath.Join(repoPath, ".git")
+			if _, err := os.Stat(gitPath); err != nil {
+				return // not a git repo
+			}
 			gs, err := analysisGitDir(projectName)
 			if err != nil {
 				return
