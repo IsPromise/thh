@@ -1,5 +1,14 @@
 import {h, resolveComponent} from "vue";
-import {LogoTwitter, LogoWebComponent} from '@vicons/ionicons5'
+import {
+    AlbumsOutline,
+    ChatbubblesOutline,
+    ConstructOutline,
+    GitCompareOutline,
+    GridOutline,
+    HappyOutline,
+    LogoTwitter,
+    LogoWebComponent,
+} from '@vicons/ionicons5'
 
 import sun from "@/pages/HomePage.vue";
 import moon from "@/pages/Manager.vue";
@@ -39,20 +48,20 @@ export default [
         belongMenu: true,
         path: '/manager', component: moon, children: [
             {showName: '', path: '', component: allTool, belongMenu: false},
-            {showName: 'mainTool', path: 'mainTool', component: mainTool, belongMenu: true},
-            {showName: 'all tool', path: 'allTool', component: allTool, belongMenu: true},
-            {showName: 'TodoList', path: 'todoList', component: todoList, belongMenu: true},
-            {showName: 'Im', path: 'im', component: imDemo, belongMenu: true},
-            {showName: 'grid demo', path: 'gridPage', component: gridPage, belongMenu: true},
+            {showName: 'All Tool', path: 'allTool', component: allTool, icon: ConstructOutline, belongMenu: true},
+            {showName: 'Git Status', path: 'mainTool', component: mainTool, icon: GitCompareOutline, belongMenu: true},
+            {showName: 'Todo List', path: 'todoList', component: todoList, icon: AlbumsOutline, belongMenu: true},
+            {showName: 'Im', path: 'im', component: imDemo, icon: ChatbubblesOutline, belongMenu: true},
+            {showName: 'Grid Demo', path: 'gridPage', component: gridPage, icon: GridOutline, belongMenu: true},
             {
                 showName: '网关管理',
-                path: 'traefikManager',
+                path: 'TraefikManager',
                 icon: LogoWebComponent,
                 component: traefikManager,
                 belongMenu: true
             },
             {
-                showName: 'twitter',
+                showName: 'TwitterTool',
                 path: 'twitter',
                 icon: LogoTwitter,
                 component: twitterManager,
@@ -62,16 +71,17 @@ export default [
                 })
             },
             {
-                name: 'about',
+                name: 'About',
                 path: 'about',
                 belongMenu: true,
+                icon: HappyOutline,
                 component: {render: () => h(resolveComponent("router-view"))},
                 children: [
                     {showName: 'about', path: 'about', component: managerAbout, belongMenu: true},
                     {showName: 'info', path: 'info', component: info, belongMenu: true},
                 ]
             },
-            {showName: 'sysInfo', path: 'sysInfo', icon: LogoWebComponent, component: sysInfo, belongMenu: true},
+            {showName: 'SysInfo', path: 'sysInfo', icon: LogoWebComponent, component: sysInfo, belongMenu: true},
         ]
     },
 ]
