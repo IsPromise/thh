@@ -77,7 +77,6 @@ let columns = [
           }
         });
       } else {
-        console.log(todoStatusMap.value)
         return h(NTag, {}, {default: () => todoStatusMap.value.get(row.status)});
       }
     }
