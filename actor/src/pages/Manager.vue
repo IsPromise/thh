@@ -95,14 +95,13 @@ function handleSelect() {
         </n-layout-header
         >
         <n-layout position="absolute" style="top: 64px; bottom: 0;" has-sider>
-
             <n-layout-sider
                     collapse-mode="width"
                     :collapsed-width="64"
                     @collapse="collapsed = true"
                     @expand="collapsed = false"
                     :collapsed="collapsed"
-                    content-style="padding-top: 24px;"
+                    content-style="padding-top: 6px;"
                     :native-scrollbar="false" bordered
                     width="180"
                     show-trigger
